@@ -1,88 +1,65 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/user';
-
-// IMPORT CORRECT DASHBOARD PATH
-import { Dashboard } from '../pages/Admin/Dashboard'; // <-- CHANGE THIS
-import { Login } from '../pages/Auth/Login';
-import { Layout } from '../components/Layout/Layout';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Login } from "../pages/Auth/Login";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import ProtectedRoute from "../components/ProtectedRoute";
+import { useAuth } from "../context/AuthContext";
+import UserList from "../pages/Admin/UserList/UserList";
+import { Profile } from "../pages/Profile/Profile";
 
 const MainStack: React.FC = () => {
   const { user } = useAuth();
-
-  const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: UserRole[] }> = ({ children, allowedRoles }) => {
-    if (!user) return <Navigate to="/login" />;
-    if (allowedRoles && !allowedRoles.includes(user.role)) {
-      // User has a role but not allowed for this route - still show dashboard
-      return <Navigate to="/dashboard" />;
-    }
-    return <>{children}</>;
-  };
 
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
 
-      {/* Redirect based on authentication */}
       <Route
         path="/"
+        element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+      />
+
+      <Route
+        path="/dashboard"
         element={
-          user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+          <ProtectedRoute allowedRoles={["admin", "volunteer", "user"]}>
+            <Dashboard />
+          </ProtectedRoute>
         }
       />
 
-
-      {/* Single Dashboard route for all users */}
-      {/* <Route 
-        path="/dashboard" 
+      {/* Admin-only user management */}
+      <Route
+        path="/admin/users"
         element={
-          <ProtectedRoute>
-            <Dashboard />
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserList />
           </ProtectedRoute>
-        } 
-      /> */}
-
-      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Route>
-
-      {/* Example of other protected routes with role restrictions */}
-      {/* <Route 
-        path="/admin/volunteers" 
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminVolunteers />
-          </ProtectedRoute>
-        } 
+        }
       />
-      
-      <Route 
-        path="/tasks" 
+
+      {/* Profile route */}
+      <Route
+        path="/profile/:userId"
         element={
-          <ProtectedRoute allowedRoles={['volunteer', 'admin']}>
-            <Tasks />
-          </ProtectedRoute>
-        } 
-      />
-      
-      <Route 
-        path="/submit-report" 
-        element={
-          <ProtectedRoute allowedRoles={['user', 'volunteer', 'admin']}>
-            <SubmitReport />
-          </ProtectedRoute>
-        } 
-      />
-      
-      <Route 
-        path="/profile" 
-        element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin", "volunteer", "user"]}>
             <Profile />
           </ProtectedRoute>
-        } 
-      /> */}
+        }
+      />
+
+      {/* Optional fallback route for /profile (current user) */}
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "volunteer", "user"]}>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

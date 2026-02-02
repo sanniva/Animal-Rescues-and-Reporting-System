@@ -1,25 +1,29 @@
+// src/components/Sidebar/Sidebar.tsx
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../../components/Icon';
 import './sidebar.css';
+
+interface User {
+  user_id: number;
+  username: string;
+  role: 'admin' | 'volunteer' | 'user';
+  volunteerStatus?: 'pending' | 'approved' | 'rejected' | 'none';
+}
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenNotifications: () => void;
   unreadNotificationsCount: number;
-  currentUser: {
-    username: string;
-    role: 'admin' | 'volunteer' | 'user';
-    volunteerStatus?: 'pending' | 'approved' | 'rejected' | 'none';
-  } | null;
-  logout: () => void;  // This should match what Layout.tsx is passing
+  currentUser: User | null;
+  logout: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ 
-  isOpen, 
-  onClose, 
-  onOpenNotifications, 
+export const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  onOpenNotifications,
   unreadNotificationsCount,
   currentUser,
   logout
@@ -32,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     onClose();
   };
 
-  const NavItem = ({ to, icon, label }: { to: string, icon: string, label: string }) => {
+  const NavItem = ({ to, icon, label }: { to: string; icon: string; label: string }) => {
     const isActive = location.pathname === to;
     return (
       <Link
@@ -41,10 +45,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         className={`nav-item ${isActive ? 'nav-item-active' : ''}`}
       >
         <div className="nav-icon-wrapper">
-          <Icon 
-            type="feather" 
-            name={icon as any} 
-            size={20} 
+          <Icon
+            type="feather"
+            name={icon as any}
+            size={20}
             className={isActive ? 'nav-icon-active' : 'nav-icon'}
           />
         </div>
@@ -74,18 +78,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <p className="section-title">Tactical Operations</p>
           <div className="nav-items">
             <NavItem to="/dashboard" icon="FiHome" label="Mission Dashboard" />
-            
+
             {(currentUser?.role === 'user' || currentUser?.role === 'volunteer') && (
               <NavItem to="/submit-report" icon="FiAlertTriangle" label="File Field Report" />
             )}
-            
+
             {currentUser?.role === 'volunteer' && currentUser.volunteerStatus === 'approved' && (
               <NavItem to="/tasks" icon="FiClipboard" label="Deployment Board" />
             )}
-            
+
             {currentUser?.role === 'admin' && (
               <>
-                <NavItem to="/admin/volunteers" icon="FiUsers" label="Ranger Personnel" />
+                <NavItem to="/admin/users" icon="FiUsers" label="Ranger Personnel" />
                 <NavItem to="/admin/reports" icon="FiFileText" label="Master Log" />
               </>
             )}
@@ -93,32 +97,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Sidebar Footer User Card */}
+      {/* Sidebar Footer */}
       <div className="sidebar-footer">
         <div className="user-card">
           <div className="user-card-content">
-            {/* Clickable User Identity Section */}
-            <div 
-              onClick={() => {
-                navigate('/profile');
-                onClose();
-              }}
-              className="user-identity"
-            >
-              <div className="user-avatar">
-                {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+            {currentUser ? (
+              <div
+                className="user-identity"
+                onClick={() => {
+                  navigate(`/profile/${currentUser.user_id}`);
+                  onClose();
+                }}
+              >
+                <div className="user-avatar">
+                  {currentUser.username.charAt(0).toUpperCase()}
+                </div>
+                <div className="user-info">
+                  <p className="user-name">{currentUser.username}</p>
+                  <p className="user-role">{currentUser.role}</p>
+                </div>
               </div>
-              <div className="user-info">
-                <p className="user-name">{currentUser?.username || 'User'}</p>
-                <p className="user-role">{currentUser?.role || 'user'}</p>
-              </div>
-            </div>
-            
-            <button 
+            ) : (
+              <div className="user-identity-placeholder">Loading user...</div>
+            )}
+
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 onOpenNotifications();
-              }} 
+              }}
               className="notifications-btn"
             >
               <Icon type="feather" name="FiBell" size={18} className="bell-icon" />
@@ -127,11 +134,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               )}
             </button>
           </div>
-          
-          <button 
-            onClick={handleLogout}
-            className="logout-btn"
-          >
+
+          <button onClick={handleLogout} className="logout-btn">
             <Icon type="feather" name="FiLogOut" size={16} className="logout-icon" />
             <span className="logout-text">Terminate Session</span>
           </button>
