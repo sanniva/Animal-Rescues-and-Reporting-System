@@ -6,6 +6,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
 import UserList from "../pages/Admin/UserList/UserList";
 import { Profile } from "../pages/Profile/Profile";
+import ReportSubmission from "../pages/User/ReportSubmission/ReportSubmission";
 
 const MainStack: React.FC = () => {
   const { user } = useAuth();
@@ -54,6 +55,16 @@ const MainStack: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={["admin", "volunteer", "user"]}>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+         {/* Report Submission - ONLY FOR REGULAR USERS */}
+      <Route
+        path="/create-report"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <ReportSubmission />
           </ProtectedRoute>
         }
       />
