@@ -23,6 +23,11 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+body {
+  background-color: #e1b545; /* light beige */
+  margin: 0; /* remove default margin */
+  font-family: Arial, sans-serif; /* optional */
+}
 
 .App-link {
   color: #61dafb;

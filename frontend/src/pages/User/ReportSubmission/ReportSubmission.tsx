@@ -1,175 +1,205 @@
+// frontend/src/pages/ReportSubmission/ReportSubmission.tsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './ReportSubmission.css';
-import { Report, AnimalType, AnimalCondition, ApiResponse } from '../../../types/types';
 import { useAuth } from '../../../context/AuthContext';
-import Icon from '../../../components/Icon';
 
-const getUserRole = (user: any): string => {
-  if (!user) return 'user';
-  
-  if (user.role && typeof user.role === 'object' && user.role.role_name) {
-    return user.role.role_name.toLowerCase();
-  }
-  
-  if (user.role_name) {
-    return user.role_name.toLowerCase();
-  }
-  
-  if (user.role_id) {
-    if (user.role_id === 3) return 'admin';
-    if (user.role_id === 2) return 'volunteer';
-    if (user.role_id === 1) return 'user';
-  }
-  
-  return 'user';
-};
+// Types
+interface AnimalType {
+  type_id: number;
+  type_name: string;
+}
+
+interface AnimalCondition {
+  condition_id: number;
+  condition_name: string;
+}
+
+interface FormData {
+  animal_type_id: number;
+  animal_condition_id: number;
+  description: string;
+  location_address: string;
+  user_note: string;
+}
+
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const ReportSubmission: React.FC = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<Omit<Report, 'report_id' | 'submitted_at' | 'is_deleted'>>({
-    user_id: currentUser?.user_id || 0,
-    animal_type_id: 1,
-    animal_condition_id: 1,
+  // State
+  const [step, setStep] = useState<number>(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([1]);
+  const [formData, setFormData] = useState<FormData>({
+    animal_type_id: 0,
+    animal_condition_id: 0,
     description: '',
     location_address: '',
-    status_id: 1,
     user_note: '',
   });
+  
+  const [animalTypes, setAnimalTypes] = useState<AnimalType[]>([]);
+  const [animalConditions, setAnimalConditions] = useState<AnimalCondition[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [retryCount, setRetryCount] = useState<number>(0);
 
-  const [animalTypes, setAnimalTypes] = useState<AnimalType[]>([
-    { type_id: 1, type_name: 'Dog' },
-    { type_id: 2, type_name: 'Cat' },
-    { type_id: 3, type_name: 'Bird' },
-    { type_id: 4, type_name: 'Rabbit' },
-    { type_id: 5, type_name: 'Hamster' },
-    { type_id: 6, type_name: 'Turtle' },
-    { type_id: 7, type_name: 'Horse' },
-    { type_id: 8, type_name: 'Cow' },
-    { type_id: 9, type_name: 'Goat' },
-    { type_id: 10, type_name: 'Sheep' },
-    { type_id: 11, type_name: 'Other' },
-  ]);
+  // Get token from localStorage
+  const getToken = () => {
+    return localStorage.getItem('token');
+  };
 
-  const [animalConditions, setAnimalConditions] = useState<AnimalCondition[]>([
-    { condition_id: 1, condition_name: 'Injured' },
-    { condition_id: 2, condition_name: 'Sick' },
-    { condition_id: 3, condition_name: 'Abandoned' },
-  ]);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
-
+  // Fetch animal data from API
   const fetchAnimalData = useCallback(async () => {
+    const token = getToken();
+    if (!token) {
+      setError('Please login to submit a report');
+      navigate('/login');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
     try {
-      setIsLoading(true);
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const typesResponse = await fetch('http://localhost:5000/api/reports/animal-types', {
+      // Fetch animal types
+      const typesResponse = await fetch(`${API_BASE_URL}/reports/animal-types`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        },
+        }
       });
 
-      if (typesResponse.ok) {
-        const typesData: ApiResponse = await typesResponse.json();
-        if (typesData.success && typesData.data) {
-          setAnimalTypes(typesData.data);
+      if (!typesResponse.ok) {
+        if (typesResponse.status === 401) {
+          console.error('Token expired, logging out');
+          logout();
+          navigate('/login');
+          return;
+        }
+        throw new Error(`Failed to fetch animal types: ${typesResponse.status}`);
+      }
+
+      const typesData = await typesResponse.json();
+
+      if (typesData.success) {
+        setAnimalTypes(typesData.data || []);
+        if (typesData.data && typesData.data.length > 0 && !formData.animal_type_id) {
+          setFormData(prev => ({
+            ...prev,
+            animal_type_id: typesData.data[0].type_id
+          }));
         }
       }
 
-      const conditionsResponse = await fetch('http://localhost:5000/api/reports/animal-conditions', {
+      // Fetch animal conditions
+      const conditionsResponse = await fetch(`${API_BASE_URL}/reports/animal-conditions`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        },
+        }
       });
 
-      if (conditionsResponse.ok) {
-        const conditionsData: ApiResponse = await conditionsResponse.json();
-        if (conditionsData.success && conditionsData.data) {
-          setAnimalConditions(conditionsData.data);
+      if (!conditionsResponse.ok) {
+        throw new Error(`Failed to fetch animal conditions: ${conditionsResponse.status}`);
+      }
+
+      const conditionsData = await conditionsResponse.json();
+
+      if (conditionsData.success) {
+        setAnimalConditions(conditionsData.data || []);
+        if (conditionsData.data && conditionsData.data.length > 0 && !formData.animal_condition_id) {
+          setFormData(prev => ({
+            ...prev,
+            animal_condition_id: conditionsData.data[0].condition_id
+          }));
         }
       }
+
     } catch (error: any) {
-      console.error('Error fetching animal data:', error);
+      console.error('❌ Error fetching animal data:', error);
+      setError(`Failed to load form data: ${error.message}`);
+      
+      // Retry logic
+      if (retryCount < 3) {
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          fetchAnimalData();
+        }, 2000);
+      }
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [navigate, logout, retryCount, formData.animal_type_id, formData.animal_condition_id]);
 
-  useEffect(() => {
-    if (currentUser?.user_id) {
-      setFormData(prev => ({
-        ...prev,
-        user_id: currentUser.user_id
-      }));
-    }
-    fetchAnimalData();
-  }, [currentUser, fetchAnimalData]);
-
+  // Initial load
   useEffect(() => {
     if (!currentUser) {
       navigate('/login');
       return;
     }
 
-    const userRole = getUserRole(currentUser);
-    if (userRole !== 'user') {
+    // Only regular users can submit reports
+    if (currentUser.role?.role_name !== 'user') {
       navigate('/dashboard');
+      return;
     }
-  }, [currentUser, navigate]);
 
-  if (!currentUser || isLoading) {
-    return (
-      <div className="report-loading-screen">
-        <div className="loader-animation">
-          <div className="loader-circle"></div>
-          <div className="loader-text">Preparing Report Form...</div>
-        </div>
-      </div>
-    );
-  }
+    fetchAnimalData();
+  }, [currentUser, navigate, fetchAnimalData]);
 
-  const validateStep = (): boolean => {
-    const errors: {[key: string]: string} = {};
+  // Update completed steps when step changes
+  useEffect(() => {
+    if (!completedSteps.includes(step) && step > 1) {
+      setCompletedSteps(prev => [...prev, step - 1]);
+    }
+  }, [step, completedSteps]);
 
-    if (step === 1) {
-      if (!formData.animal_type_id) {
-        errors.animal_type_id = 'Please select an animal type';
-      }
-      if (!formData.animal_condition_id) {
-        errors.animal_condition_id = 'Please select a condition';
-      }
-    } else if (step === 2) {
-      if (!formData.location_address.trim()) {
-        errors.location_address = 'Please provide a location';
-      }
-    } else if (step === 3) {
-      if (!formData.description.trim()) {
-        errors.description = 'Please describe the situation';
-      }
-      if (formData.description.trim().length < 10) {
-        errors.description = 'Description must be at least 10 characters';
-      }
+  // Form validation
+  const validateStep = (stepNumber: number): boolean => {
+    const errors: Record<string, string> = {};
+
+    switch (stepNumber) {
+      case 1:
+        if (!formData.animal_type_id) {
+          errors.animal_type_id = 'Please select an animal type';
+        }
+        if (!formData.animal_condition_id) {
+          errors.animal_condition_id = 'Please select a condition';
+        }
+        break;
+      
+      case 2:
+        if (!formData.location_address.trim()) {
+          errors.location_address = 'Please provide a location';
+        } else if (formData.location_address.trim().length < 5) {
+          errors.location_address = 'Location must be at least 5 characters';
+        }
+        break;
+      
+      case 3:
+        if (!formData.description.trim()) {
+          errors.description = 'Please describe the situation';
+        } else if (formData.description.trim().length < 10) {
+          errors.description = 'Description must be at least 10 characters';
+        }
+        break;
     }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
+  // Navigation
   const nextStep = () => {
-    if (validateStep()) {
+    if (validateStep(step)) {
       setStep(prev => Math.min(prev + 1, 4));
     }
   };
@@ -184,6 +214,7 @@ const ReportSubmission: React.FC = () => {
       ...prev,
       [name]: name === 'animal_type_id' || name === 'animal_condition_id' ? parseInt(value) : value
     }));
+    // Clear error for this field
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -196,519 +227,518 @@ const ReportSubmission: React.FC = () => {
     }
   };
 
-  const sendNotificationToAdmins = async (reportId: number): Promise<boolean> => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return false;
-
-      const selectedAnimalType = animalTypes.find(t => t.type_id === formData.animal_type_id)?.type_name || 'Unknown';
-      const selectedCondition = animalConditions.find(c => c.condition_id === formData.animal_condition_id)?.condition_name || 'Unknown';
-
-      const notificationData = {
-        type: 'new_report',
-        title: 'New Animal Report Submitted',
-        message: `User ${currentUser.username} (#${currentUser.user_id}) submitted a new animal rescue report`,
-        metadata: {
-          report_id: reportId,
-          animal_type: selectedAnimalType,
-          condition: selectedCondition,
-          location: formData.location_address,
-          submitted_by: currentUser.user_id,
-          submitted_by_username: currentUser.username
-        }
-      };
-
-      const response = await fetch('http://localhost:5000/api/notifications/admin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(notificationData)
-      });
-
-      return response.ok;
-    } catch (error) {
-      console.error('Error sending notification:', error);
-      return false;
+  const handleConditionSelect = (conditionId: number) => {
+    setFormData(prev => ({ ...prev, animal_condition_id: conditionId }));
+    if (formErrors.animal_condition_id) {
+      setFormErrors(prev => ({ ...prev, animal_condition_id: '' }));
     }
   };
 
+  // Submit report
   const handleSubmit = async () => {
-    if (!validateStep()) return;
+    if (!validateStep(step)) return;
 
     setIsSubmitting(true);
-    setErrorMessage('');
-    setSuccessMessage('');
+    setError('');
+    setSuccess('');
+
+    const token = getToken();
+    if (!token) {
+      setError('Please login to submit a report');
+      navigate('/login');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Please login to submit a report');
-      }
+      const payload = {
+        animal_type_id: formData.animal_type_id,
+        animal_condition_id: formData.animal_condition_id,
+        description: formData.description.trim(),
+        location_address: formData.location_address.trim(),
+        user_note: formData.user_note.trim() || ''
+      };
 
-      const response = await fetch('http://localhost:5000/api/reports', {
+      const response = await fetch(`${API_BASE_URL}/reports/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
-      if (!response.ok) {
-        let errorMessage = `Failed to submit report (${response.status})`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch {}
-        throw new Error(errorMessage);
+      let data;
+      try {
+        const responseText = await response.text();
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse JSON:', parseError);
+        throw new Error('Invalid server response');
       }
 
-      const data: ApiResponse = await response.json();
-      
+      if (!response.ok) {
+        throw new Error(data.message || `Failed to submit report (${response.status})`);
+      }
+
       if (!data.success) {
         throw new Error(data.message || 'Failed to submit report');
       }
 
-      const reportId = data.report_id || data.data?.report_id;
-      
-      if (reportId) {
-        await sendNotificationToAdmins(reportId);
-      }
-      
-      setSuccessMessage('Report submitted successfully! Our team has been notified.');
-      
+      setSuccess('✅ Field report submitted! Our rangers will respond ASAP.');
+
+      // Mark all steps as completed
+      setCompletedSteps([1, 2, 3, 4]);
+
+      // Redirect to dashboard after 3 seconds
       setTimeout(() => {
         navigate('/dashboard');
       }, 3000);
-      
+
     } catch (error: any) {
-      console.error('Submit error:', error);
-      setErrorMessage(error.message || 'Failed to submit report. Please try again.');
+      console.error('❌ Submit error:', error);
+      setError(`Failed to submit report: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const getSelectedAnimalType = () => {
-    return animalTypes.find(t => t.type_id === formData.animal_type_id)?.type_name || 'Select';
+  // Helper functions
+  const getSelectedAnimalTypeName = () => {
+    return animalTypes.find(t => t.type_id === formData.animal_type_id)?.type_name || 'Not selected';
   };
 
-  const getSelectedCondition = () => {
-    return animalConditions.find(c => c.condition_id === formData.animal_condition_id)?.condition_name || 'Select';
+  const getSelectedConditionName = () => {
+    return animalConditions.find(c => c.condition_id === formData.animal_condition_id)?.condition_name || 'Not selected';
   };
 
-  const getAnimalIcon = (typeName: string) => {
-    switch (typeName.toLowerCase()) {
-      case 'dog': return 'FiGitlab';
-      case 'cat': return 'FiGitlab';
-      case 'bird': return 'FiFeather';
-      case 'rabbit': return 'FiGitlab';
-      case 'hamster': return 'FiCircle';
-      case 'turtle': return 'FiCircle';
-      case 'horse': return 'FiGitlab';
-      case 'cow': return 'FiGitlab';
-      case 'goat': return 'FiGitlab';
-      case 'sheep': return 'FiGitlab';
-      case 'other': return 'FiHelpCircle';
-      default: return 'FiHelpCircle';
-    }
+  // Emoji icons for animals
+  const getAnimalEmoji = (typeName: string) => {
+    const emojiMap: Record<string, string> = {
+      'dog': '🐕',
+      'cat': '🐈',
+      'bird': '🐦',
+      'rabbit': '🐇',
+      'hamster': '🐹',
+      'turtle': '🐢',
+      'horse': '🐎',
+      'cow': '🐄',
+      'goat': '🐐',
+      'sheep': '🐑',
+      'other': '❓'
+    };
+    
+    const lowerType = typeName.toLowerCase();
+    return emojiMap[lowerType] || '❓';
   };
 
   const getConditionIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
-      case 'injured': return 'FiAlertTriangle';
-      case 'sick': return 'FiActivity';
-      case 'abandoned': return 'FiHeart';
-      default: return 'FiInfo';
+      case 'critical': return '🆘';
+      case 'severe': return '⚠️';
+      case 'moderate': return '🩹';
+      case 'mild': return '🤒';
+      case 'injured': return '🩹';
+      case 'sick': return '🤒';
+      case 'abandoned': return '💔';
+      default: return 'ℹ️';
     }
   };
 
-  return (
-    <div className="report-submission-container">
-      {/* Header with back button and title */}
-      <header className="report-header">
-        <div className="header-top">
-          <button 
-            className="back-button"
-            onClick={() => navigate('/dashboard')}
-          >
-            <Icon type="feather" name="FiArrowLeft" size={20} />
-            <span>Back to Dashboard</span>
-          </button>
-          
-          <h1 className="page-title">New Rescue Report</h1>
-          
-          <div className="header-actions">
-            <button
-              type="button"
-              onClick={() => navigate('/dashboard')}
-              className="cancel-button"
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="report-submission-container">
+        <div className="report-loading-screen">
+          <div className="loader-animation">
+            <div className="loader-circle"></div>
+            <div className="loader-text">🛰️ Initializing Field Report...</div>
+            <button 
+              onClick={fetchAnimalData} 
+              className="retry-button"
             >
-              <Icon type="feather" name="FiX" size={20} />
+              Retry Connection
             </button>
           </div>
         </div>
-      </header>
+      </div>
+    );
+  }
 
-      {/* Step Circles */}
-      <div className="step-circles-container">
-        <div className="step-circles">
-          {[1, 2, 3, 4].map((stepNumber) => (
-            <div key={stepNumber} className="step-circle-wrapper">
-              <div 
-                className={`step-circle ${step === stepNumber ? 'active' : ''} ${step > stepNumber ? 'completed' : ''}`}
-                onClick={() => step < stepNumber && validateStep() && setStep(stepNumber)}
-              >
-                {step > stepNumber ? (
-                  <Icon type="feather" name="FiCheck" size={16} />
-                ) : (
-                  <span>{stepNumber}</span>
-                )}
-              </div>
-              <span className="step-label">
-                {stepNumber === 1 && 'Animal'}
-                {stepNumber === 2 && 'Location'}
-                {stepNumber === 3 && 'Details'}
-                {stepNumber === 4 && 'Review'}
-              </span>
+  return (
+    <div className="report-submission-container">
+      {/* Header with back button */}
+      <div className="report-header">
+        {/* <button 
+          onClick={() => navigate('/dashboard')}
+          className="back-to-dashboard-btn"
+        >
+          ← Back to Dashboard
+        </button> */}
+        <h1 className="report-title">📋 File Field Report</h1>
+        <p className="report-subtitle">
+          Report animals in distress. Your information helps our rangers respond effectively.
+        </p>
+      </div>
+
+      {/* Step Progress Circles */}
+      <div className="step-progress-circles">
+        {[1, 2, 3, 4].map((stepNum) => (
+          <div key={stepNum} className="step-circle-wrapper">
+            <div className={`step-circle ${step === stepNum ? 'active' : ''} ${completedSteps.includes(stepNum) ? 'completed' : ''}`}>
+              {completedSteps.includes(stepNum) && stepNum !== step ? (
+                <span className="check-icon">✓</span>
+              ) : (
+                <span>{stepNum}</span>
+              )}
             </div>
-          ))}
-        </div>
+            <p className={`step-label ${step === stepNum ? 'active' : ''}`}>
+              {stepNum === 1 ? 'Animal' : 
+               stepNum === 2 ? 'Location' : 
+               stepNum === 3 ? 'Details' : 'Review'}
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Main Content */}
       <main className="report-main-content">
-        <div className="form-container">
-          <div className="form-card">
-            {successMessage ? (
-              <div className="success-state">
-                <div className="success-icon">
-                  <Icon type="feather" name="FiCheckCircle" size={48} />
+        <div className="form-wrapper">
+          {success ? (
+            <div className="success-card">
+              <div className="success-icon">✅</div>
+              <h2>Report Submitted Successfully!</h2>
+              <p className="success-message">{success}</p>
+              <div className="loading-indicator">
+                <div className="loading-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
-                <h3>Report Submitted Successfully!</h3>
-                <p>{successMessage}</p>
-                <div className="success-actions">
-                  <div className="loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <p className="redirect-text">Redirecting to dashboard...</p>
-                </div>
+                <p>Redirecting to dashboard...</p>
               </div>
-            ) : (
-              <>
-                {errorMessage && (
-                  <div className="error-state">
-                    <Icon type="feather" name="FiAlertTriangle" size={20} />
-                    <div className="error-message-text">
-                      <strong>Submission Error</strong>
-                      <p>{errorMessage}</p>
-                    </div>
+            </div>
+          ) : (
+            <div className="form-card">
+              {/* Error Display */}
+              {error && (
+                <div className="error-alert">
+                  <div className="error-icon">❌</div>
+                  <div className="error-content">
+                    <strong>Error</strong>
+                    <p>{error}</p>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Step 1: Animal Selection */}
-                {step === 1 && (
-                  <div className="step-content">
-                    <div className="step-header">
-                      <h2>Select Animal Type</h2>
-                      <p>Choose the type of animal you found</p>
-                    </div>
+              {/* Step 1: Animal Selection */}
+              {step === 1 && (
+                <div className="step-content">
+                  <div className="step-header">
+                    <h2>What animal did you find?</h2>
+                    <p>Select the animal type and its condition</p>
+                  </div>
 
-                    <div className="selection-section">
-                      <div className="animal-selection">
-                        <div className="animal-grid">
-                          {animalTypes.map(type => (
+                  <div className="animal-selection-section">
+                    {/* Animal Types */}
+                    <div className="selection-group">
+                      <label className="section-label">Animal Type</label>
+                      <div className="animal-cards-grid">
+                        {animalTypes.length > 0 ? (
+                          animalTypes.map(type => (
                             <button
                               key={type.type_id}
                               type="button"
                               onClick={() => handleAnimalTypeSelect(type.type_id)}
-                              className={`animal-select-card ${
+                              className={`animal-card ${
                                 formData.animal_type_id === type.type_id ? 'selected' : ''
                               }`}
+                              disabled={isSubmitting}
                             >
-                              <div className="animal-select-icon">
-                                <Icon 
-                                  type="feather" 
-                                  name={getAnimalIcon(type.type_name)} 
-                                  size={20} 
-                                />
+                              <div className="animal-emoji">
+                                {getAnimalEmoji(type.type_name)}
                               </div>
-                              <span className="animal-select-name">{type.type_name}</span>
+                              <span className="animal-name">{type.type_name}</span>
                             </button>
-                          ))}
-                        </div>
-                        {formErrors.animal_type_id && (
-                          <div className="error-message">
-                            <Icon type="feather" name="FiAlertCircle" size={14} />
-                            <span>{formErrors.animal_type_id}</span>
+                          ))
+                        ) : (
+                          <div className="no-data-message">
+                            <div className="no-data-icon">📋</div>
+                            <p>No animal types available</p>
                           </div>
                         )}
                       </div>
+                      {formErrors.animal_type_id && (
+                        <div className="validation-error">
+                          <span className="error-icon">⚠️</span>
+                          <span>{formErrors.animal_type_id}</span>
+                        </div>
+                      )}
+                    </div>
 
-                      <div className="condition-selection">
-                        <label className="condition-label">Select Condition</label>
-                        <div className="condition-buttons">
-                          {animalConditions.map(condition => (
+                    {/* Animal Conditions */}
+                    <div className="selection-group">
+                      <label className="section-label">Animal Condition</label>
+                      <div className="condition-options">
+                        {animalConditions.length > 0 ? (
+                          animalConditions.map(condition => (
                             <button
                               key={condition.condition_id}
                               type="button"
-                              onClick={() => setFormData(prev => ({ 
-                                ...prev, 
-                                animal_condition_id: condition.condition_id 
-                              }))}
-                              className={`condition-select-button ${
+                              onClick={() => handleConditionSelect(condition.condition_id)}
+                              className={`condition-option ${
                                 formData.animal_condition_id === condition.condition_id ? 'selected' : ''
                               }`}
+                              disabled={isSubmitting}
                             >
-                              <Icon 
-                                type="feather" 
-                                name={getConditionIcon(condition.condition_name)} 
-                                size={16} 
-                              />
+                              <div className="condition-emoji">
+                                {getConditionIcon(condition.condition_name)}
+                              </div>
                               <span>{condition.condition_name}</span>
                             </button>
-                          ))}
-                        </div>
-                        {formErrors.animal_condition_id && (
-                          <div className="error-message">
-                            <Icon type="feather" name="FiAlertCircle" size={14} />
-                            <span>{formErrors.animal_condition_id}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 2: Location */}
-                {step === 2 && (
-                  <div className="step-content">
-                    <div className="step-header">
-                      <h2>Where is the animal?</h2>
-                      <p>Provide the location details</p>
-                    </div>
-
-                    <div className="input-section">
-                      <label className="input-label">
-                        <Icon type="feather" name="FiMapPin" size={16} />
-                        <span>Location Address</span>
-                        <span className="required">*</span>
-                      </label>
-                      
-                      <textarea
-                        name="location_address"
-                        value={formData.location_address}
-                        onChange={handleInputChange}
-                        placeholder="Enter exact address, street name, or nearby landmark"
-                        className="location-input"
-                        rows={3}
-                        autoFocus
-                      />
-                      
-                      {formErrors.location_address && (
-                        <div className="error-message">
-                          <Icon type="feather" name="FiAlertCircle" size={14} />
-                          <span>{formErrors.location_address}</span>
-                        </div>
-                      )}
-                      
-                      <div className="input-help">
-                        <Icon type="feather" name="FiInfo" size={14} />
-                        <span>Be specific to help rescuers find the animal quickly</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 3: Details */}
-                {step === 3 && (
-                  <div className="step-content">
-                    <div className="step-header">
-                      <h2>Provide Details</h2>
-                      <p>Describe the animal and situation</p>
-                    </div>
-
-                    <div className="input-section">
-                      <label className="input-label">
-                        <Icon type="feather" name="FiFileText" size={16} />
-                        <span>Description</span>
-                        <span className="required">*</span>
-                      </label>
-                      
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        placeholder="Describe the animal's appearance, behavior, visible injuries, and current situation..."
-                        className="description-input"
-                        rows={6}
-                      />
-                      
-                      <div className="char-counter">
-                        <span>{formData.description.length}/500 characters</span>
-                        <span className="min-chars">Min. 10 characters</span>
-                      </div>
-                      
-                      {formErrors.description && (
-                        <div className="error-message">
-                          <Icon type="feather" name="FiAlertCircle" size={14} />
-                          <span>{formErrors.description}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="input-section">
-                      <label className="input-label">
-                        <Icon type="feather" name="FiMessageSquare" size={16} />
-                        <span>Additional Notes</span>
-                        <span className="optional">Optional</span>
-                      </label>
-                      
-                      <textarea
-                        name="user_note"
-                        value={formData.user_note}
-                        onChange={handleInputChange}
-                        placeholder="Time sighted, accessibility issues, safety concerns, or other observations..."
-                        className="notes-input"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 4: Review */}
-                {step === 4 && (
-                  <div className="step-content">
-                    <div className="step-header">
-                      <h2>Review Report</h2>
-                      <p>Check all information before submitting</p>
-                    </div>
-
-                    <div className="review-section">
-                      <div className="review-card">
-                        <div className="review-card-header">
-                          <Icon type="feather" name="FiGitlab" size={16} />
-                          <h3>Animal Details</h3>
-                        </div>
-                        <div className="review-items">
-                          <div className="review-item">
-                            <span className="review-label">Type:</span>
-                            <span className="review-value">
-                              <Icon 
-                                type="feather" 
-                                name={getAnimalIcon(getSelectedAnimalType())} 
-                                size={14} 
-                              />
-                              {getSelectedAnimalType()}
-                            </span>
-                          </div>
-                          <div className="review-item">
-                            <span className="review-label">Condition:</span>
-                            <span className="review-value">
-                              <Icon 
-                                type="feather" 
-                                name={getConditionIcon(getSelectedCondition())} 
-                                size={14} 
-                              />
-                              {getSelectedCondition()}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="review-card">
-                        <div className="review-card-header">
-                          <Icon type="feather" name="FiMapPin" size={16} />
-                          <h3>Location</h3>
-                        </div>
-                        <div className="review-item full">
-                          <span className="review-text">{formData.location_address}</span>
-                        </div>
-                      </div>
-
-                      <div className="review-card">
-                        <div className="review-card-header">
-                          <Icon type="feather" name="FiFileText" size={16} />
-                          <h3>Description</h3>
-                        </div>
-                        <div className="review-item full">
-                          <span className="review-text">{formData.description}</span>
-                        </div>
-                        {formData.user_note && (
-                          <div className="review-item full">
-                            <div className="review-label">Additional Notes:</div>
-                            <span className="review-text note">{formData.user_note}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="action-buttons">
-                  <div className="button-group">
-                    {step > 1 ? (
-                      <button
-                        type="button"
-                        onClick={prevStep}
-                        className="btn-prev"
-                        disabled={isSubmitting}
-                      >
-                        <Icon type="feather" name="FiChevronLeft" size={18} />
-                        <span>Previous</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => navigate('/dashboard')}
-                        className="btn-cancel"
-                      >
-                        <Icon type="feather" name="FiX" size={18} />
-                        <span>Cancel</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="button-group">
-                    {step < 4 ? (
-                      <button
-                        type="button"
-                        onClick={nextStep}
-                        className="btn-next"
-                      >
-                        <span>Continue</span>
-                        <Icon type="feather" name="FiChevronRight" size={18} />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        className="btn-submit"
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="submit-spinner"></div>
-                            <span>Submitting...</span>
-                          </>
+                          ))
                         ) : (
-                          <>
-                            <Icon type="feather" name="FiSend" size={18} />
-                            <span>Submit Report</span>
-                          </>
+                          <div className="no-data-message">
+                            <div className="no-data-icon">📋</div>
+                            <p>No conditions available</p>
+                          </div>
                         )}
-                      </button>
-                    )}
+                      </div>
+                      {formErrors.animal_condition_id && (
+                        <div className="validation-error">
+                          <span className="error-icon">⚠️</span>
+                          <span>{formErrors.animal_condition_id}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
+              )}
+
+              {/* Step 2: Location */}
+              {step === 2 && (
+                <div className="step-content">
+                  <div className="step-header">
+                    <h2>Where is the animal located?</h2>
+                    <p>Provide the exact location for rescue teams</p>
+                  </div>
+
+                  <div className="input-group">
+                    <label className="input-label">
+                      <span className="input-icon">📍</span>
+                      <span>Location Address *</span>
+                    </label>
+
+                    <textarea
+                      name="location_address"
+                      value={formData.location_address}
+                      onChange={handleInputChange}
+                      placeholder="Enter street address, landmarks, or GPS coordinates..."
+                      className="location-textarea"
+                      rows={4}
+                      disabled={isSubmitting}
+                    />
+
+                    {formErrors.location_address && (
+                      <div className="validation-error">
+                        <span className="error-icon">⚠️</span>
+                        <span>{formErrors.location_address}</span>
+                      </div>
+                    )}
+
+                    <div className="input-hint">
+                      <span className="hint-icon">💡</span>
+                      <span>Be as specific as possible for faster response</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Details */}
+              {step === 3 && (
+                <div className="step-content">
+                  <div className="step-header">
+                    <h2>Tell us more about the situation</h2>
+                    <p>Describe what you observed</p>
+                  </div>
+
+                  <div className="input-group">
+                    <label className="input-label">
+                      <span className="input-icon">📝</span>
+                      <span>Detailed Description *</span>
+                    </label>
+
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      placeholder="Describe the animal's appearance, behavior, visible injuries, and current situation..."
+                      className="description-textarea"
+                      rows={6}
+                      disabled={isSubmitting}
+                    />
+
+                    <div className="textarea-footer">
+                      <span className={`char-count ${formData.description.length > 500 ? 'error' : ''}`}>
+                        {formData.description.length}/500
+                      </span>
+                      <span className="min-chars">Minimum 10 characters</span>
+                    </div>
+
+                    {formErrors.description && (
+                      <div className="validation-error">
+                        <span className="error-icon">⚠️</span>
+                        <span>{formErrors.description}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="input-group">
+                    <label className="input-label">
+                      <span className="input-icon">💬</span>
+                      <span>Additional Notes (Optional)</span>
+                    </label>
+
+                    <textarea
+                      name="user_note"
+                      value={formData.user_note}
+                      onChange={handleInputChange}
+                      placeholder="Time first seen, safety concerns, accessibility notes..."
+                      className="notes-textarea"
+                      rows={3}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Review */}
+              {step === 4 && (
+                <div className="step-content">
+                  <div className="step-header">
+                    <h2>Review your report</h2>
+                    <p>Please verify all information before submitting</p>
+                  </div>
+
+                  <div className="review-container">
+                    {/* Animal Info */}
+                    <div className="review-section">
+                      <div className="review-header">
+                        <span className="review-icon">🐾</span>
+                        <h3>Animal Information</h3>
+                      </div>
+                      <div className="review-details">
+                        <div className="detail-item">
+                          <span className="detail-label">Animal Type:</span>
+                          <span className="detail-value">
+                            <span className="detail-emoji">
+                              {getAnimalEmoji(getSelectedAnimalTypeName())}
+                            </span>
+                            {getSelectedAnimalTypeName()}
+                          </span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Condition:</span>
+                          <span className="detail-value">
+                            <span className="detail-emoji">
+                              {getConditionIcon(getSelectedConditionName())}
+                            </span>
+                            {getSelectedConditionName()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Location */}
+                    <div className="review-section">
+                      <div className="review-header">
+                        <span className="review-icon">📍</span>
+                        <h3>Location Details</h3>
+                      </div>
+                      <div className="review-details full">
+                        <p className="location-text">{formData.location_address}</p>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="review-section">
+                      <div className="review-header">
+                        <span className="review-icon">📝</span>
+                        <h3>Description</h3>
+                      </div>
+                      <div className="review-details full">
+                        <p className="description-text">{formData.description}</p>
+                        {formData.user_note && (
+                          <>
+                            <div className="note-label">Additional Notes:</div>
+                            <p className="note-text">{formData.user_note}</p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation Buttons */}
+              <div className="form-navigation">
+                <div className="nav-buttons">
+                  {step > 1 ? (
+                    <button
+                      type="button"
+                      onClick={prevStep}
+                      className="nav-button secondary"
+                      disabled={isSubmitting}
+                    >
+                      {/* <span className="nav-icon">←</span> */}
+                      <span>Back</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/dashboard')}
+                      className="nav-button secondary"
+                      disabled={isSubmitting}
+                    >
+                      {/* <span className="nav-icon">✕</span> */}
+                      <span>Cancel</span>
+                    </button>
+                  )}
+
+                  {step < 4 ? (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      className="nav-button primary"
+                      disabled={isSubmitting || animalTypes.length === 0 || animalConditions.length === 0}
+                    >
+                      <span>Continue</span>
+                      {/* <span className="nav-icon">→</span> */}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      className="nav-button submit"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="button-spinner"></div>
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="nav-icon">📤</span>
+                          <span>Submit Report</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
