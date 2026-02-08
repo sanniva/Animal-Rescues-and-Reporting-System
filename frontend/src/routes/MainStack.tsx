@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import UserList from "../pages/Admin/UserList/UserList";
 import { Profile } from "../pages/Profile/Profile";
 import ReportSubmission from "../pages/User/ReportSubmission/ReportSubmission";
+import MyReports from "../pages/User/MyReports/MyReports";
 
 const MainStack: React.FC = () => {
   const { user } = useAuth();
@@ -65,6 +66,15 @@ const MainStack: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={["user"]}>
             <ReportSubmission />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-reports"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <MyReports />
           </ProtectedRoute>
         }
       />

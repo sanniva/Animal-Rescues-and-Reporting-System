@@ -359,7 +359,7 @@ const pool = mysql.createPool({
 
 /* =====================================================
    CONFIGURE MULTER FOR FILE UPLOADS
-===================================================== */
+// ===================================================== */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = 'uploads/profile-images/';
@@ -374,6 +374,7 @@ const storage = multer.diskStorage({
     cb(null, 'profile-' + req.params.id + '-' + uniqueSuffix + ext);
   }
 });
+
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp/;

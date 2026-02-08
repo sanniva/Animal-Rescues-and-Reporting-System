@@ -79,8 +79,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="nav-items">
             <NavItem to="/dashboard" icon="FiHome" label="Mission Dashboard" />
 
-            {(currentUser?.role === 'user' || currentUser?.role === 'volunteer') && (
+            {/* {(currentUser?.role === 'user' || currentUser?.role === 'volunteer') && (
               <NavItem to="/create-report" icon="FiAlertTriangle" label="File Field Report" />
+            )} */}
+
+            {(currentUser?.role === 'user') && (
+              <>
+                <NavItem to="/create-report" icon="FiAlertTriangle" label="File Field Report" />
+                <NavItem to="/my-reports" icon="FiFileText" label="My Reports" />
+              </>
+             
             )}
 
             {currentUser?.role === 'volunteer' && currentUser.volunteerStatus === 'approved' && (
