@@ -1,3 +1,507 @@
+// import React, { useState, useEffect } from 'react';
+// import { Link } from 'react-router-dom';
+// import { useAuth } from '../../../context/AuthContext';
+// import './MyReports.css';
+
+// interface Report {
+//   report_id: number;
+//   user_id: number;
+//   description: string;
+//   location_address: string;
+//   submitted_at: string;
+//   animal_type: string;
+//   animal_condition: string;
+//   status_id: number;
+//   reporter_name?: string;
+//   reporter_phone?: string | null;
+//   email?: string;
+// }
+
+// // Helper function to check if phone exists
+// const hasPhone = (phone?: string | null): boolean => {
+//   if (phone === null || phone === undefined) return false;
+//   if (typeof phone !== 'string') return false;
+//   return phone.trim().length > 0;
+// };
+
+// const ReportDetailModal: React.FC<{
+//   report: Report | null;
+//   isOpen: boolean;
+//   onClose: () => void;
+// }> = ({ report, isOpen, onClose }) => {
+//   if (!isOpen || !report) return null;
+
+//   const getStatusText = (statusId: number): string => {
+//     switch(statusId) {
+//       case 1: return 'Submitted';
+//       case 2: return 'Under Review';
+//       case 3: return 'In Progress';
+//       case 4: return 'Completed';
+//       case 5: return 'Cancelled';
+//       default: return 'Unknown';
+//     }
+//   };
+
+//   const getStatusClass = (statusId: number): string => {
+//     switch(statusId) {
+//       case 1: return 'submitted';
+//       case 2: return 'review';
+//       case 3: return 'progress';
+//       case 4: return 'completed';
+//       case 5: return 'cancelled';
+//       default: return 'unknown';
+//     }
+//   };
+
+//   const getAnimalEmoji = (animalType: string): string => {
+//     const type = animalType?.toLowerCase() || '';
+//     if (type.includes('dog')) return '🐶';
+//     if (type.includes('cat')) return '🐱';
+//     if (type.includes('bird')) return '🐦';
+//     if (type.includes('rabbit') || type.includes('bunny')) return '🐰';
+//     if (type.includes('hamster')) return '🐹';
+//     if (type.includes('turtle') || type.includes('tortoise')) return '🐢';
+//     if (type.includes('horse')) return '🐴';
+//     if (type.includes('cow')) return '🐮';
+//     if (type.includes('goat')) return '🐐';
+//     if (type.includes('sheep')) return '🐑';
+//     if (type.includes('fish')) return '🐠';
+//     if (type.includes('snake')) return '🐍';
+//     if (type.includes('mouse') || type.includes('rat')) return '🐭';
+//     if (type.includes('monkey')) return '🐒';
+//     if (type.includes('pig')) return '🐷';
+//     if (type.includes('chicken')) return '🐔';
+//     if (type.includes('duck')) return '🦆';
+//     return '🐾';
+//   };
+
+//   const formatDate = (dateString: string): string => {
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString('en-US', {
+//       weekday: 'short',
+//       month: 'short',
+//       day: 'numeric',
+//       year: 'numeric',
+//       hour: '2-digit',
+//       minute: '2-digit'
+//     });
+//   };
+
+//   const getConditionIcon = (condition: string): string => {
+//     const cond = condition.toLowerCase();
+//     if (cond.includes('critical') || cond.includes('emergency')) return '🆘';
+//     if (cond.includes('severe') || cond.includes('serious')) return '⚠️';
+//     if (cond.includes('moderate') || cond.includes('injured')) return '🩹';
+//     if (cond.includes('mild') || cond.includes('sick')) return '🤒';
+//     if (cond.includes('abandoned') || cond.includes('lost')) return '💔';
+//     if (cond.includes('healthy') || cond.includes('safe')) return '✅';
+//     return 'ℹ️';
+//   };
+
+//   const formatPhoneNumber = (phone?: string | null): string => {
+//     if (!hasPhone(phone)) {
+//       return 'Not provided';
+//     }
+    
+//     const phoneStr = String(phone).trim();
+//     const cleaned = phoneStr.replace(/\D/g, '');
+    
+//     if (cleaned.length === 10) {
+//       return `+977 ${cleaned}`;
+//     }
+    
+//     return phoneStr;
+//   };
+
+//   return (
+//     <div className="modal-overlay" onClick={onClose}>
+//       <div className="modal-content" onClick={e => e.stopPropagation()}>
+//         <div className="modal-header">
+//           <div className="modal-header-left">
+//             <span className="modal-animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
+//             <div>
+//               <h3 className="modal-title">Report #{report.report_id}</h3>
+//               <p className="modal-subtitle">{report.animal_type} • {report.animal_condition}</p>
+//             </div>
+//           </div>
+//           <button className="modal-close" onClick={onClose}>×</button>
+//         </div>
+        
+//         <div className="modal-body">
+//           <div className="modal-top-row">
+//             <div className="modal-status">
+//               <span className={`status-badge-large status-${getStatusClass(report.status_id)}`}>
+//                 {getStatusText(report.status_id)}
+//               </span>
+//             </div>
+//           </div>
+
+//           <div className="modal-section">
+//             <h4 className="modal-section-title">
+//               <span className="section-icon">👤</span>
+//               Your Information
+//             </h4>
+//             <div className="modal-detail-grid">
+//               <div className="detail-item">
+//                 <span className="detail-label">Name</span>
+//                 <span className="detail-value">{report.reporter_name || 'Anonymous'}</span>
+//               </div>
+//               <div className="detail-item">
+//                 <span className="detail-label">User ID</span>
+//                 <span className="detail-value">#{report.user_id}</span>
+//               </div>
+//               {report.email && (
+//                 <div className="detail-item">
+//                   <span className="detail-label">Email</span>
+//                   <span className="detail-value">{report.email}</span>
+//                 </div>
+//               )}
+//               {hasPhone(report.reporter_phone) && (
+//                 <div className="detail-item">
+//                   <span className="detail-label">Phone</span>
+//                   <span className="detail-value">
+//                     {formatPhoneNumber(report.reporter_phone)}
+//                   </span>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+
+//           <div className="modal-section">
+//             <h4 className="modal-section-title">
+//               <span className="section-icon">🐾</span>
+//               Animal Information
+//             </h4>
+//             <div className="modal-detail-grid">
+//               <div className="detail-item">
+//                 <span className="detail-label">Animal Type</span>
+//                 <div className="detail-value-with-emoji">
+//                   <span className="detail-emoji">{getAnimalEmoji(report.animal_type)}</span>
+//                   <span>{report.animal_type || 'Unknown Animal'}</span>
+//                 </div>
+//               </div>
+//               <div className="detail-item">
+//                 <span className="detail-label">Condition</span>
+//                 <div className="detail-value-with-emoji">
+//                   <span className="detail-emoji">{getConditionIcon(report.animal_condition)}</span>
+//                   <span>{report.animal_condition || 'Not specified'}</span>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           <div className="modal-section">
+//             <h4 className="modal-section-title">
+//               <span className="section-icon">📍</span>
+//               Location Details
+//             </h4>
+//             <div className="location-card">
+//               <div className="location-content">
+//                 <span className="location-icon-large">📍</span>
+//                 <span className="location-text">{report.location_address}</span>
+//               </div>
+//             </div>
+//           </div>
+
+//           <div className="modal-section">
+//             <h4 className="modal-section-title">
+//               <span className="section-icon">📝</span>
+//               Description
+//             </h4>
+//             <div className="description-card">
+//               <p className="description-text">{report.description}</p>
+//             </div>
+//           </div>
+
+//           <div className="modal-section">
+//             <h4 className="modal-section-title">
+//               <span className="section-icon">📅</span>
+//               Timeline
+//             </h4>
+//             <div className="timeline-card">
+//               <div className="timeline-item">
+//                 <div className="timeline-icon">📅</div>
+//                 <div className="timeline-content">
+//                   <div className="timeline-label">Report Submitted</div>
+//                   <div className="timeline-value">{formatDate(report.submitted_at)}</div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+        
+//         <div className="modal-footer">
+//           <button className="modal-btn secondary" onClick={onClose}>
+//             Close
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// const MyReports: React.FC = () => {
+//   const [reports, setReports] = useState<Report[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+//   const { user: currentUser } = useAuth();
+
+//   useEffect(() => {
+//     const fetchUserReports = async () => {
+//       if (!currentUser) return;
+      
+//       try {
+//         setLoading(true);
+//         setError(null);
+//         const token = localStorage.getItem('token');
+        
+//         console.log('FETCHING reports for user ID:', currentUser.user_id);
+        
+//         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
+//           headers: {
+//             'Authorization': `Bearer ${token}`,
+//             'Content-Type': 'application/json'
+//           }
+//         });
+        
+//         console.log('Response status:', response.status);
+        
+//         if (response.ok) {
+//           const data = await response.json();
+//           console.log('API RESPONSE:', data);
+          
+//           if (data.success) {
+//             console.log(`Found ${data.data?.length || 0} reports`);
+//             setReports(data.data || []);
+//           } else {
+//             console.error('API error:', data.message);
+//             setError(data.message || 'Failed to load reports');
+//           }
+//         } else {
+//           console.error('HTTP error:', response.status, response.statusText);
+//           setError('Failed to fetch reports: ' + response.statusText);
+//         }
+//       } catch (error) {
+//         console.error('Network error:', error);
+//         setError('Error loading reports. Please try again.');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+    
+//     if (currentUser) {
+//       fetchUserReports();
+//     }
+//   }, [currentUser]);
+
+//   const handleViewDetails = (report: Report) => {
+//     setSelectedReport(report);
+//     setIsModalOpen(true);
+//   };
+
+//   const getStatusText = (statusId: number): string => {
+//     switch(statusId) {
+//       case 1: return 'Submitted';
+//       case 2: return 'Under Review';
+//       case 3: return 'In Progress';
+//       case 4: return 'Completed';
+//       case 5: return 'Cancelled';
+//       default: return 'Unknown';
+//     }
+//   };
+
+//   const getStatusClass = (statusId: number): string => {
+//     switch(statusId) {
+//       case 1: return 'submitted';
+//       case 2: return 'review';
+//       case 3: return 'progress';
+//       case 4: return 'completed';
+//       case 5: return 'cancelled';
+//       default: return 'unknown';
+//     }
+//   };
+
+//   const formatDate = (dateString: string): string => {
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString('en-US', {
+//       month: 'short',
+//       day: 'numeric',
+//       year: 'numeric'
+//     });
+//   };
+
+//   const getAnimalEmoji = (animalType: string): string => {
+//     const type = animalType?.toLowerCase() || '';
+//     if (type.includes('dog')) return '🐶';
+//     if (type.includes('cat')) return '🐱';
+//     if (type.includes('bird')) return '🐦';
+//     if (type.includes('rabbit') || type.includes('bunny')) return '🐰';
+//     if (type.includes('hamster')) return '🐹';
+//     if (type.includes('turtle') || type.includes('tortoise')) return '🐢';
+//     if (type.includes('horse')) return '🐴';
+//     if (type.includes('cow')) return '🐮';
+//     if (type.includes('goat')) return '🐐';
+//     if (type.includes('sheep')) return '🐑';
+//     if (type.includes('fish')) return '🐠';
+//     if (type.includes('snake')) return '🐍';
+//     if (type.includes('mouse') || type.includes('rat')) return '🐭';
+//     if (type.includes('monkey')) return '🐒';
+//     if (type.includes('pig')) return '🐷';
+//     if (type.includes('chicken')) return '🐔';
+//     if (type.includes('duck')) return '🦆';
+//     return '🐾';
+//   };
+
+//   const formatPhoneNumber = (phone?: string | null): string => {
+//     if (!hasPhone(phone)) {
+//       return 'No phone';
+//     }
+    
+//     const phoneStr = String(phone).trim();
+//     const cleaned = phoneStr.replace(/\D/g, '');
+    
+//     if (cleaned.length === 10) {
+//       return `+977 ${cleaned}`;
+//     }
+    
+//     return phoneStr;
+//   };
+
+//   if (!currentUser) {
+//     return (
+//       <div className="my-reports-container">
+//         <div className="no-access">
+//           <h2>Access Denied</h2>
+//           <p>Please log in to view your reports.</p>
+//           <Link to="/login" className="login-link">
+//             Go to Login
+//           </Link>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="my-reports-container">
+//       <div className="reports-header">
+//         <div>
+//           <h1 className="page-title">My Reports</h1>
+//           <p className="page-subtitle">
+//             All your submitted animal rescue reports
+//           </p>
+//         </div>
+//         <Link to="/create-report" className="new-report-btn">
+//           + New Report
+//         </Link>
+//       </div>
+
+//       <div className="reports-list-section">
+//         {loading ? (
+//           <div className="loading-container">
+//             <div className="loading-spinner"></div>
+//             <p>Loading your reports...</p>
+//           </div>
+//         ) : error ? (
+//           <div className="error-container">
+//             <div className="error-icon">⚠️</div>
+//             <h3 className="error-title">Unable to Load Reports</h3>
+//             <p className="error-message">{error}</p>
+//             <button 
+//               onClick={() => window.location.reload()} 
+//               className="retry-btn"
+//             >
+//               Try Again
+//             </button>
+//           </div>
+//         ) : reports.length > 0 ? (
+//           <div className="simple-reports-list">
+//             <table className="reports-table">
+//               <thead>
+//                 <tr>
+//                   <th>ID</th>
+//                   <th>Animal</th>
+//                   <th>Phone</th>
+//                   <th>Location</th>
+//                   <th>Date</th>
+//                   <th>Status</th>
+//                   <th>Actions</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {reports.map(report => (
+//                   <tr key={report.report_id}>
+//                     <td className="report-id">#{report.report_id}</td>
+//                     <td className="animal-cell">
+//                       <div className="animal-info">
+//                         <span className="animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
+//                         <span className="animal-name">{report.animal_type || 'Unknown'}</span>
+//                       </div>
+//                     </td>
+//                     <td className="phone-cell">
+//                       <div className="phone-info">
+//                         <span className="phone-icon">📱</span>
+//                         <span className="phone-number">
+//                           {formatPhoneNumber(report.reporter_phone)}
+//                         </span>
+//                       </div>
+//                     </td>
+//                     <td className="location-cell">
+//                       <div className="location-info">
+//                         <span className="location-icon">📍</span>
+//                         <span className="location-text">
+//                           {report.location_address.length > 25 
+//                             ? `${report.location_address.substring(0, 25)}...` 
+//                             : report.location_address}
+//                         </span>
+//                       </div>
+//                     </td>
+//                     <td className="date-cell">{formatDate(report.submitted_at)}</td>
+//                     <td>
+//                       <span className={`status-badge status-${getStatusClass(report.status_id)}`}>
+//                         {getStatusText(report.status_id)}
+//                       </span>
+//                     </td>
+//                     <td>
+//                       <button 
+//                         onClick={() => handleViewDetails(report)}
+//                         className="view-detail-btn"
+//                       >
+//                         View Detail
+//                       </button>
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         ) : (
+//           <div className="empty-state">
+//             <div className="empty-icon">📝</div>
+//             <h3 className="empty-title">No Reports Yet</h3>
+//             <p className="empty-message">
+//               You haven't submitted any reports yet.
+//             </p>
+//             <Link to="/create-report" className="empty-action-btn">
+//               Submit Your First Report
+//             </Link>
+//           </div>
+//         )}
+//       </div>
+
+//       <ReportDetailModal 
+//         report={selectedReport} 
+//         isOpen={isModalOpen} 
+//         onClose={() => setIsModalOpen(false)}
+//       />
+//     </div>
+//   );
+// };
+
+// export default MyReports;
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
@@ -24,94 +528,90 @@ const hasPhone = (phone?: string | null): boolean => {
   return phone.trim().length > 0;
 };
 
+// Helper functions (same as Dashboard)
+const getStatusText = (statusId: number): string => {
+  switch(statusId) {
+    case 1: return 'Submitted';
+    case 2: return 'Under Review';
+    case 3: return 'In Progress';
+    case 4: return 'Completed';
+    case 5: return 'Cancelled';
+    default: return 'Unknown';
+  }
+};
+
+const getStatusClass = (statusId: number): string => {
+  switch(statusId) {
+    case 1: return 'submitted';
+    case 2: return 'review';
+    case 3: return 'progress';
+    case 4: return 'completed';
+    case 5: return 'cancelled';
+    default: return 'unknown';
+  }
+};
+
+const getAnimalEmoji = (animalType: string): string => {
+  const type = animalType?.toLowerCase() || '';
+  if (type.includes('dog')) return '🐶';
+  if (type.includes('cat')) return '🐱';
+  if (type.includes('bird')) return '🐦';
+  if (type.includes('rabbit') || type.includes('bunny')) return '🐰';
+  if (type.includes('hamster')) return '🐹';
+  if (type.includes('turtle') || type.includes('tortoise')) return '🐢';
+  if (type.includes('horse')) return '🐴';
+  if (type.includes('cow')) return '🐮';
+  if (type.includes('goat')) return '🐐';
+  if (type.includes('sheep')) return '🐑';
+  if (type.includes('fish')) return '🐠';
+  if (type.includes('snake')) return '🐍';
+  if (type.includes('mouse') || type.includes('rat')) return '🐭';
+  if (type.includes('monkey')) return '🐒';
+  if (type.includes('pig')) return '🐷';
+  if (type.includes('chicken')) return '🐔';
+  if (type.includes('duck')) return '🦆';
+  return '🐾';
+};
+
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+// Format phone number for display
+const formatPhoneNumber = (phone?: string | null): string => {
+  if (!hasPhone(phone)) {
+    return 'Not provided';
+  }
+  
+  const phoneStr = String(phone).trim();
+  const cleaned = phoneStr.replace(/\D/g, '');
+  
+  if (cleaned.length === 10) {
+    return `+977 ${cleaned}`;
+  }
+  
+  return phoneStr;
+};
+
+// Report Detail Modal Component (Consistent with Dashboard)
 const ReportDetailModal: React.FC<{
   report: Report | null;
   isOpen: boolean;
   onClose: () => void;
-}> = ({ report, isOpen, onClose }) => {
+  userPhone?: string;
+  userName?: string;
+}> = ({ report, isOpen, onClose, userPhone, userName }) => {
   if (!isOpen || !report) return null;
 
-  const getStatusText = (statusId: number): string => {
-    switch(statusId) {
-      case 1: return 'Submitted';
-      case 2: return 'Under Review';
-      case 3: return 'In Progress';
-      case 4: return 'Completed';
-      case 5: return 'Cancelled';
-      default: return 'Unknown';
-    }
-  };
-
-  const getStatusClass = (statusId: number): string => {
-    switch(statusId) {
-      case 1: return 'submitted';
-      case 2: return 'review';
-      case 3: return 'progress';
-      case 4: return 'completed';
-      case 5: return 'cancelled';
-      default: return 'unknown';
-    }
-  };
-
-  const getAnimalEmoji = (animalType: string): string => {
-    const type = animalType?.toLowerCase() || '';
-    if (type.includes('dog')) return '🐶';
-    if (type.includes('cat')) return '🐱';
-    if (type.includes('bird')) return '🐦';
-    if (type.includes('rabbit') || type.includes('bunny')) return '🐰';
-    if (type.includes('hamster')) return '🐹';
-    if (type.includes('turtle') || type.includes('tortoise')) return '🐢';
-    if (type.includes('horse')) return '🐴';
-    if (type.includes('cow')) return '🐮';
-    if (type.includes('goat')) return '🐐';
-    if (type.includes('sheep')) return '🐑';
-    if (type.includes('fish')) return '🐠';
-    if (type.includes('snake')) return '🐍';
-    if (type.includes('mouse') || type.includes('rat')) return '🐭';
-    if (type.includes('monkey')) return '🐒';
-    if (type.includes('pig')) return '🐷';
-    if (type.includes('chicken')) return '🐔';
-    if (type.includes('duck')) return '🦆';
-    return '🐾';
-  };
-
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getConditionIcon = (condition: string): string => {
-    const cond = condition.toLowerCase();
-    if (cond.includes('critical') || cond.includes('emergency')) return '🆘';
-    if (cond.includes('severe') || cond.includes('serious')) return '⚠️';
-    if (cond.includes('moderate') || cond.includes('injured')) return '🩹';
-    if (cond.includes('mild') || cond.includes('sick')) return '🤒';
-    if (cond.includes('abandoned') || cond.includes('lost')) return '💔';
-    if (cond.includes('healthy') || cond.includes('safe')) return '✅';
-    return 'ℹ️';
-  };
-
-  const formatPhoneNumber = (phone?: string | null): string => {
-    if (!hasPhone(phone)) {
-      return 'Not provided';
-    }
-    
-    const phoneStr = String(phone).trim();
-    const cleaned = phoneStr.replace(/\D/g, '');
-    
-    if (cleaned.length === 10) {
-      return `+977 ${cleaned}`;
-    }
-    
-    return phoneStr;
-  };
+  const isEditable = report.status_id === 1;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -128,14 +628,19 @@ const ReportDetailModal: React.FC<{
         </div>
         
         <div className="modal-body">
+          {/* Top row with status */}
           <div className="modal-top-row">
             <div className="modal-status">
               <span className={`status-badge-large status-${getStatusClass(report.status_id)}`}>
                 {getStatusText(report.status_id)}
               </span>
+              {!isEditable && (
+                <span className="non-editable-badge">Non-editable</span>
+              )}
             </div>
           </div>
 
+          {/* Your Information Section */}
           <div className="modal-section">
             <h4 className="modal-section-title">
               <span className="section-icon">👤</span>
@@ -144,7 +649,7 @@ const ReportDetailModal: React.FC<{
             <div className="modal-detail-grid">
               <div className="detail-item">
                 <span className="detail-label">Name</span>
-                <span className="detail-value">{report.reporter_name || 'Anonymous'}</span>
+                <span className="detail-value">{report.reporter_name || userName || 'Anonymous'}</span>
               </div>
               <div className="detail-item">
                 <span className="detail-label">User ID</span>
@@ -159,7 +664,7 @@ const ReportDetailModal: React.FC<{
               {hasPhone(report.reporter_phone) && (
                 <div className="detail-item">
                   <span className="detail-label">Phone</span>
-                  <span className="detail-value">
+                  <span className="detail-value phone-emphasis">
                     {formatPhoneNumber(report.reporter_phone)}
                   </span>
                 </div>
@@ -167,6 +672,7 @@ const ReportDetailModal: React.FC<{
             </div>
           </div>
 
+          {/* Animal Information Section */}
           <div className="modal-section">
             <h4 className="modal-section-title">
               <span className="section-icon">🐾</span>
@@ -183,13 +689,21 @@ const ReportDetailModal: React.FC<{
               <div className="detail-item">
                 <span className="detail-label">Condition</span>
                 <div className="detail-value-with-emoji">
-                  <span className="detail-emoji">{getConditionIcon(report.animal_condition)}</span>
+                  <span className="detail-emoji">
+                    {report.animal_condition?.includes('Critical') ? '🆘' : 
+                     report.animal_condition?.includes('Severe') ? '⚠️' : 
+                     report.animal_condition?.includes('Injured') ? '🩹' : 
+                     report.animal_condition?.includes('Sick') ? '🤒' : 
+                     report.animal_condition?.includes('Abandoned') ? '💔' : 
+                     'ℹ️'}
+                  </span>
                   <span>{report.animal_condition || 'Not specified'}</span>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Location Details */}
           <div className="modal-section">
             <h4 className="modal-section-title">
               <span className="section-icon">📍</span>
@@ -203,6 +717,7 @@ const ReportDetailModal: React.FC<{
             </div>
           </div>
 
+          {/* Description */}
           <div className="modal-section">
             <h4 className="modal-section-title">
               <span className="section-icon">📝</span>
@@ -213,6 +728,7 @@ const ReportDetailModal: React.FC<{
             </div>
           </div>
 
+          {/* Timeline */}
           <div className="modal-section">
             <h4 className="modal-section-title">
               <span className="section-icon">📅</span>
@@ -240,15 +756,303 @@ const ReportDetailModal: React.FC<{
   );
 };
 
+// Edit Report Modal (Updated to match Dashboard style)
+const EditReportModal: React.FC<{
+  report: Report | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (updatedReport: Report) => Promise<void>;
+}> = ({ report, isOpen, onClose, onSave }) => {
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (report) {
+      setDescription(report.description);
+      setLocation(report.location_address);
+      setError(null);
+    }
+  }, [report]);
+
+  if (!isOpen || !report) return null;
+
+  const validateForm = (): boolean => {
+    if (description.trim().length < 10) {
+      setError('Description must be at least 10 characters long');
+      return false;
+    }
+
+    if (location.trim().length < 5) {
+      setError('Location must be at least 5 characters long');
+      return false;
+    }
+
+    // Check if there are actual changes
+    if (description.trim() === report.description && 
+        location.trim() === report.location_address) {
+      setError('No changes made to save');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSaveClick = () => {
+    setError(null);
+    if (validateForm()) {
+      setShowSaveConfirm(true);
+    }
+  };
+
+  const handleConfirmSave = async () => {
+    try {
+      setIsSaving(true);
+      setError(null);
+
+      const updatedReport = {
+        ...report,
+        description: description.trim(),
+        location_address: location.trim()
+      };
+
+      await onSave(updatedReport);
+      setShowSaveConfirm(false);
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save changes');
+      setShowSaveConfirm(false);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (description !== report.description || location !== report.location_address) {
+      if (window.confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+        setDescription(report.description);
+        setLocation(report.location_address);
+        setError(null);
+        onClose();
+      }
+    } else {
+      onClose();
+    }
+  };
+
+  return (
+    <>
+      <div className="modal-overlay" onClick={handleCancel}>
+        <div className="modal-content edit-modal" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div className="modal-header-left">
+              <span className="modal-animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
+              <div>
+                <h3 className="modal-title">Edit Report #{report.report_id}</h3>
+                <p className="modal-subtitle">{report.animal_type} • {report.animal_condition}</p>
+              </div>
+            </div>
+            <button 
+              className="modal-close" 
+              onClick={handleCancel}
+              disabled={isSaving}
+            >
+              ×
+            </button>
+          </div>
+          
+          <div className="modal-body">
+            {error && (
+              <div className="edit-error-message">
+                <span className="error-icon-small">⚠️</span>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="edit-form">
+              <div className="form-group">
+                <label htmlFor="description" className="form-label">
+                  <span className="form-label-icon">📝</span>
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  className="form-textarea"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe the animal's situation in detail..."
+                  rows={6}
+                  disabled={isSaving}
+                />
+                <div className="form-help">
+                  Minimum 10 characters. Current: {description.length}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="location" className="form-label">
+                  <span className="form-label-icon">📍</span>
+                  Location Address
+                </label>
+                <textarea
+                  id="location"
+                  className="form-textarea"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Provide the exact location where the animal is..."
+                  rows={3}
+                  disabled={isSaving}
+                />
+                <div className="form-help">
+                  Minimum 5 characters. Current: {location.length}
+                </div>
+              </div>
+
+              <div className="form-notice">
+                <div className="notice-icon">ℹ️</div>
+                <div className="notice-content">
+                  <strong>Note:</strong> You can only edit reports with "Submitted" status. 
+                  Once a report is under review or in progress, it cannot be edited.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="modal-footer">
+            <button 
+              className="modal-btn secondary" 
+              onClick={handleCancel}
+              disabled={isSaving}
+            >
+              Cancel
+            </button>
+            <button 
+              className="modal-btn primary" 
+              onClick={handleSaveClick}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <>
+                  <span className="loading-spinner-small"></span>
+                  Saving...
+                </>
+              ) : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Confirmation Modal */}
+      {showSaveConfirm && (
+        <div className="modal-overlay">
+          <div className="modal-content save-confirm-modal">
+            <div className="modal-header">
+              <h3 className="modal-title">Confirm Save</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowSaveConfirm(false)}
+                disabled={isSaving}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="save-confirm-warning">
+                <div className="warning-icon">💾</div>
+                <h4>Are you sure you want to save these changes?</h4>
+                <div className="changes-list">
+                  {description.trim() !== report.description && (
+                    <div className="change-item">
+                      <span className="change-label">Description:</span>
+                      <span className="change-value">Updated</span>
+                    </div>
+                  )}
+                  {location.trim() !== report.location_address && (
+                    <div className="change-item">
+                      <span className="change-label">Location:</span>
+                      <span className="change-value">Updated</span>
+                    </div>
+                  )}
+                </div>
+                <p className="confirm-message">
+                  Your changes will be submitted for review.
+                </p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="modal-btn secondary" 
+                onClick={() => setShowSaveConfirm(false)}
+                disabled={isSaving}
+              >
+                Cancel
+              </button>
+              <button 
+                className="modal-btn primary" 
+                onClick={handleConfirmSave}
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <>
+                    <span className="loading-spinner-small"></span>
+                    Saving...
+                  </>
+                ) : 'Yes, Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const MyReports: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [editingReport, setEditingReport] = useState<Report | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [reportToDelete, setReportToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
   
   const { user: currentUser } = useAuth();
 
+  // Fetch user profile
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!currentUser) return;
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/users/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setUserProfile(data.data);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+      }
+    };
+
+    fetchUserProfile();
+  }, [currentUser]);
+
+  // Fetch user's reports
   useEffect(() => {
     const fetchUserReports = async () => {
       if (!currentUser) return;
@@ -258,8 +1062,6 @@ const MyReports: React.FC = () => {
         setError(null);
         const token = localStorage.getItem('token');
         
-        console.log('FETCHING reports for user ID:', currentUser.user_id);
-        
         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -267,21 +1069,14 @@ const MyReports: React.FC = () => {
           }
         });
         
-        console.log('Response status:', response.status);
-        
         if (response.ok) {
           const data = await response.json();
-          console.log('API RESPONSE:', data);
-          
           if (data.success) {
-            console.log(`Found ${data.data?.length || 0} reports`);
             setReports(data.data || []);
           } else {
-            console.error('API error:', data.message);
             setError(data.message || 'Failed to load reports');
           }
         } else {
-          console.error('HTTP error:', response.status, response.statusText);
           setError('Failed to fetch reports: ' + response.statusText);
         }
       } catch (error) {
@@ -302,25 +1097,97 @@ const MyReports: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const getStatusText = (statusId: number): string => {
-    switch(statusId) {
-      case 1: return 'Submitted';
-      case 2: return 'Under Review';
-      case 3: return 'In Progress';
-      case 4: return 'Completed';
-      case 5: return 'Cancelled';
-      default: return 'Unknown';
+  const handleEditClick = (report: Report, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingReport(report);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveReport = async (updatedReport: Report) => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`http://localhost:5000/api/reports/${updatedReport.report_id}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          description: updatedReport.description,
+          location_address: updatedReport.location_address
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Update the report in the list
+          setReports(prev => prev.map(report => 
+            report.report_id === updatedReport.report_id 
+              ? { ...report, ...updatedReport }
+              : report
+          ));
+          
+          // Also update the selected report if it's the same one
+          if (selectedReport?.report_id === updatedReport.report_id) {
+            setSelectedReport(updatedReport);
+          }
+          
+          return; // Success
+        } else {
+          throw new Error(data.message || 'Failed to update report');
+        }
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update report');
+      }
+    } catch (error) {
+      console.error('Error updating report:', error);
+      throw error;
     }
   };
 
-  const getStatusClass = (statusId: number): string => {
-    switch(statusId) {
-      case 1: return 'submitted';
-      case 2: return 'review';
-      case 3: return 'progress';
-      case 4: return 'completed';
-      case 5: return 'cancelled';
-      default: return 'unknown';
+  const handleDeleteClick = (reportId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setReportToDelete(reportId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteReport = async () => {
+    if (!reportToDelete || !currentUser) return;
+    
+    try {
+      setIsDeleting(true);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`http://localhost:5000/api/reports/${reportToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Remove the deleted report from the list
+          setReports(prev => prev.filter(report => report.report_id !== reportToDelete));
+          setDeleteConfirmOpen(false);
+          setReportToDelete(null);
+          setIsModalOpen(false);
+        } else {
+          alert(data.message || 'Failed to delete report');
+        }
+      } else {
+        alert('Failed to delete report');
+      }
+    } catch (error) {
+      console.error('Error deleting report:', error);
+      alert('Error deleting report. Please try again.');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -333,41 +1200,8 @@ const MyReports: React.FC = () => {
     });
   };
 
-  const getAnimalEmoji = (animalType: string): string => {
-    const type = animalType?.toLowerCase() || '';
-    if (type.includes('dog')) return '🐶';
-    if (type.includes('cat')) return '🐱';
-    if (type.includes('bird')) return '🐦';
-    if (type.includes('rabbit') || type.includes('bunny')) return '🐰';
-    if (type.includes('hamster')) return '🐹';
-    if (type.includes('turtle') || type.includes('tortoise')) return '🐢';
-    if (type.includes('horse')) return '🐴';
-    if (type.includes('cow')) return '🐮';
-    if (type.includes('goat')) return '🐐';
-    if (type.includes('sheep')) return '🐑';
-    if (type.includes('fish')) return '🐠';
-    if (type.includes('snake')) return '🐍';
-    if (type.includes('mouse') || type.includes('rat')) return '🐭';
-    if (type.includes('monkey')) return '🐒';
-    if (type.includes('pig')) return '🐷';
-    if (type.includes('chicken')) return '🐔';
-    if (type.includes('duck')) return '🦆';
-    return '🐾';
-  };
-
-  const formatPhoneNumber = (phone?: string | null): string => {
-    if (!hasPhone(phone)) {
-      return 'No phone';
-    }
-    
-    const phoneStr = String(phone).trim();
-    const cleaned = phoneStr.replace(/\D/g, '');
-    
-    if (cleaned.length === 10) {
-      return `+977 ${cleaned}`;
-    }
-    
-    return phoneStr;
+  const isReportEditable = (statusId: number): boolean => {
+    return statusId === 1;
   };
 
   if (!currentUser) {
@@ -423,7 +1257,6 @@ const MyReports: React.FC = () => {
                 <tr>
                   <th>ID</th>
                   <th>Animal</th>
-                  <th>Phone</th>
                   <th>Location</th>
                   <th>Date</th>
                   <th>Status</th>
@@ -431,49 +1264,62 @@ const MyReports: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {reports.map(report => (
-                  <tr key={report.report_id}>
-                    <td className="report-id">#{report.report_id}</td>
-                    <td className="animal-cell">
-                      <div className="animal-info">
-                        <span className="animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
-                        <span className="animal-name">{report.animal_type || 'Unknown'}</span>
-                      </div>
-                    </td>
-                    <td className="phone-cell">
-                      <div className="phone-info">
-                        <span className="phone-icon">📱</span>
-                        <span className="phone-number">
-                          {formatPhoneNumber(report.reporter_phone)}
+                {reports.map(report => {
+                  const editable = isReportEditable(report.status_id);
+                  return (
+                    <tr key={report.report_id}>
+                      <td className="report-id">#{report.report_id}</td>
+                      <td className="animal-cell">
+                        <div className="animal-info">
+                          <span className="animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
+                          <span className="animal-name">{report.animal_type || 'Unknown'}</span>
+                        </div>
+                      </td>
+                      <td className="location-cell">
+                        <div className="location-info">
+                          <span className="location-icon">📍</span>
+                          <span className="location-text">
+                            {report.location_address.length > 25 
+                              ? `${report.location_address.substring(0, 25)}...` 
+                              : report.location_address}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="date-cell">{formatDate(report.submitted_at)}</td>
+                      <td>
+                        <span className={`status-badge status-${getStatusClass(report.status_id)}`}>
+                          {getStatusText(report.status_id)}
                         </span>
-                      </div>
-                    </td>
-                    <td className="location-cell">
-                      <div className="location-info">
-                        <span className="location-icon">📍</span>
-                        <span className="location-text">
-                          {report.location_address.length > 25 
-                            ? `${report.location_address.substring(0, 25)}...` 
-                            : report.location_address}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="date-cell">{formatDate(report.submitted_at)}</td>
-                    <td>
-                      <span className={`status-badge status-${getStatusClass(report.status_id)}`}>
-                        {getStatusText(report.status_id)}
-                      </span>
-                    </td>
-                    <td>
-                      <button 
-                        onClick={() => handleViewDetails(report)}
-                        className="view-detail-btn"
-                      >
-                        View Detail
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td>
+                        <div className="action-buttons">
+                          <button 
+                            onClick={() => handleViewDetails(report)}
+                            className="view-detail-btn"
+                          >
+                            View
+                          </button>
+                          {editable && (
+                            <>
+                              <button 
+                                onClick={(e) => handleEditClick(report, e)}
+                                className="edit-btn-small"
+                              >
+                                Edit
+                              </button>
+                              <button 
+                                onClick={(e) => handleDeleteClick(report.report_id, e)}
+                                className="delete-btn-small"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -491,11 +1337,63 @@ const MyReports: React.FC = () => {
         )}
       </div>
 
+      {/* View Details Modal */}
       <ReportDetailModal 
         report={selectedReport} 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
+        userPhone={userProfile?.phone}
+        userName={userProfile?.username}
       />
+
+      {/* Edit Modal */}
+      <EditReportModal
+        report={editingReport}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleSaveReport}
+      />
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content delete-confirm-modal">
+            <div className="modal-header">
+              <h3 className="modal-title">Confirm Delete</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setDeleteConfirmOpen(false)}
+                disabled={isDeleting}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="delete-warning">
+                <div className="warning-icon">⚠️</div>
+                <h4>Are you sure you want to delete this report?</h4>
+                <p>This action cannot be undone. The report will be permanently removed.</p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="modal-btn secondary" 
+                onClick={() => setDeleteConfirmOpen(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button 
+                className="modal-btn delete-btn" 
+                onClick={handleDeleteReport}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Report'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

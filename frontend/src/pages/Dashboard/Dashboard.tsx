@@ -2812,12 +2812,157 @@ const formatDate = (dateString: string): string => {
 };
 
 // Report Detail Modal Component (For User Dashboard)
+// const ReportDetailModal: React.FC<{
+//   report: Report | null;
+//   isOpen: boolean;
+//   onClose: () => void;
+//   userPhone?: string; // Current user's phone number
+//   userName?: string;  // Current user's name
+// }> = ({ report, isOpen, onClose, userPhone, userName }) => {
+//   if (!isOpen || !report) return null;
+
+//   // Use reporter info from report or fall back to current user info
+//   const reporterName = report.reporter_name || userName;
+//   const phoneNumber = report.reporter_phone || userPhone;
+
+//   return (
+//     <div className="modal-overlay" onClick={onClose}>
+//       <div className="modal-content" onClick={e => e.stopPropagation()}>
+//         <div className="modal-header">
+//           <h3 className="modal-title">
+//             <span className="modal-animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
+//             Report Details
+//           </h3>
+//           <button className="modal-close" onClick={onClose}>×</button>
+//         </div>
+        
+//         <div className="modal-body">
+//           <div className="detail-row">
+//             <div className="detail-label">Report ID</div>
+//             <div className="detail-value">#{report.report_id}</div>
+//           </div>
+          
+//           <div className="detail-row">
+//             <div className="detail-label">Status</div>
+//             <div className="detail-value">
+//               <span className={`status-badge status-${getStatusClass(report.status_id)}`}>
+//                 {getStatusText(report.status_id)}
+//               </span>
+//             </div>
+//           </div>
+          
+//           {/* Reporter Information Section */}
+//           <div className="reporter-section">
+//             <h4 className="reporter-section-title">Reporter Information</h4>
+            
+//             <div className="detail-row">
+//               <div className="detail-label">Name</div>
+//               <div className="detail-value">
+//                 <div className="reporter-info">
+//                   <span className="reporter-icon">👤</span>
+//                   <span className="reporter-name">{reporterName || 'Anonymous'}</span>
+//                 </div>
+//               </div>
+//             </div>
+            
+//             {/* Show phone number */}
+//             {phoneNumber && (
+//               <div className="detail-row">
+//                 <div className="detail-label">Phone Number</div>
+//                 <div className="detail-value detail-contact">
+//                   <span className="contact-icon">📱</span>
+//                   <span className="phone-number">{phoneNumber}</span>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+          
+//           <div className="animal-section">
+//             <h4 className="animal-section-title">Animal Information</h4>
+            
+//             <div className="detail-row">
+//               <div className="detail-label">Animal Type</div>
+//               <div className="detail-value">{report.animal_type || 'Unknown'}</div>
+//             </div>
+            
+//             <div className="detail-row">
+//               <div className="detail-label">Animal Condition</div>
+//               <div className="detail-value">{report.animal_condition || 'Not specified'}</div>
+//             </div>
+//           </div>
+          
+//           <div className="location-section">
+//             <h4 className="location-section-title">Location Details</h4>
+            
+//             <div className="detail-row">
+//               <div className="detail-label">Location</div>
+//               <div className="detail-value">
+//                 <div className="location-info">
+//                   <span className="location-icon">📍</span>
+//                   <span className="location-text">{report.location_address}</span>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+          
+//           <div className="details-section">
+//             <h4 className="details-section-title">Report Details</h4>
+            
+//             <div className="detail-row">
+//               <div className="detail-label">Description</div>
+//               <div className="detail-value detail-description">{report.description}</div>
+//             </div>
+            
+//             {report.user_note && (
+//               <div className="detail-row">
+//                 <div className="detail-label">Additional Notes</div>
+//                 <div className="detail-value detail-note">{report.user_note}</div>
+//               </div>
+//             )}
+//           </div>
+          
+//           {/* Show assigned volunteer name only (no phone) */}
+//           {report.volunteer_name && (
+//             <div className="volunteer-section">
+//               <h4 className="volunteer-section-title">Assigned Volunteer</h4>
+//               <div className="detail-row">
+//                 <div className="detail-label">Volunteer Name</div>
+//                 <div className="detail-value detail-volunteer">
+//                   <span className="volunteer-icon">🦸</span>
+//                   <span>{report.volunteer_name}</span>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+          
+//           <div className="timeline-section">
+//             <h4 className="timeline-section-title">Timeline</h4>
+//             <div className="detail-row">
+//               <div className="detail-label">Submitted On</div>
+//               <div className="detail-value">{formatDate(report.submitted_at)}</div>
+//             </div>
+//           </div>
+//         </div>
+        
+//         <div className="modal-footer">
+//           <button className="modal-btn secondary" onClick={onClose}>
+//             Close
+//           </button>
+//           {/* <Link to={`/reports/${report.report_id}`} className="modal-btn primary">
+//             View Full Details
+//           </Link> */}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+// Report Detail Modal Component (Updated to match MyReports style)
 const ReportDetailModal: React.FC<{
   report: Report | null;
   isOpen: boolean;
   onClose: () => void;
-  userPhone?: string; // Current user's phone number
-  userName?: string;  // Current user's name
+  userPhone?: string;
+  userName?: string;
 }> = ({ report, isOpen, onClose, userPhone, userName }) => {
   if (!isOpen || !report) return null;
 
@@ -2825,121 +2970,174 @@ const ReportDetailModal: React.FC<{
   const reporterName = report.reporter_name || userName;
   const phoneNumber = report.reporter_phone || userPhone;
 
+  const isEditable = report.status_id === 1;
+
+  // Helper function to check if phone exists
+  const hasPhone = (phone?: string | null): boolean => {
+    if (phone === null || phone === undefined) return false;
+    if (typeof phone !== 'string') return false;
+    return phone.trim().length > 0;
+  };
+
+  // Format phone number for display
+  const formatPhoneNumber = (phone?: string | null): string => {
+    if (!hasPhone(phone)) {
+      return 'Not provided';
+    }
+    
+    const phoneStr = String(phone).trim();
+    const cleaned = phoneStr.replace(/\D/g, '');
+    
+    if (cleaned.length === 10) {
+      return `+977 ${cleaned}`;
+    }
+    
+    return phoneStr;
+  };
+
+  const getConditionIcon = (condition: string): string => {
+    const cond = condition?.toLowerCase() || '';
+    if (cond.includes('critical') || cond.includes('emergency')) return '🆘';
+    if (cond.includes('severe') || cond.includes('serious')) return '⚠️';
+    if (cond.includes('moderate') || cond.includes('injured')) return '🩹';
+    if (cond.includes('mild') || cond.includes('sick')) return '🤒';
+    if (cond.includes('abandoned') || cond.includes('lost')) return '💔';
+    if (cond.includes('healthy') || cond.includes('safe')) return '✅';
+    return 'ℹ️';
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">
+          <div className="modal-header-left">
             <span className="modal-animal-emoji">{getAnimalEmoji(report.animal_type)}</span>
-            Report Details
-          </h3>
+            <div>
+              <h3 className="modal-title">Report #{report.report_id}</h3>
+              <p className="modal-subtitle">{report.animal_type} • {report.animal_condition}</p>
+            </div>
+          </div>
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
         
         <div className="modal-body">
-          <div className="detail-row">
-            <div className="detail-label">Report ID</div>
-            <div className="detail-value">#{report.report_id}</div>
-          </div>
-          
-          <div className="detail-row">
-            <div className="detail-label">Status</div>
-            <div className="detail-value">
-              <span className={`status-badge status-${getStatusClass(report.status_id)}`}>
+          {/* Top row with status */}
+          <div className="modal-top-row">
+            <div className="modal-status">
+              <span className={`status-badge-large status-${getStatusClass(report.status_id)}`}>
                 {getStatusText(report.status_id)}
               </span>
+              {!isEditable && (
+                <span className="non-editable-badge">Non-editable</span>
+              )}
             </div>
           </div>
-          
-          {/* Reporter Information Section */}
-          <div className="reporter-section">
-            <h4 className="reporter-section-title">Reporter Information</h4>
-            
-            <div className="detail-row">
-              <div className="detail-label">Name</div>
-              <div className="detail-value">
-                <div className="reporter-info">
-                  <span className="reporter-icon">👤</span>
-                  <span className="reporter-name">{reporterName || 'Anonymous'}</span>
+
+          {/* Your Information Section */}
+          <div className="modal-section">
+            <h4 className="modal-section-title">
+              <span className="section-icon">👤</span>
+              Your Information
+            </h4>
+            <div className="modal-detail-grid">
+              <div className="detail-item">
+                <span className="detail-label">Name</span>
+                <span className="detail-value">{reporterName || 'Anonymous'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">User ID</span>
+                <span className="detail-value">#{report.user_id}</span>
+              </div>
+              {hasPhone(phoneNumber) && (
+                <div className="detail-item">
+                  <span className="detail-label">Phone</span>
+                  <span className="detail-value phone-emphasis">
+                    {formatPhoneNumber(phoneNumber)}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Animal Information Section */}
+          <div className="modal-section">
+            <h4 className="modal-section-title">
+              <span className="section-icon">🐾</span>
+              Animal Information
+            </h4>
+            <div className="modal-detail-grid">
+              <div className="detail-item">
+                <span className="detail-label">Animal Type</span>
+                <div className="detail-value-with-emoji">
+                  <span className="detail-emoji">{getAnimalEmoji(report.animal_type)}</span>
+                  <span>{report.animal_type || 'Unknown Animal'}</span>
+                </div>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Condition</span>
+                <div className="detail-value-with-emoji">
+                  <span className="detail-emoji">{getConditionIcon(report.animal_condition)}</span>
+                  <span>{report.animal_condition || 'Not specified'}</span>
                 </div>
               </div>
             </div>
-            
-            {/* Show phone number */}
-            {phoneNumber && (
-              <div className="detail-row">
-                <div className="detail-label">Phone Number</div>
-                <div className="detail-value detail-contact">
-                  <span className="contact-icon">📱</span>
-                  <span className="phone-number">{phoneNumber}</span>
-                </div>
-              </div>
-            )}
           </div>
-          
-          <div className="animal-section">
-            <h4 className="animal-section-title">Animal Information</h4>
-            
-            <div className="detail-row">
-              <div className="detail-label">Animal Type</div>
-              <div className="detail-value">{report.animal_type || 'Unknown'}</div>
-            </div>
-            
-            <div className="detail-row">
-              <div className="detail-label">Animal Condition</div>
-              <div className="detail-value">{report.animal_condition || 'Not specified'}</div>
-            </div>
-          </div>
-          
-          <div className="location-section">
-            <h4 className="location-section-title">Location Details</h4>
-            
-            <div className="detail-row">
-              <div className="detail-label">Location</div>
-              <div className="detail-value">
-                <div className="location-info">
-                  <span className="location-icon">📍</span>
-                  <span className="location-text">{report.location_address}</span>
-                </div>
+
+          {/* Location Details */}
+          <div className="modal-section">
+            <h4 className="modal-section-title">
+              <span className="section-icon">📍</span>
+              Location Details
+            </h4>
+            <div className="location-card">
+              <div className="location-content">
+                <span className="location-icon-large">📍</span>
+                <span className="location-text">{report.location_address}</span>
               </div>
             </div>
           </div>
-          
-          <div className="details-section">
-            <h4 className="details-section-title">Report Details</h4>
-            
-            <div className="detail-row">
-              <div className="detail-label">Description</div>
-              <div className="detail-value detail-description">{report.description}</div>
+
+          {/* Description */}
+          <div className="modal-section">
+            <h4 className="modal-section-title">
+              <span className="section-icon">📝</span>
+              Description
+            </h4>
+            <div className="description-card">
+              <p className="description-text">{report.description}</p>
             </div>
-            
-            {report.user_note && (
-              <div className="detail-row">
-                <div className="detail-label">Additional Notes</div>
-                <div className="detail-value detail-note">{report.user_note}</div>
-              </div>
-            )}
           </div>
-          
+
           {/* Show assigned volunteer name only (no phone) */}
           {report.volunteer_name && (
-            <div className="volunteer-section">
-              <h4 className="volunteer-section-title">Assigned Volunteer</h4>
-              <div className="detail-row">
-                <div className="detail-label">Volunteer Name</div>
-                <div className="detail-value detail-volunteer">
-                  <span className="volunteer-icon">🦸</span>
+            <div className="modal-section">
+              <h4 className="modal-section-title">
+                <span className="section-icon">🦸</span>
+                Assigned Volunteer
+              </h4>
+              <div className="detail-item">
+                <div className="detail-value-with-emoji">
+                  <span className="detail-emoji">🦸</span>
                   <span>{report.volunteer_name}</span>
                 </div>
               </div>
             </div>
           )}
-          
-          <div className="timeline-section">
-            <h4 className="timeline-section-title">Timeline</h4>
-            <div className="detail-row">
-              <div className="detail-label">Submitted On</div>
-              <div className="detail-value">{formatDate(report.submitted_at)}</div>
+
+          {/* Timeline */}
+          <div className="modal-section">
+            <h4 className="modal-section-title">
+              <span className="section-icon">📅</span>
+              Timeline
+            </h4>
+            <div className="timeline-card">
+              <div className="timeline-item">
+                <div className="timeline-icon">📅</div>
+                <div className="timeline-content">
+                  <div className="timeline-label">Report Submitted</div>
+                  <div className="timeline-value">{formatDate(report.submitted_at)}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2948,9 +3146,6 @@ const ReportDetailModal: React.FC<{
           <button className="modal-btn secondary" onClick={onClose}>
             Close
           </button>
-          <Link to={`/reports/${report.report_id}`} className="modal-btn primary">
-            View Full Details
-          </Link>
         </div>
       </div>
     </div>
