@@ -98,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {currentUser?.role === 'admin' && (
               <>
                 <NavItem to="/admin/users" icon="FiUsers" label="Ranger Personnel" />
-                <NavItem to="/admin/reports" icon="FiFileText" label="Master Log" />
+                <NavItem to="/admin/rescue-reports" icon="FiFileText" label="Master Log" />
               </>
             )}
           </div>

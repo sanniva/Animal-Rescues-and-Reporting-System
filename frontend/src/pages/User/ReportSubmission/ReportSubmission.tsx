@@ -1700,7 +1700,7 @@ const ReportSubmission: React.FC = () => {
         throw new Error(data.message || 'Failed to submit report');
       }
 
-      setSuccess('✅ Field report submitted! Our rangers will respond ASAP.');
+      setSuccess('Field report submitted! Our rangers will respond ASAP.');
 
       // Mark all steps as completed
       setCompletedSteps([1, 2, 3, 4]);
@@ -1711,7 +1711,7 @@ const ReportSubmission: React.FC = () => {
       }, 3000);
 
     } catch (error: any) {
-      console.error('❌ Submit error:', error);
+      console.error('Submit error:', error);
       setError(`Failed to submit report: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -1791,7 +1791,7 @@ const ReportSubmission: React.FC = () => {
         </p>
       </div>
 
-      {/* Progress Steps - FIXED STRUCTURE */}
+      {/* Progress Steps*/}
       <div className="step-progress">
         {[1, 2, 3, 4].map((stepNum, index) => (
           <React.Fragment key={stepNum}>

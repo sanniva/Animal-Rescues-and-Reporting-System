@@ -8,6 +8,7 @@ import UserList from "../pages/Admin/UserList/UserList";
 import { Profile } from "../pages/Profile/Profile";
 import ReportSubmission from "../pages/User/ReportSubmission/ReportSubmission";
 import MyReports from "../pages/User/MyReports/MyReports";
+import RescueReports from "../pages/Admin/RescueReports/RescueReports";
 
 const MainStack: React.FC = () => {
   const { user } = useAuth();
@@ -36,6 +37,15 @@ const MainStack: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <UserList />
+          </ProtectedRoute>
+        }
+      />
+
+         <Route
+        path="/admin/rescue-reports"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <RescueReports /> 
           </ProtectedRoute>
         }
       />
