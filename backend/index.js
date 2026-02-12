@@ -36,7 +36,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
 const reportRoutes = require('./routes/reports');
-const volunteerRoutes = require('./routes/volunteerList');
+const volunteerRoutes = require('./routes/volunteers');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

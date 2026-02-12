@@ -621,36 +621,6 @@
   transform: translateY(-2px);
 }
 
-/* Notes Input - Match other textareas */
-.notes-input {
-  width: 100%;
-  padding: 16px;
-  background: #f9f5ec; /* This should match .location-input and .description-input */
-  border: 2px solid #e8dfc9;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 1rem;
-  color: #444;
-  resize: vertical;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.notes-input:focus {
-  border-color: #2D5A27;
-  background: white; /* Only goes white when focused */
-  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
-}
-
-.notes-input:disabled {
-  background: #f0f0f0;
-  cursor: not-allowed;
-}
-
-.notes-input::placeholder {
-  color: #999;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .report-submission-container {
