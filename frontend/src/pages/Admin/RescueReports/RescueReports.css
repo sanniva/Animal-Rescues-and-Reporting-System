@@ -1522,6 +1522,80 @@
   color: #b91c1c;
 }
 
+/* Volunteer Details Section */
+.reports-volunteer-details {
+  background-color: #f9f7f0;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #e8dfc9;
+  font-size: 0.85rem;
+}
+
+.reports-volunteer-details .reports-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px dashed #e0d6c0;
+}
+
+.reports-volunteer-details .reports-detail-row:last-child {
+  border-bottom: none;
+}
+
+.reports-volunteer-details .reports-detail-label {
+  font-weight: 600;
+  color: #5c6b5c;
+  font-size: 0.75rem;
+}
+
+.reports-volunteer-details .reports-detail-value {
+  color: #2c3e2f;
+  font-weight: 500;
+}
+
+/* Disabled Notes Styling */
+.reports-notes-input:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #ddd;
+}
+
+.reports-note-disabled-hint {
+  font-size: 0.75rem;
+  color: #b85a1a;
+  margin-left: 10px;
+  font-style: italic;
+}
+
+/* In Progress Badge */
+.reports-badge.in-progress {
+  background-color: #f0f9ff;
+  color: #0EA5E9;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid #b8e1f5;
+}
+
+/* Unassign button disabled state */
+.reports-btn.unassign:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: transparent;
+  color: #b33a3a;
+  border: 1px solid #b33a3a;
+}
+
+.reports-btn.unassign:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: transparent;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .reports-declined-volunteer {
