@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
 
             {currentUser?.role === 'volunteer' && currentUser.volunteerStatus === 'approved' && (
-              <NavItem to="/tasks" icon="FiClipboard" label="Deployment Board" />
+              <NavItem to="/mission-board" icon="FiGrid" label="Mission Board" />
             )}
 
             {currentUser?.role === 'admin' && (
