@@ -1,4 +1,5 @@
-/* Login.css - Clean version with animal rescue background */
+/* Login.css - Complete version with all styles */
+
 .auth-wrapper {
   min-height: 100vh;
   background: #f4f2ec;
@@ -109,9 +110,10 @@
   font-size: 0.95rem;
 }
 
-/* FORM */
+/* FORM - All inputs same size */
 .form-group {
   margin-bottom: 12px;
+  width: 100%;
 }
 
 .form-group label {
@@ -122,20 +124,67 @@
   margin-bottom: 6px;
 }
 
-.form-group input {
-  width: 93%;
+.form-group input,
+.form-group select,
+.animal-handling-input,
+.city-input {
+  width: 100%;
   padding: 12px 16px;
   border-radius: 10px;
   border: 1px solid #ddd;
   background: #f7f5f0;
   font-size: 1rem;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: #10b981;
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+}
+
+/* Password toggle */
+.password-group {
+  position: relative;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: #065f46;
+}
+
+/* Input hints */
+.input-hint {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
 }
 
 /* Button */
@@ -168,7 +217,12 @@
   transform: translateY(0);
 }
 
-/* Volunteer */
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Volunteer Box */
 .volunteer-box {
   margin-top: 12px;
   padding: 16px;
@@ -181,6 +235,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   background: #f9fdfa;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .volunteer-box:hover {
@@ -198,6 +254,7 @@
 .volunteer-box-content {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .volunteer-box-content strong {
@@ -210,6 +267,14 @@
   color: #666;
 }
 
+.volunteer-note {
+  display: block;
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: 4px;
+  font-style: italic;
+}
+
 .paw-bg {
   position: absolute;
   right: 12px;
@@ -217,6 +282,44 @@
   opacity: 0.15;
   color: #10b981;
   pointer-events: none;
+}
+
+/* Volunteer fields */
+.volunteer-fields {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.volunteer-fields h4 {
+  color: #065f46;
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.checkbox-group {
+  margin-bottom: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #10b981;
 }
 
 /* Error */
@@ -275,7 +378,7 @@
 
   .auth-left {
     width: 100%;
-    height: 250px;
+    height: 200px;
     border-radius: 16px 16px 0 0;
   }
 
@@ -306,16 +409,49 @@
     margin-bottom: 1.5rem;
   }
 
-  /* Limit input width on mobile */
+  /* All inputs same size on mobile */
   .form-group input,
+  .form-group select,
   .auth-btn,
-  .volunteer-box {
-    max-width: 320px;
+  .volunteer-box,
+  .volunteer-fields {
+    width: 100%;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
+    box-sizing: border-box;
   }
 
   .toggle {
     text-align: center;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .auth-right {
+    padding: 20px;
+  }
+
+  .auth-left {
+    height: 150px;
+  }
+
+  .auth-left-overlay h2 {
+    font-size: 24px;
+  }
+
+  .auth-left-overlay p {
+    font-size: 0.9rem;
+  }
+
+  .auth-right h3 {
+    font-size: 22px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .auth-btn {
+    padding: 10px 14px;
   }
 }
