@@ -1,0 +1,160 @@
+.notification-popup-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.notification-popup {
+  pointer-events: auto;
+  width: 320px;
+  background: white;
+  border-left: 4px solid var(--notification-color, #2D5A27);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+  animation: slideInRight 0.3s ease forwards;
+  transform: translateX(100%);
+  opacity: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-popup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--notification-color), transparent);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+@keyframes slideInRight {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-popup:hover {
+  transform: translateX(-2px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.popup-icon {
+  font-size: 1.8rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.popup-content {
+  flex: 1;
+}
+
+.popup-title {
+  font-weight: 600;
+  color: #2c3e2f;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.popup-message {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  opacity: 0.5;
+  line-height: 1;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.notification-popup:hover .popup-close {
+  opacity: 1;
+}
+
+.popup-close:hover {
+  color: #ff4757;
+  transform: scale(1.2);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Animation for popup removal */
+.notification-popup.removing {
+  animation: slideOutRight 0.3s ease forwards;
+}
+
+@keyframes slideOutRight {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notification-popup-container {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+  }
+  
+  .notification-popup {
+    width: auto;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-popup-container {
+    top: 60px;
+    right: 5px;
+    left: 5px;
+  }
+  
+  .notification-popup {
+    padding: 0.75rem;
+  }
+  
+  .popup-icon {
+    font-size: 1.5rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .popup-title {
+    font-size: 0.8rem;
+  }
+  
+  .popup-message {
+    font-size: 0.75rem;
+  }
+}
