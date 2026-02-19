@@ -906,10 +906,8 @@ router.post('/:id/assign', verifyToken, async (req, res) => {
   }
 });
 
-// =====================================================
 // FIXED: UNASSIGN VOLUNTEER FROM REPORT (ADMIN ONLY)
 // Removed updated_at column which doesn't exist in tasks table
-// =====================================================
 router.put('/:id/unassign', verifyToken, async (req, res) => {
   const reportId = Number(req.params.id);
   
