@@ -1,30 +1,129 @@
+// // // // const express = require('express');
+// // // // const cors = require('cors');
+// // // // require('dotenv').config();
+
+// // // // const authRoutes = require('./routes/auth');
+// // // // const userRoutes = require('./routes/users'); // important
+// // // // const taskRoutes = require('./routes/tasks');
+// // // // const reportRoutes = require('./routes/reports');
+
+// // // // const app = express();
+// // // // const PORT = process.env.PORT || 5000;
+
+// // // // // Middleware
+// // // // app.use(cors());
+// // // // app.use(express.json());
+
+// // // // // Test route
+// // // // app.get('/', (req, res) => res.send('Backend is running'));
+
+// // // // // API routes
+// // // // app.use('/api/auth', authRoutes);
+// // // // app.use('/api/users', userRoutes);  // must match
+// // // // app.use('/api/tasks', taskRoutes);
+// // // // app.use('/api/reports', reportRoutes);
+
+// // // // // Start server
+// // // // app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
 // // // const express = require('express');
 // // // const cors = require('cors');
+// // // const path = require('path');
+// // // const fs = require('fs');
 // // // require('dotenv').config();
 
 // // // const authRoutes = require('./routes/auth');
-// // // const userRoutes = require('./routes/users'); // important
+// // // const userRoutes = require('./routes/users');
 // // // const taskRoutes = require('./routes/tasks');
 // // // const reportRoutes = require('./routes/reports');
+// // // const volunteerRoutes = require('./routes/volunteers');
 
 // // // const app = express();
 // // // const PORT = process.env.PORT || 5000;
 
+// // // // Create uploads directories if they don't exist
+// // // const createUploadsDirectories = () => {
+// // //   const uploadsDir = path.join(__dirname, 'uploads');
+// // //   const profileImagesDir = path.join(uploadsDir, 'profile-images');
+  
+// // //   // Create uploads directory
+// // //   if (!fs.existsSync(uploadsDir)) {
+// // //     fs.mkdirSync(uploadsDir);
+// // //     console.log('Created uploads directory:', uploadsDir);
+// // //   }
+  
+// // //   // Create profile-images subdirectory
+// // //   if (!fs.existsSync(profileImagesDir)) {
+// // //     fs.mkdirSync(profileImagesDir, { recursive: true });
+// // //     console.log('Created profile-images directory:', profileImagesDir);
+// // //   }
+// // // };
+
+// // // // Create directories on startup
+// // // createUploadsDirectories();
+
 // // // // Middleware
-// // // app.use(cors());
+// // // app.use(cors({
+// // //   origin: 'http://localhost:3000',
+// // //   credentials: true
+// // // }));
 // // // app.use(express.json());
 
+// // // // Serve static files from uploads folder
+// // // // This makes files accessible at http://localhost:5000/uploads/profile-images/filename.jpg
+// // // app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+// // //   setHeaders: (res, filePath) => {
+// // //     // Disable caching for profile images
+// // //     if (filePath.includes('profile-images')) {
+// // //       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+// // //       res.setHeader('Pragma', 'no-cache');
+// // //       res.setHeader('Expires', '0');
+// // //     }
+// // //   }
+// // // }));
+
+// // // console.log('Static files served from:', path.join(__dirname, 'uploads'));
+
 // // // // Test route
-// // // app.get('/', (req, res) => res.send('Backend is running'));
+// // // app.get('/', (req, res) => {
+// // //   res.send('Backend is running');
+// // // });
+
+// // // // Health check route
+// // // app.get('/health', (req, res) => {
+// // //   res.json({ 
+// // //     status: 'OK', 
+// // //     message: 'Server is running',
+// // //     uploadsPath: path.join(__dirname, 'uploads'),
+// // //     profileImagesPath: path.join(__dirname, 'uploads/profile-images')
+// // //   });
+// // // });
 
 // // // // API routes
 // // // app.use('/api/auth', authRoutes);
-// // // app.use('/api/users', userRoutes);  // must match
+// // // app.use('/api/users', userRoutes);
 // // // app.use('/api/tasks', taskRoutes);
 // // // app.use('/api/reports', reportRoutes);
+// // // app.use('/api/volunteers', volunteerRoutes);
+
+// // // // 404 handler
+// // // app.use((req, res) => {
+// // //   res.status(404).json({ error: 'Route not found' });
+// // // });
+
+// // // // Error handler
+// // // app.use((err, req, res, next) => {
+// // //   console.error('Server error:', err);
+// // //   res.status(500).json({ error: 'Internal server error' });
+// // // });
 
 // // // // Start server
-// // // app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// // // app.listen(PORT, () => {
+// // //   console.log(`Server running on http://localhost:${PORT}`);
+// // //   console.log(`Uploads directory: ${path.join(__dirname, 'uploads')}`);
+// // //   console.log(`Profile images: ${path.join(__dirname, 'uploads/profile-images')}`);
+// // // });
+
 
 // // const express = require('express');
 // // const cors = require('cors');
@@ -45,6 +144,7 @@
 // // const createUploadsDirectories = () => {
 // //   const uploadsDir = path.join(__dirname, 'uploads');
 // //   const profileImagesDir = path.join(uploadsDir, 'profile-images');
+// //   const evidenceDir = path.join(uploadsDir, 'evidence'); // Add evidence directory
   
 // //   // Create uploads directory
 // //   if (!fs.existsSync(uploadsDir)) {
@@ -56,6 +156,12 @@
 // //   if (!fs.existsSync(profileImagesDir)) {
 // //     fs.mkdirSync(profileImagesDir, { recursive: true });
 // //     console.log('Created profile-images directory:', profileImagesDir);
+// //   }
+  
+// //   // Create evidence subdirectory
+// //   if (!fs.existsSync(evidenceDir)) {
+// //     fs.mkdirSync(evidenceDir, { recursive: true });
+// //     console.log('Created evidence directory:', evidenceDir);
 // //   }
 // // };
 
@@ -70,11 +176,10 @@
 // // app.use(express.json());
 
 // // // Serve static files from uploads folder
-// // // This makes files accessible at http://localhost:5000/uploads/profile-images/filename.jpg
 // // app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 // //   setHeaders: (res, filePath) => {
-// //     // Disable caching for profile images
-// //     if (filePath.includes('profile-images')) {
+// //     // Disable caching for images
+// //     if (filePath.includes('profile-images') || filePath.includes('evidence')) {
 // //       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
 // //       res.setHeader('Pragma', 'no-cache');
 // //       res.setHeader('Expires', '0');
@@ -89,14 +194,80 @@
 // //   res.send('Backend is running');
 // // });
 
-// // // Health check route
+// // // Health check route with directory info
 // // app.get('/health', (req, res) => {
 // //   res.json({ 
 // //     status: 'OK', 
 // //     message: 'Server is running',
 // //     uploadsPath: path.join(__dirname, 'uploads'),
-// //     profileImagesPath: path.join(__dirname, 'uploads/profile-images')
+// //     profileImagesPath: path.join(__dirname, 'uploads/profile-images'),
+// //     evidencePath: path.join(__dirname, 'uploads/evidence')
 // //   });
+// // });
+
+// // // Debug route to list all files
+// // app.get('/debug/files', (req, res) => {
+// //   const uploadsDir = path.join(__dirname, 'uploads');
+// //   const profileImagesDir = path.join(uploadsDir, 'profile-images');
+// //   const evidenceDir = path.join(uploadsDir, 'evidence');
+  
+// //   const result = {
+// //     uploadsDir: {
+// //       path: uploadsDir,
+// //       exists: fs.existsSync(uploadsDir)
+// //     },
+// //     profileImages: {
+// //       path: profileImagesDir,
+// //       exists: fs.existsSync(profileImagesDir),
+// //       files: []
+// //     },
+// //     evidence: {
+// //       path: evidenceDir,
+// //       exists: fs.existsSync(evidenceDir),
+// //       files: []
+// //     }
+// //   };
+  
+// //   if (fs.existsSync(profileImagesDir)) {
+// //     result.profileImages.files = fs.readdirSync(profileImagesDir).map(f => ({
+// //       filename: f,
+// //       url: `/uploads/profile-images/${f}`,
+// //       size: fs.statSync(path.join(profileImagesDir, f)).size
+// //     }));
+// //   }
+  
+// //   if (fs.existsSync(evidenceDir)) {
+// //     result.evidence.files = fs.readdirSync(evidenceDir).map(f => ({
+// //       filename: f,
+// //       url: `/uploads/evidence/${f}`,
+// //       size: fs.statSync(path.join(evidenceDir, f)).size
+// //     }));
+// //   }
+  
+// //   res.json(result);
+// // });
+
+// // // Test specific image route
+// // app.get('/test-image/:filename', (req, res) => {
+// //   const filename = req.params.filename;
+// //   const imagePath = path.join(__dirname, 'uploads', 'evidence', filename);
+  
+// //   console.log('Testing image path:', imagePath);
+// //   console.log('File exists:', fs.existsSync(imagePath));
+  
+// //   if (fs.existsSync(imagePath)) {
+// //     res.sendFile(imagePath);
+// //   } else {
+// //     res.status(404).json({ 
+// //       error: 'Image not found', 
+// //       path: imagePath,
+// //       exists: false,
+// //       directory: path.join(__dirname, 'uploads', 'evidence'),
+// //       files: fs.existsSync(path.join(__dirname, 'uploads', 'evidence')) 
+// //         ? fs.readdirSync(path.join(__dirname, 'uploads', 'evidence'))
+// //         : []
+// //     });
+// //   }
 // // });
 
 // // // API routes
@@ -122,6 +293,7 @@
 // //   console.log(`Server running on http://localhost:${PORT}`);
 // //   console.log(`Uploads directory: ${path.join(__dirname, 'uploads')}`);
 // //   console.log(`Profile images: ${path.join(__dirname, 'uploads/profile-images')}`);
+// //   console.log(`Evidence images: ${path.join(__dirname, 'uploads/evidence')}`);
 // // });
 
 
@@ -142,31 +314,43 @@
 
 // // Create uploads directories if they don't exist
 // const createUploadsDirectories = () => {
-//   const uploadsDir = path.join(__dirname, 'uploads');
-//   const profileImagesDir = path.join(uploadsDir, 'profile-images');
-//   const evidenceDir = path.join(uploadsDir, 'evidence'); // Add evidence directory
+//   // Profile images in backend/uploads/profile-images/
+//   const backendUploadsDir = path.join(__dirname, 'uploads');
+//   const profileImagesDir = path.join(backendUploadsDir, 'profile-images');
   
-//   // Create uploads directory
-//   if (!fs.existsSync(uploadsDir)) {
-//     fs.mkdirSync(uploadsDir);
-//     console.log('Created uploads directory:', uploadsDir);
+//   // Evidence images in project root uploads/evidence/
+//   const projectUploadsDir = path.join(__dirname, '..', 'uploads');
+//   const evidenceDir = path.join(projectUploadsDir, 'evidence');
+  
+//   // Create backend uploads directory
+//   if (!fs.existsSync(backendUploadsDir)) {
+//     fs.mkdirSync(backendUploadsDir);
+//     console.log('Created backend uploads directory:', backendUploadsDir);
 //   }
   
-//   // Create profile-images subdirectory
+//   // Create profile-images subdirectory in backend
 //   if (!fs.existsSync(profileImagesDir)) {
 //     fs.mkdirSync(profileImagesDir, { recursive: true });
 //     console.log('Created profile-images directory:', profileImagesDir);
 //   }
   
-//   // Create evidence subdirectory
+//   // Create project uploads directory
+//   if (!fs.existsSync(projectUploadsDir)) {
+//     fs.mkdirSync(projectUploadsDir);
+//     console.log('Created project uploads directory:', projectUploadsDir);
+//   }
+  
+//   // Create evidence subdirectory in project root
 //   if (!fs.existsSync(evidenceDir)) {
 //     fs.mkdirSync(evidenceDir, { recursive: true });
 //     console.log('Created evidence directory:', evidenceDir);
 //   }
+  
+//   return { backendUploadsDir, projectUploadsDir };
 // };
 
 // // Create directories on startup
-// createUploadsDirectories();
+// const { backendUploadsDir, projectUploadsDir } = createUploadsDirectories();
 
 // // Middleware
 // app.use(cors({
@@ -175,11 +359,10 @@
 // }));
 // app.use(express.json());
 
-// // Serve static files from uploads folder
+// // Serve profile images from backend/uploads/
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 //   setHeaders: (res, filePath) => {
-//     // Disable caching for images
-//     if (filePath.includes('profile-images') || filePath.includes('evidence')) {
+//     if (filePath.includes('profile-images')) {
 //       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
 //       res.setHeader('Pragma', 'no-cache');
 //       res.setHeader('Expires', '0');
@@ -187,7 +370,17 @@
 //   }
 // }));
 
-// console.log('Static files served from:', path.join(__dirname, 'uploads'));
+// // Serve evidence images from project root uploads/
+// app.use('/uploads/evidence', express.static(path.join(__dirname, '..', 'uploads', 'evidence'), {
+//   setHeaders: (res) => {
+//     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+//     res.setHeader('Pragma', 'no-cache');
+//     res.setHeader('Expires', '0');
+//   }
+// }));
+
+// console.log('Profile images served from:', path.join(__dirname, 'uploads'));
+// console.log('Evidence images served from:', path.join(__dirname, '..', 'uploads', 'evidence'));
 
 // // Test route
 // app.get('/', (req, res) => {
@@ -199,23 +392,17 @@
 //   res.json({ 
 //     status: 'OK', 
 //     message: 'Server is running',
-//     uploadsPath: path.join(__dirname, 'uploads'),
 //     profileImagesPath: path.join(__dirname, 'uploads/profile-images'),
-//     evidencePath: path.join(__dirname, 'uploads/evidence')
+//     evidencePath: path.join(__dirname, '..', 'uploads/evidence')
 //   });
 // });
 
 // // Debug route to list all files
 // app.get('/debug/files', (req, res) => {
-//   const uploadsDir = path.join(__dirname, 'uploads');
-//   const profileImagesDir = path.join(uploadsDir, 'profile-images');
-//   const evidenceDir = path.join(uploadsDir, 'evidence');
+//   const profileImagesDir = path.join(__dirname, 'uploads', 'profile-images');
+//   const evidenceDir = path.join(__dirname, '..', 'uploads', 'evidence');
   
 //   const result = {
-//     uploadsDir: {
-//       path: uploadsDir,
-//       exists: fs.existsSync(uploadsDir)
-//     },
 //     profileImages: {
 //       path: profileImagesDir,
 //       exists: fs.existsSync(profileImagesDir),
@@ -248,9 +435,17 @@
 // });
 
 // // Test specific image route
-// app.get('/test-image/:filename', (req, res) => {
-//   const filename = req.params.filename;
-//   const imagePath = path.join(__dirname, 'uploads', 'evidence', filename);
+// app.get('/test-image/:type/:filename', (req, res) => {
+//   const { type, filename } = req.params;
+  
+//   let imagePath;
+//   if (type === 'profile') {
+//     imagePath = path.join(__dirname, 'uploads', 'profile-images', filename);
+//   } else if (type === 'evidence') {
+//     imagePath = path.join(__dirname, '..', 'uploads', 'evidence', filename);
+//   } else {
+//     return res.status(400).json({ error: 'Invalid image type' });
+//   }
   
 //   console.log('Testing image path:', imagePath);
 //   console.log('File exists:', fs.existsSync(imagePath));
@@ -261,11 +456,7 @@
 //     res.status(404).json({ 
 //       error: 'Image not found', 
 //       path: imagePath,
-//       exists: false,
-//       directory: path.join(__dirname, 'uploads', 'evidence'),
-//       files: fs.existsSync(path.join(__dirname, 'uploads', 'evidence')) 
-//         ? fs.readdirSync(path.join(__dirname, 'uploads', 'evidence'))
-//         : []
+//       exists: false
 //     });
 //   }
 // });
@@ -276,6 +467,11 @@
 // app.use('/api/tasks', taskRoutes);
 // app.use('/api/reports', reportRoutes);
 // app.use('/api/volunteers', volunteerRoutes);
+
+
+// // Add notification routes
+// const notificationRoutes = require('./routes/notifications');
+// app.use('/api/notifications', notificationRoutes);
 
 // // 404 handler
 // app.use((req, res) => {
@@ -291,9 +487,10 @@
 // // Start server
 // app.listen(PORT, () => {
 //   console.log(`Server running on http://localhost:${PORT}`);
-//   console.log(`Uploads directory: ${path.join(__dirname, 'uploads')}`);
 //   console.log(`Profile images: ${path.join(__dirname, 'uploads/profile-images')}`);
-//   console.log(`Evidence images: ${path.join(__dirname, 'uploads/evidence')}`);
+//   console.log(`Evidence images: ${path.join(__dirname, '..', 'uploads/evidence')}`);
+//   console.log(`Profile URL: http://localhost:${PORT}/uploads/profile-images/`);
+//   console.log(`Evidence URL: http://localhost:${PORT}/uploads/evidence/`);
 // });
 
 
@@ -303,11 +500,20 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
 const reportRoutes = require('./routes/reports');
 const volunteerRoutes = require('./routes/volunteers');
+const notificationRoutes = require('./routes/notifications');
+
+// Import tracking routes
+const adminTrackingRoutes = require('./routes/adminTrackingRoutes');
+const volunteerTrackingRoutes = require('./routes/volunteerTrackingRoutes');
+
+// Import tracking initialization
+const initializeTracking = require('./scripts/initTracking');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -350,7 +556,7 @@ const createUploadsDirectories = () => {
 };
 
 // Create directories on startup
-const { backendUploadsDir, projectUploadsDir } = createUploadsDirectories();
+createUploadsDirectories();
 
 // Middleware
 app.use(cors({
@@ -359,7 +565,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve profile images from backend/uploads/
+// Serve static files
+// Profile images from backend/uploads/
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, filePath) => {
     if (filePath.includes('profile-images')) {
@@ -370,7 +577,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   }
 }));
 
-// Serve evidence images from project root uploads/
+// Evidence images from project root uploads/
 app.use('/uploads/evidence', express.static(path.join(__dirname, '..', 'uploads', 'evidence'), {
   setHeaders: (res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -461,16 +668,49 @@ app.get('/test-image/:type/:filename', (req, res) => {
   }
 });
 
-// API routes
+// =====================================================
+// API ROUTES
+// =====================================================
+
+// Auth routes
 app.use('/api/auth', authRoutes);
+
+// User routes
 app.use('/api/users', userRoutes);
+
+// Task routes
 app.use('/api/tasks', taskRoutes);
+
+// Report routes
 app.use('/api/reports', reportRoutes);
+
+// Volunteer routes
 app.use('/api/volunteers', volunteerRoutes);
 
-// Add notification routes
-const notificationRoutes = require('./routes/notifications');
+// Notification routes
 app.use('/api/notifications', notificationRoutes);
+
+// =====================================================
+// TRACKING ROUTES
+// =====================================================
+
+// Admin tracking routes (require admin role)
+app.use('/api/admin/tracking', adminTrackingRoutes);
+
+// Volunteer tracking routes (require authentication)
+app.use('/api/volunteer/tracking', volunteerTrackingRoutes);
+
+// =====================================================
+// Initialize Tracking System
+// =====================================================
+(async () => {
+  try {
+    await initializeTracking();
+    console.log('Tracking system initialized');
+  } catch (error) {
+    console.error('Failed to initialize tracking system:', error);
+  }
+})();
 
 // 404 handler
 app.use((req, res) => {
@@ -480,14 +720,32 @@ app.use((req, res) => {
 // Error handler
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
-  res.status(500).json({ error: 'Internal server error' });
+  res.status(500).json({ 
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
 // Start server
 app.listen(PORT, () => {
+  console.log('\n=================================');
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log('=================================');
   console.log(`Profile images: ${path.join(__dirname, 'uploads/profile-images')}`);
   console.log(`Evidence images: ${path.join(__dirname, '..', 'uploads/evidence')}`);
   console.log(`Profile URL: http://localhost:${PORT}/uploads/profile-images/`);
   console.log(`Evidence URL: http://localhost:${PORT}/uploads/evidence/`);
+  console.log('=================================\n');
+  
+  // Log all registered routes
+  console.log('Registered Routes:');
+  console.log('  - /api/auth');
+  console.log('  - /api/users');
+  console.log('  - /api/tasks');
+  console.log('  - /api/reports');
+  console.log('  - /api/volunteers');
+  console.log('  - /api/notifications');
+  console.log('  - /api/admin/tracking');
+  console.log('  - /api/volunteer/tracking');
+  console.log('=================================\n');
 });
