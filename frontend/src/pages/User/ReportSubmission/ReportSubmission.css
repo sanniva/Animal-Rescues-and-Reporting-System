@@ -560,23 +560,315 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+/* Mobile styles (480px and below) */
+@media (max-width: 480px) {
   .report-container {
-    padding: 1rem;
+    padding: 0.75rem;
+  }
+
+  .report-header {
+    margin-bottom: 2rem;
   }
 
   .report-header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .report-header p {
+    font-size: 0.85rem;
+  }
+
+  /* Progress steps - stack vertically on very small screens */
+  .progress-steps {
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
   .step-connector {
-    width: 40px;
+    display: none;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 70px;
+  }
+
+  .step-number {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+    text-align: center;
   }
 
   .report-content {
-    padding: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
   }
 
+  .step-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-description {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section label {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Animal grid - Smaller cards on mobile */
+  .animal-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+
+  .animal-card {
+    padding: 0.5rem 0.2rem;
+  }
+
+  .animal-emoji {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .animal-name {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Condition grid - Smaller cards on mobile */
+  .condition-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .condition-card {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .condition-icon {
+    font-size: 0.9rem;
+  }
+
+  /* Location search */
+  .search-input {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .suggestions li {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Map */
+  .map-wrapper {
+    margin: 0.75rem 0;
+  }
+
+  .map-container {
+    height: 220px;
+  }
+
+  .map-hint {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+    white-space: nowrap;
+  }
+
+  .selected-location label {
+    font-size: 0.8rem;
+  }
+
+  .selected-location textarea {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  /* Description input */
+  .description-input {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .char-counter {
+    font-size: 0.7rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  /* Review section */
+  .review-section {
+    padding: 1rem;
+  }
+
+  .review-section h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .review-item {
+    font-size: 0.85rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .review-item span:first-child {
+    font-weight: 600;
+    color: #2D5A27;
+  }
+
+  .review-text {
+    font-size: 0.85rem;
+  }
+
+  .review-coords {
+    font-size: 0.7rem;
+  }
+
+  /* Navigation */
+  .form-navigation {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    gap: 0.5rem;
+  }
+
+  .btn-secondary, .btn-primary, .btn-submit {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-submit {
+    padding: 0.6rem 1.5rem;
+  }
+
+  /* Error message */
+  .error-message {
+    padding: 0.75rem;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .error-text {
+    font-size: 0.7rem;
+  }
+
+  /* Success message */
+  .success-message {
+    padding: 2rem 0.5rem;
+  }
+
+  .success-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .success-message h2 {
+    font-size: 1.2rem;
+  }
+
+  .success-message p {
+    font-size: 0.85rem;
+  }
+
+  .dot-flash {
+    width: 0.4rem;
+    height: 0.4rem;
+  }
+
+  /* Loading screen */
+  .loading-screen {
+    min-height: 300px;
+  }
+
+  .spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+/* Very small phones (360px and below) */
+@media (max-width: 360px) {
+  .report-header h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Animal grid - 2 columns on very small phones */
+  .animal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .animal-card {
+    padding: 0.4rem 0.1rem;
+  }
+
+  .animal-emoji {
+    font-size: 1rem;
+  }
+
+  .animal-name {
+    font-size: 0.65rem;
+  }
+
+  /* Condition grid - 1 column on very small phones */
+  .condition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .condition-card {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .condition-icon {
+    font-size: 0.8rem;
+  }
+
+  .map-container {
+    height: 200px;
+  }
+
+  .step {
+    min-width: 60px;
+  }
+
+  .step-number {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.8rem;
+  }
+
+  .step-label {
+    font-size: 0.7rem;
+  }
+
+  .review-item {
+    font-size: 0.8rem;
+  }
+}
+
+/* Tablet styles (768px and below) - Keep original sizes but adjust grid */
+@media (max-width: 768px) {
   .animal-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -584,36 +876,38 @@
   .condition-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .form-navigation {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .btn-secondary, .btn-primary, .btn-submit {
-    width: 100%;
-  }
 }
 
-@media (max-width: 480px) {
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
   .progress-steps {
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
   }
 
   .step-connector {
-    display: none;
+    display: block;
+    width: 30px;
   }
 
+  /* More columns in landscape */
   .animal-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .condition-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .map-container {
-    height: 250px;
+    height: 200px;
+  }
+
+  .form-navigation {
+    flex-direction: row;
+  }
+
+  .btn-secondary, .btn-primary, .btn-submit {
+    width: auto;
   }
 }
