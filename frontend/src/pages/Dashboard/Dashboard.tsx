@@ -1073,7 +1073,7 @@
 // // //       if (!currentUser) return;
       
 // // //       try {
-// // //         const token = localStorage.getItem('token');
+// // //         const token = sessionStorage.getItem('token');
 // // //         const response = await fetch('http://localhost:5000/api/users/profile', {
 // // //           headers: {
 // // //             'Authorization': `Bearer ${token}`,
@@ -1097,7 +1097,7 @@
 
 // // //   const fetchAllReports = async () => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       const response = await fetch('http://localhost:5000/api/reports/admin/all', {
 // // //         headers: {
 // // //           'Authorization': `Bearer ${token}`,
@@ -1122,7 +1122,7 @@
       
 // // //       try {
 // // //         setReportsLoading(true);
-// // //         const token = localStorage.getItem('token');
+// // //         const token = sessionStorage.getItem('token');
         
 // // //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 // // //           headers: {
@@ -1594,7 +1594,7 @@
 // // //       try {
 // // //         setMissionsLoading(true);
 // // //         setFetchError(null);
-// // //         const token = localStorage.getItem('token');
+// // //         const token = sessionStorage.getItem('token');
         
 // // //         if (!token) {
 // // //           setFetchError('No authentication token');
@@ -1643,7 +1643,7 @@
 
 // // //   const fetchTaskEvidence = async (taskId: number) => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 // // //         {
@@ -1666,7 +1666,7 @@
 
 // // //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/reports/${reportId}/admin-notes`,
 // // //         {
@@ -1690,7 +1690,7 @@
 // // //   const handleAcceptTask = async (taskId: number) => {
 // // //     try {
 // // //       setActionLoading(true);
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
       
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/accept`,
@@ -1732,7 +1732,7 @@
 // // //   const handleDeclineTask = async (taskId: number, reason: string) => {
 // // //     try {
 // // //       setActionLoading(true);
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
       
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/decline`,
@@ -1767,7 +1767,7 @@
 // // //   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
 // // //     try {
 // // //       setActionLoading(true);
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
       
 // // //       const formData = new FormData();
 // // //       formData.append('proofs', file);
@@ -1848,7 +1848,7 @@
 // // //   const handleCompleteTask = async (taskId: number) => {
 // // //     try {
 // // //       setActionLoading(true);
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
       
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/complete`,
@@ -2357,7 +2357,7 @@
 // // // //   useEffect(() => {
 // // // //     const fetchVolunteerDetails = async () => {
 // // // //       try {
-// // // //         const token = localStorage.getItem('token');
+// // // //         const token = sessionStorage.getItem('token');
 // // // //         const response = await fetch(`http://localhost:5000/api/volunteers/${user.user_id}/profile`, {
 // // // //           headers: {
 // // // //             'Authorization': `Bearer ${token}`,
@@ -2606,7 +2606,7 @@
 // // // //     // Fetch rejection reason if available
 // // // //     const fetchRejectionReason = async () => {
 // // // //       try {
-// // // //         const token = localStorage.getItem('token');
+// // // //         const token = sessionStorage.getItem('token');
 // // // //         const response = await fetch(`http://localhost:5000/api/volunteers/${user?.user_id}/rejection-reason`, {
 // // // //           headers: {
 // // // //             'Authorization': `Bearer ${token}`,
@@ -3995,7 +3995,7 @@
 // //       if (!currentUser) return;
       
 // //       try {
-// //         const token = localStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token');
 // //         const response = await fetch('http://localhost:5000/api/users/profile', {
 // //           headers: {
 // //             'Authorization': `Bearer ${token}`,
@@ -4019,7 +4019,7 @@
 
 // //   const fetchAllReports = async () => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch('http://localhost:5000/api/reports/admin/all', {
 // //         headers: {
 // //           'Authorization': `Bearer ${token}`,
@@ -4044,7 +4044,7 @@
       
 // //       try {
 // //         setReportsLoading(true);
-// //         const token = localStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token');
         
 // //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 // //           headers: {
@@ -4643,7 +4643,7 @@
 // //       try {
 // //         setMissionsLoading(true);
 // //         setFetchError(null);
-// //         const token = localStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token');
         
 // //         if (!token) {
 // //           setFetchError('No authentication token');
@@ -4692,7 +4692,7 @@
 
 // //   const fetchTaskEvidence = async (taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 // //         {
@@ -4715,7 +4715,7 @@
 
 // //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/reports/${reportId}/admin-notes`,
 // //         {
@@ -4739,7 +4739,7 @@
 // //   const handleAcceptTask = async (taskId: number) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/accept`,
@@ -4781,7 +4781,7 @@
 // //   const handleDeclineTask = async (taskId: number, reason: string) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/decline`,
@@ -4816,7 +4816,7 @@
 // //   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       const formData = new FormData();
 // //       formData.append('proofs', file);
@@ -4897,7 +4897,7 @@
 // //   const handleCompleteTask = async (taskId: number) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/volunteers/tasks/${taskId}/complete`,
@@ -5883,7 +5883,7 @@
   
 //   const saveLocation = useCallback(async (latitude: number, longitude: number, accuracy: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) return;
       
 //       const response = await fetch('http://localhost:5000/api/volunteer/tracking/point', {
@@ -5909,7 +5909,7 @@
 //   const retryPendingPoints = useCallback(async () => {
 //     if (pendingQueue.current.length === 0) return;
     
-//     const token = localStorage.getItem('token');
+//     const token = sessionStorage.getItem('token');
 //     if (!token) return;
     
 //     const points = [...pendingQueue.current];
@@ -6965,7 +6965,7 @@
 //       try {
 //         setMissionsLoading(true);
 //         setFetchError(null);
-//         const token = localStorage.getItem('token');
+//         const token = sessionStorage.getItem('token');
         
 //         if (!token) {
 //           setFetchError('No authentication token');
@@ -7008,7 +7008,7 @@
 
 //   const fetchTaskEvidence = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, {
 //         headers: { 'Authorization': `Bearer ${token}` }
 //       });
@@ -7023,7 +7023,7 @@
 
 //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(`http://localhost:5000/api/reports/${reportId}/admin-notes`, {
 //         headers: { 'Authorization': `Bearer ${token}` }
 //       });
@@ -7038,7 +7038,7 @@
 
 //   const fetchFullTaskDetails = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/task/${taskId}/full-details`,
 //         {
@@ -7060,7 +7060,7 @@
 //   const handleAcceptTask = async (taskId: number) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
 //         method: 'PATCH',
@@ -7096,7 +7096,7 @@
 //   const handleDeclineTask = async (taskId: number, reason: string) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
 //         method: 'PATCH',
@@ -7125,7 +7125,7 @@
 //   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
       
 //       const formData = new FormData();
 //       formData.append('proofs', file);
@@ -7727,7 +7727,7 @@
 //       if (!currentUser) return;
       
 //       try {
-//         const token = localStorage.getItem('token');
+//         const token = sessionStorage.getItem('token');
 //         const response = await fetch('http://localhost:5000/api/users/profile', {
 //           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
 //         });
@@ -7746,7 +7746,7 @@
 
 //   const fetchAllReports = async () => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch('http://localhost:5000/api/reports/admin/all', {
 //         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
 //       });
@@ -7766,7 +7766,7 @@
       
 //       try {
 //         setReportsLoading(true);
-//         const token = localStorage.getItem('token');
+//         const token = sessionStorage.getItem('token');
         
 //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 //           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
@@ -8275,7 +8275,7 @@ const LocationTracker: React.FC<{
   
   const saveLocation = useCallback(async (latitude: number, longitude: number, accuracy: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
       
       const response = await fetch('http://localhost:5000/api/volunteer/tracking/point', {
@@ -8301,7 +8301,7 @@ const LocationTracker: React.FC<{
   const retryPendingPoints = useCallback(async () => {
     if (pendingQueue.current.length === 0) return;
     
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return;
     
     const points = [...pendingQueue.current];
@@ -9477,7 +9477,7 @@ const VolunteerDashboard: React.FC<{
       try {
         setMissionsLoading(true);
         setFetchError(null);
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         
         if (!token) {
           setFetchError('No authentication token');
@@ -9520,7 +9520,7 @@ const VolunteerDashboard: React.FC<{
 
   const fetchTaskEvidence = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -9535,7 +9535,7 @@ const VolunteerDashboard: React.FC<{
 
   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/reports/${reportId}/admin-notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -9550,7 +9550,7 @@ const VolunteerDashboard: React.FC<{
 
   const fetchFullTaskDetails = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/task/${taskId}/full-details`,
         {
@@ -9572,7 +9572,7 @@ const VolunteerDashboard: React.FC<{
   const handleAcceptTask = async (taskId: number) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
         method: 'PATCH',
@@ -9608,7 +9608,7 @@ const VolunteerDashboard: React.FC<{
   const handleDeclineTask = async (taskId: number, reason: string) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
         method: 'PATCH',
@@ -9637,7 +9637,7 @@ const VolunteerDashboard: React.FC<{
   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       const formData = new FormData();
       formData.append('proofs', file);
@@ -10265,7 +10265,7 @@ export const Dashboard: React.FC = () => {
       if (!currentUser) return;
       
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch('http://localhost:5000/api/users/profile', {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
         });
@@ -10284,7 +10284,7 @@ export const Dashboard: React.FC = () => {
 
   const fetchAllReports = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/reports/admin/all', {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
@@ -10304,7 +10304,7 @@ export const Dashboard: React.FC = () => {
       
       try {
         setReportsLoading(true);
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         
         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
@@ -10390,7 +10390,7 @@ export const Dashboard: React.FC = () => {
     
     try {
       setLoadingDetails(prev => ({ ...prev, [reportId]: true }));
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       // Fetch evidence
       const evidenceRes = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, {
