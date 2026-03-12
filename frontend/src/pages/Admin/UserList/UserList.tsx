@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 // import React, { useEffect, useState } from 'react';
 // import './UserList.css';
 
@@ -107,7 +108,7 @@
 //       setUsers(mappedUsers);
 //     } catch (err: any) {
 //       console.error('Error fetching users:', err);
-//       alert(`Failed to fetch users: ${err.message}`);
+//       toast.success(`Failed to fetch users: ${err.message}`);
 //     } finally {
 //       setLoading(false);
 //     }
@@ -121,7 +122,7 @@
 //   const approveVolunteer = async (userId: number) => {
 //     const token = sessionStorage.getItem('token');
 //     if (!token) {
-//       alert('Please login first');
+//       toast.success('Please login first');
 //       return;
 //     }
 
@@ -171,7 +172,7 @@
 //               })
 //             );
             
-//             alert(result.message || 'Volunteer approved successfully!');
+//             toast.success(result.message || 'Volunteer approved successfully!');
 //             return;
 //           } else if (response.status === 403) {
 //             const errorData = await response.json();
@@ -187,14 +188,14 @@
 //     }
     
 //     // If all endpoints failed, show error
-//     alert('Failed to approve volunteer. Please check:\n1. You are logged in as admin\n2. Backend is running\n3. Check browser console for details');
+//     toast.success('Failed to approve volunteer. Please check:\n1. You are logged in as admin\n2. Backend is running\n3. Check browser console for details');
 //   };
 
 //   // ✅ FIXED: CORRECT REJECT FUNCTION
 //   const rejectVolunteer = async (userId: number) => {
 //     const token = sessionStorage.getItem('token');
 //     if (!token) {
-//       alert('Please login first');
+//       toast.success('Please login first');
 //       return;
 //     }
 
@@ -240,7 +241,7 @@
 //               })
 //             );
             
-//             alert(result.message || 'Volunteer rejected!');
+//             toast.success(result.message || 'Volunteer rejected!');
 //             return;
 //           }
 //         } catch (error) {
@@ -249,7 +250,7 @@
 //       }
 //     }
     
-//     alert('Failed to reject volunteer.');
+//     toast.success('Failed to reject volunteer.');
 //   };
 
 //   // Delete a user
@@ -272,11 +273,11 @@
 //         throw new Error(data.message || 'Delete failed');
 //       }
 
-//       alert('User deleted successfully!');
+//       toast.success('User deleted successfully!');
 //       fetchUsers();
 //     } catch (err: any) {
 //       console.error('Delete error:', err);
-//       alert(`Failed to delete user: ${err.message}`);
+//       toast.success(`Failed to delete user: ${err.message}`);
 //     }
 //   };
 
@@ -767,7 +768,7 @@
 //       setUsers(mappedUsers);
 //     } catch (err: any) {
 //       console.error('Error fetching users:', err);
-//       alert(`Failed to fetch users: ${err.message}`);
+//       toast.success(`Failed to fetch users: ${err.message}`);
 //     } finally {
 //       setLoading(false);
 //     }
@@ -782,7 +783,7 @@
 //     try {
 //       const token = sessionStorage.getItem('token');
 //       if (!token) {
-//         alert('Please login first');
+//         toast.success('Please login first');
 //         return;
 //       }
 
@@ -803,7 +804,7 @@
 //         const result = await response.json();
 //         console.log('Success:', result);
         
-//         alert(result.message || 'Volunteer approved successfully!');
+//         toast.success(result.message || 'Volunteer approved successfully!');
         
 //         // Update the user in state
 //         setUsers(prevUsers => 
@@ -834,7 +835,7 @@
         
 //         if (response2.ok) {
 //           const result = await response2.json();
-//           alert(result.message || 'Volunteer approved successfully!');
+//           toast.success(result.message || 'Volunteer approved successfully!');
           
 //           setUsers(prevUsers => 
 //             prevUsers.map(user => {
@@ -857,7 +858,7 @@
       
 //     } catch (error: any) {
 //       console.error('Approve error:', error);
-//       alert(`Failed to approve volunteer: ${error.message}`);
+//       toast.success(`Failed to approve volunteer: ${error.message}`);
 //     }
 //   };
 
@@ -866,7 +867,7 @@
 //     try {
 //       const token = sessionStorage.getItem('token');
 //       if (!token) {
-//         alert('Please login first');
+//         toast.success('Please login first');
 //         return;
 //       }
 
@@ -887,7 +888,7 @@
 //         const result = await response.json();
 //         console.log('Success:', result);
         
-//         alert(result.message || 'Volunteer rejected!');
+//         toast.success(result.message || 'Volunteer rejected!');
         
 //         // Update the user in state
 //         setUsers(prevUsers => 
@@ -915,7 +916,7 @@
         
 //         if (response2.ok) {
 //           const result = await response2.json();
-//           alert(result.message || 'Volunteer rejected!');
+//           toast.success(result.message || 'Volunteer rejected!');
           
 //           setUsers(prevUsers => 
 //             prevUsers.map(user => {
@@ -937,7 +938,7 @@
       
 //     } catch (error: any) {
 //       console.error('Reject error:', error);
-//       alert(`Failed to reject volunteer: ${error.message}`);
+//       toast.success(`Failed to reject volunteer: ${error.message}`);
 //     }
 //   };
 
@@ -961,11 +962,11 @@
 //         throw new Error(data.message || 'Delete failed');
 //       }
 
-//       alert('User deleted successfully!');
+//       toast.success('User deleted successfully!');
 //       fetchUsers();
 //     } catch (err: any) {
 //       console.error('Delete error:', err);
-//       alert(`Failed to delete user: ${err.message}`);
+//       toast.success(`Failed to delete user: ${err.message}`);
 //     }
 //   };
 
@@ -1482,7 +1483,7 @@ const UserList: React.FC = () => {
       setUsers(mappedUsers);
     } catch (err: any) {
       console.error('Error fetching users:', err);
-      alert(`Failed to fetch users: ${err.message}`);
+      toast.success(`Failed to fetch users: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -1497,7 +1498,7 @@ const UserList: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        alert('Please login first');
+        toast.success('Please login first');
         return;
       }
 
@@ -1518,7 +1519,7 @@ const UserList: React.FC = () => {
         const result = await response.json();
         console.log('Success:', result);
         
-        alert(result.message || 'Volunteer approved successfully!');
+        toast.success(result.message || 'Volunteer approved successfully!');
         
         // Update the user in state
         setUsers(prevUsers => 
@@ -1549,7 +1550,7 @@ const UserList: React.FC = () => {
         
         if (response2.ok) {
           const result = await response2.json();
-          alert(result.message || 'Volunteer approved successfully!');
+          toast.success(result.message || 'Volunteer approved successfully!');
           
           setUsers(prevUsers => 
             prevUsers.map(user => {
@@ -1572,7 +1573,7 @@ const UserList: React.FC = () => {
       
     } catch (error: any) {
       console.error('Approve error:', error);
-      alert(`Failed to approve volunteer: ${error.message}`);
+      toast.success(`Failed to approve volunteer: ${error.message}`);
     }
   };
 
@@ -1581,7 +1582,7 @@ const UserList: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        alert('Please login first');
+        toast.success('Please login first');
         return;
       }
 
@@ -1602,7 +1603,7 @@ const UserList: React.FC = () => {
         const result = await response.json();
         console.log('Success:', result);
         
-        alert(result.message || 'Volunteer rejected!');
+        toast.success(result.message || 'Volunteer rejected!');
         
         // Update the user in state
         setUsers(prevUsers => 
@@ -1630,7 +1631,7 @@ const UserList: React.FC = () => {
         
         if (response2.ok) {
           const result = await response2.json();
-          alert(result.message || 'Volunteer rejected!');
+          toast.success(result.message || 'Volunteer rejected!');
           
           setUsers(prevUsers => 
             prevUsers.map(user => {
@@ -1652,7 +1653,7 @@ const UserList: React.FC = () => {
       
     } catch (error: any) {
       console.error('Reject error:', error);
-      alert(`Failed to reject volunteer: ${error.message}`);
+      toast.success(`Failed to reject volunteer: ${error.message}`);
     }
   };
 
@@ -1676,11 +1677,11 @@ const UserList: React.FC = () => {
         throw new Error(data.message || 'Delete failed');
       }
 
-      alert('User deleted successfully!');
+      toast.success('User deleted successfully!');
       fetchUsers();
     } catch (err: any) {
       console.error('Delete error:', err);
-      alert(`Failed to delete user: ${err.message}`);
+      toast.success(`Failed to delete user: ${err.message}`);
     }
   };
 
@@ -2085,3 +2086,4 @@ const UserList: React.FC = () => {
 };
 
 export default UserList;
+
