@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 // // import React, { useState, useEffect } from 'react';
 // // import { useNavigate, Link } from 'react-router-dom';
 // // import { useAuth } from '../../../context/AuthContext';
@@ -223,11 +224,11 @@
 
 // //   const handleSubmit = async () => {
 // //     if (proofFiles.length === 0) {
-// //       alert('Please upload at least one proof photo');
+// //       toast.success('Please upload at least one proof photo');
 // //       return;
 // //     }
 // //     if (!notes.trim()) {
-// //       alert('Please enter completion notes');
+// //       toast.success('Please enter completion notes');
 // //       return;
 // //     }
     
@@ -1340,13 +1341,13 @@
 // //         await fetchMissions();
 // //         setIsTaskModalOpen(false);
 // //         setSelectedTask(null);
-// //         alert('Mission accepted successfully!');
+// //         toast.success('Mission accepted successfully!');
 // //       } else {
-// //         alert('Failed to accept task: ' + data.message);
+// //         toast.success('Failed to accept task: ' + data.message);
 // //       }
 // //     } catch (error) {
 // //       console.error('Error accepting task:', error);
-// //       alert('Failed to accept task');
+// //       toast.success('Failed to accept task');
 // //     } finally {
 // //       setActionLoading(false);
 // //     }
@@ -1370,13 +1371,13 @@
 // //         await fetchMissions();
 // //         setIsTaskModalOpen(false);
 // //         setSelectedTask(null);
-// //         alert('Mission declined');
+// //         toast.success('Mission declined');
 // //       } else {
-// //         alert('Failed to decline task: ' + data.message);
+// //         toast.success('Failed to decline task: ' + data.message);
 // //       }
 // //     } catch (error) {
 // //       console.error('Error declining task:', error);
-// //       alert('Failed to decline task');
+// //       toast.success('Failed to decline task');
 // //     } finally {
 // //       setActionLoading(false);
 // //     }
@@ -1405,7 +1406,7 @@
 // //       const uploadData = await uploadResponse.json();
       
 // //       if (!uploadData.success) {
-// //         alert('Failed to upload proof: ' + uploadData.message);
+// //         toast.success('Failed to upload proof: ' + uploadData.message);
 // //         return;
 // //       }
       
@@ -1428,7 +1429,7 @@
 // //       const noteData = await noteResponse.json();
       
 // //       if (!noteData.success) {
-// //         alert('Failed to save completion note: ' + noteData.message);
+// //         toast.success('Failed to save completion note: ' + noteData.message);
 // //         return;
 // //       }
       
@@ -1450,13 +1451,13 @@
 // //         await fetchMissions();
 // //         setIsTaskModalOpen(false);
 // //         setSelectedTask(null);
-// //         alert('Mission completed successfully! Thank you for your service!');
+// //         toast.success('Mission completed successfully! Thank you for your service!');
 // //       } else {
-// //         alert('Failed to complete mission: ' + completeData.message);
+// //         toast.success('Failed to complete mission: ' + completeData.message);
 // //       }
 // //     } catch (error) {
 // //       console.error('Error uploading evidence:', error);
-// //       alert('Failed to upload evidence and complete mission');
+// //       toast.success('Failed to upload evidence and complete mission');
 // //     } finally {
 // //       setActionLoading(false);
 // //     }
@@ -2074,11 +2075,11 @@
 
 //   const handleSubmit = async () => {
 //     if (proofFiles.length === 0) {
-//       alert('Please upload at least one proof photo');
+//       toast.success('Please upload at least one proof photo');
 //       return;
 //     }
 //     if (!notes.trim()) {
-//       alert('Please enter completion notes');
+//       toast.success('Please enter completion notes');
 //       return;
 //     }
     
@@ -3213,13 +3214,13 @@
 //         await fetchMissions();
 //         setIsTaskModalOpen(false);
 //         setSelectedTask(null);
-//         alert('Mission accepted successfully!');
+//         toast.success('Mission accepted successfully!');
 //       } else {
-//         alert('Failed to accept task: ' + data.message);
+//         toast.success('Failed to accept task: ' + data.message);
 //       }
 //     } catch (error) {
 //       console.error('Error accepting task:', error);
-//       alert('Failed to accept task');
+//       toast.success('Failed to accept task');
 //     } finally {
 //       setActionLoading(false);
 //     }
@@ -3243,13 +3244,13 @@
 //         await fetchMissions();
 //         setIsTaskModalOpen(false);
 //         setSelectedTask(null);
-//         alert('Mission declined');
+//         toast.success('Mission declined');
 //       } else {
-//         alert('Failed to decline task: ' + data.message);
+//         toast.success('Failed to decline task: ' + data.message);
 //       }
 //     } catch (error) {
 //       console.error('Error declining task:', error);
-//       alert('Failed to decline task');
+//       toast.success('Failed to decline task');
 //     } finally {
 //       setActionLoading(false);
 //     }
@@ -3278,7 +3279,7 @@
 //       const uploadData = await uploadResponse.json();
       
 //       if (!uploadData.success) {
-//         alert('Failed to upload proof: ' + uploadData.message);
+//         toast.success('Failed to upload proof: ' + uploadData.message);
 //         return;
 //       }
       
@@ -3301,7 +3302,7 @@
 //       const noteData = await noteResponse.json();
       
 //       if (!noteData.success) {
-//         alert('Failed to save completion note: ' + noteData.message);
+//         toast.success('Failed to save completion note: ' + noteData.message);
 //         return;
 //       }
       
@@ -3323,13 +3324,13 @@
 //         await fetchMissions();
 //         setIsTaskModalOpen(false);
 //         setSelectedTask(null);
-//         alert('Mission completed successfully! Thank you for your service!');
+//         toast.success('Mission completed successfully! Thank you for your service!');
 //       } else {
-//         alert('Failed to complete mission: ' + completeData.message);
+//         toast.success('Failed to complete mission: ' + completeData.message);
 //       }
 //     } catch (error) {
 //       console.error('Error uploading evidence:', error);
-//       alert('Failed to upload evidence and complete mission');
+//       toast.success('Failed to upload evidence and complete mission');
 //     } finally {
 //       setActionLoading(false);
 //     }
@@ -4249,11 +4250,11 @@ const CompleteMissionModal: React.FC<{
 
   const handleSubmit = async () => {
     if (proofFiles.length === 0) {
-      alert('Please upload at least one proof photo');
+      toast.success('Please upload at least one proof photo');
       return;
     }
     if (!notes.trim()) {
-      alert('Please enter completion notes');
+      toast.success('Please enter completion notes');
       return;
     }
     
@@ -5408,13 +5409,13 @@ export const MissionBoard: React.FC = () => {
         await fetchMissions();
         setIsTaskModalOpen(false);
         setSelectedTask(null);
-        alert('Mission accepted successfully!');
+        toast.success('Mission accepted successfully!');
       } else {
-        alert('Failed to accept task: ' + data.message);
+        toast.success('Failed to accept task: ' + data.message);
       }
     } catch (error) {
       console.error('Error accepting task:', error);
-      alert('Failed to accept task');
+      toast.success('Failed to accept task');
     } finally {
       setActionLoading(false);
     }
@@ -5438,13 +5439,13 @@ export const MissionBoard: React.FC = () => {
         await fetchMissions();
         setIsTaskModalOpen(false);
         setSelectedTask(null);
-        alert('Mission declined');
+        toast.success('Mission declined');
       } else {
-        alert('Failed to decline task: ' + data.message);
+        toast.success('Failed to decline task: ' + data.message);
       }
     } catch (error) {
       console.error('Error declining task:', error);
-      alert('Failed to decline task');
+      toast.success('Failed to decline task');
     } finally {
       setActionLoading(false);
     }
@@ -5472,7 +5473,7 @@ export const MissionBoard: React.FC = () => {
       const uploadData = await uploadResponse.json();
       
       if (!uploadData.success) {
-        alert('Failed to upload proof: ' + uploadData.message);
+        toast.success('Failed to upload proof: ' + uploadData.message);
         return;
       }
       
@@ -5494,7 +5495,7 @@ export const MissionBoard: React.FC = () => {
       const noteData = await noteResponse.json();
       
       if (!noteData.success) {
-        alert('Failed to save completion note: ' + noteData.message);
+        toast.success('Failed to save completion note: ' + noteData.message);
         return;
       }
       
@@ -5515,13 +5516,13 @@ export const MissionBoard: React.FC = () => {
         await fetchMissions();
         setIsTaskModalOpen(false);
         setSelectedTask(null);
-        alert('Mission completed successfully!');
+        toast.success('Mission completed successfully!');
       } else {
-        alert('Failed to complete mission: ' + completeData.message);
+        toast.success('Failed to complete mission: ' + completeData.message);
       }
     } catch (error) {
       console.error('Error uploading evidence:', error);
-      alert('Failed to upload evidence and complete mission');
+      toast.success('Failed to upload evidence and complete mission');
     } finally {
       setActionLoading(false);
     }
@@ -5958,3 +5959,4 @@ export const MissionBoard: React.FC = () => {
 };
 
 export default MissionBoard;
+
