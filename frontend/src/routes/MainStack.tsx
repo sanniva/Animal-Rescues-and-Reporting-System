@@ -110,7 +110,7 @@
 
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Login } from "../pages/Auth/Login";
+import { Login } from "../pages/Auth/Login/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
