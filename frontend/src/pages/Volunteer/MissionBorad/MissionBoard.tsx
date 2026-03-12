@@ -1246,7 +1246,7 @@
 // //     try {
 // //       setLoading(true);
 // //       setError(null);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       const response = await fetch('http://localhost:5000/api/volunteers/tasks', {
 // //         headers: { 'Authorization': `Bearer ${token}` }
@@ -1271,7 +1271,7 @@
 
 // //   const fetchTaskEvidence = async (taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 // //         {
@@ -1289,7 +1289,7 @@
 
 // //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/reports/${reportId}/admin-notes`,
 // //         {
@@ -1307,7 +1307,7 @@
 
 // //   const fetchTaskCompletionNotes = async (taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
 // //         {
@@ -1326,7 +1326,7 @@
 // //   const handleAcceptTask = async (taskId: number) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
 // //         method: 'PATCH',
 // //         headers: {
@@ -1355,7 +1355,7 @@
 // //   const handleDeclineTask = async (taskId: number, reason: string) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
 // //         method: 'PATCH',
 // //         headers: {
@@ -1385,7 +1385,7 @@
 // //   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
 // //     try {
 // //       setActionLoading(true);
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
       
 // //       // Upload proof
 // //       const formData = new FormData();
@@ -3098,7 +3098,7 @@
 //     try {
 //       setLoading(true);
 //       setError(null);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
       
 //       const response = await fetch('http://localhost:5000/api/volunteers/tasks', {
 //         headers: { 'Authorization': `Bearer ${token}` }
@@ -3123,7 +3123,7 @@
 
 //   const fetchTaskEvidence = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 //         {
@@ -3141,7 +3141,7 @@
 
 //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/reports/${reportId}/admin-notes`,
 //         {
@@ -3159,7 +3159,7 @@
 
 //   const fetchTaskCompletionNotes = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
 //         {
@@ -3177,7 +3177,7 @@
 
 //   const fetchFullTaskDetails = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/task/${taskId}/full-details`,
 //         {
@@ -3199,7 +3199,7 @@
 //   const handleAcceptTask = async (taskId: number) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
 //         method: 'PATCH',
 //         headers: {
@@ -3228,7 +3228,7 @@
 //   const handleDeclineTask = async (taskId: number, reason: string) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
 //         method: 'PATCH',
 //         headers: {
@@ -3258,7 +3258,7 @@
 //   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
 //     try {
 //       setActionLoading(true);
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
       
 //       // Upload proof
 //       const formData = new FormData();
@@ -3975,7 +3975,7 @@ const LocationTracker: React.FC<{
   // Save location to server
   const saveLocation = async (latitude: number, longitude: number, accuracy: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
       
       const response = await fetch('http://localhost:5000/api/volunteer/tracking/point', {
@@ -4009,7 +4009,7 @@ const LocationTracker: React.FC<{
   const retryPendingPoints = async () => {
     if (pendingQueue.current.length === 0) return;
     
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return;
     
     const points = [...pendingQueue.current];
@@ -5293,7 +5293,7 @@ export const MissionBoard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       const response = await fetch('http://localhost:5000/api/volunteers/tasks', {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -5318,7 +5318,7 @@ export const MissionBoard: React.FC = () => {
 
   const fetchTaskEvidence = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/${taskId}/evidence`,
         {
@@ -5336,7 +5336,7 @@ export const MissionBoard: React.FC = () => {
 
   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/reports/${reportId}/admin-notes`,
         {
@@ -5354,7 +5354,7 @@ export const MissionBoard: React.FC = () => {
 
   const fetchTaskCompletionNotes = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
         {
@@ -5372,7 +5372,7 @@ export const MissionBoard: React.FC = () => {
 
   const fetchFullTaskDetails = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/task/${taskId}/full-details`,
         {
@@ -5394,7 +5394,7 @@ export const MissionBoard: React.FC = () => {
   const handleAcceptTask = async (taskId: number) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
         method: 'PATCH',
         headers: {
@@ -5423,7 +5423,7 @@ export const MissionBoard: React.FC = () => {
   const handleDeclineTask = async (taskId: number, reason: string) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
         method: 'PATCH',
         headers: {
@@ -5453,7 +5453,7 @@ export const MissionBoard: React.FC = () => {
   const handleUploadEvidence = async (taskId: number, file: File, notes: string) => {
     try {
       setActionLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       const formData = new FormData();
       formData.append('proofs', file);
