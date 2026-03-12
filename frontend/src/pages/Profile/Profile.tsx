@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 // // // // // // import React, { useEffect, useState } from "react";
 // // // // // // import { useParams, useNavigate } from "react-router-dom";
 // // // // // // import Icon from "../../components/Icon";
@@ -106,10 +107,10 @@
 
 // // // // // //       setProfileUser(prev => prev ? { ...prev, ...formData } : null);
 // // // // // //       setEditing(false);
-// // // // // //       alert("Profile updated successfully!");
+// // // // // //       toast.success("Profile updated successfully!");
 // // // // // //     } catch (err: any) {
 // // // // // //       console.error("Update error:", err);
-// // // // // //       alert("Failed to update profile: " + err.message);
+// // // // // //       toast.success("Failed to update profile: " + err.message);
 // // // // // //     } finally {
 // // // // // //       setSaving(false);
 // // // // // //     }
@@ -432,12 +433,12 @@
 
 // // // // //     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 // // // // //     if (!validTypes.includes(file.type)) {
-// // // // //       alert('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
+// // // // //       toast.success('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
 // // // // //       return;
 // // // // //     }
 
 // // // // //     if (file.size > 2 * 1024 * 1024) {
-// // // // //       alert('Image size should be less than 2MB');
+// // // // //       toast.success('Image size should be less than 2MB');
 // // // // //       return;
 // // // // //     }
 
@@ -501,10 +502,10 @@
 // // // // //         refreshData();
 // // // // //       }, 500);
       
-// // // // //       alert("Profile image updated successfully!");
+// // // // //       toast.success("Profile image updated successfully!");
 // // // // //     } catch (err: any) {
 // // // // //       console.error("Image upload error:", err);
-// // // // //       alert("Failed to upload image: " + err.message);
+// // // // //       toast.success("Failed to upload image: " + err.message);
 // // // // //     } finally {
 // // // // //       setUploadingImage(false);
 // // // // //       if (fileInputRef.current) {
@@ -550,10 +551,10 @@
 // // // // //       });
       
 // // // // //       setShowImageControls(false);
-// // // // //       alert("Profile image removed successfully!");
+// // // // //       toast.success("Profile image removed successfully!");
 // // // // //     } catch (err: any) {
 // // // // //       console.error("Image removal error:", err);
-// // // // //       alert("Failed to remove image: " + err.message);
+// // // // //       toast.success("Failed to remove image: " + err.message);
 // // // // //     } finally {
 // // // // //       setUploadingImage(false);
 // // // // //     }
@@ -563,7 +564,7 @@
 // // // // //     if (!profileUser) return;
 
 // // // // //     if (!formData.username.trim() || !formData.email.trim()) {
-// // // // //       alert("Username and email are required");
+// // // // //       toast.success("Username and email are required");
 // // // // //       return;
 // // // // //     }
 
@@ -600,10 +601,10 @@
 // // // // //       } : null);
       
 // // // // //       setEditing(false);
-// // // // //       alert("Profile updated successfully!");
+// // // // //       toast.success("Profile updated successfully!");
 // // // // //     } catch (err: any) {
 // // // // //       console.error("Update error:", err);
-// // // // //       alert("Failed to update profile: " + err.message);
+// // // // //       toast.success("Failed to update profile: " + err.message);
 // // // // //     } finally {
 // // // // //       setSaving(false);
 // // // // //     }
@@ -1144,12 +1145,12 @@
 
 // // // //     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 // // // //     if (!validTypes.includes(file.type)) {
-// // // //       alert('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
+// // // //       toast.success('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
 // // // //       return;
 // // // //     }
 
 // // // //     if (file.size > 5 * 1024 * 1024) {
-// // // //       alert('Image size should be less than 5MB');
+// // // //       toast.success('Image size should be less than 5MB');
 // // // //       return;
 // // // //     }
 
@@ -1204,11 +1205,11 @@
 // // // //         }, 500);
 // // // //       }
       
-// // // //       alert("Profile image updated successfully!");
+// // // //       toast.success("Profile image updated successfully!");
       
 // // // //     } catch (err: any) {
 // // // //       console.error("Image upload error:", err);
-// // // //       alert("Failed to upload image: " + err.message);
+// // // //       toast.success("Failed to upload image: " + err.message);
 // // // //     } finally {
 // // // //       setUploadingImage(false);
 // // // //       if (fileInputRef.current) {
@@ -1257,7 +1258,7 @@
 // // // //         };
 // // // //       });
       
-// // // //       alert("Profile image removed successfully!");
+// // // //       toast.success("Profile image removed successfully!");
       
 // // // //       // Force refetch
 // // // //       setTimeout(() => {
@@ -1266,7 +1267,7 @@
       
 // // // //     } catch (err: any) {
 // // // //       console.error("Image removal error:", err);
-// // // //       alert("Failed to remove image: " + err.message);
+// // // //       toast.success("Failed to remove image: " + err.message);
 // // // //     } finally {
 // // // //       setUploadingImage(false);
 // // // //     }
@@ -1276,7 +1277,7 @@
 // // // //     if (!profileUser) return;
 
 // // // //     if (!formData.username.trim() || !formData.email.trim()) {
-// // // //       alert("Username and email are required");
+// // // //       toast.success("Username and email are required");
 // // // //       return;
 // // // //     }
 
@@ -1309,10 +1310,10 @@
 // // // //       await fetchUserData(true);
       
 // // // //       setEditing(false);
-// // // //       alert("Profile updated successfully!");
+// // // //       toast.success("Profile updated successfully!");
 // // // //     } catch (err: any) {
 // // // //       console.error("Update error:", err);
-// // // //       alert("Failed to update profile: " + err.message);
+// // // //       toast.success("Failed to update profile: " + err.message);
 // // // //     } finally {
 // // // //       setSaving(false);
 // // // //     }
@@ -1847,12 +1848,12 @@
 
 // // //     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 // // //     if (!validTypes.includes(file.type)) {
-// // //       alert('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
+// // //       toast.success('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
 // // //       return;
 // // //     }
 
 // // //     if (file.size > 5 * 1024 * 1024) {
-// // //       alert('Image size should be less than 5MB');
+// // //       toast.success('Image size should be less than 5MB');
 // // //       return;
 // // //     }
 
@@ -1898,11 +1899,11 @@
 // // //         }, 500);
 // // //       }
       
-// // //       alert("Profile image updated successfully!");
+// // //       toast.success("Profile image updated successfully!");
       
 // // //     } catch (err: any) {
 // // //       console.error("Image upload error:", err);
-// // //       alert("Failed to upload image: " + err.message);
+// // //       toast.success("Failed to upload image: " + err.message);
 // // //     } finally {
 // // //       setUploadingImage(false);
 // // //       if (fileInputRef.current) {
@@ -1948,14 +1949,14 @@
 // // //         };
 // // //       });
       
-// // //       alert("Profile image removed successfully!");
+// // //       toast.success("Profile image removed successfully!");
 // // //       setTimeout(() => {
 // // //         fetchUserData(true);
 // // //       }, 500);
       
 // // //     } catch (err: any) {
 // // //       console.error("Image removal error:", err);
-// // //       alert("Failed to remove image: " + err.message);
+// // //       toast.success("Failed to remove image: " + err.message);
 // // //     } finally {
 // // //       setUploadingImage(false);
 // // //     }
@@ -1965,7 +1966,7 @@
 // // //     if (!profileUser) return;
 
 // // //     if (!formData.username.trim() || !formData.email.trim()) {
-// // //       alert("Username and email are required");
+// // //       toast.success("Username and email are required");
 // // //       return;
 // // //     }
 
@@ -1997,10 +1998,10 @@
 
 // // //       await fetchUserData(true);
 // // //       setEditing(false);
-// // //       alert("Profile updated successfully!");
+// // //       toast.success("Profile updated successfully!");
 // // //     } catch (err: any) {
 // // //       console.error("Update error:", err);
-// // //       alert("Failed to update profile: " + err.message);
+// // //       toast.success("Failed to update profile: " + err.message);
 // // //     } finally {
 // // //       setSaving(false);
 // // //     }
@@ -2615,12 +2616,12 @@
 
 // //     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 // //     if (!validTypes.includes(file.type)) {
-// //       alert('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
+// //       toast.success('Please select a valid image file (JPEG, PNG, GIF, WEBP)');
 // //       return;
 // //     }
 
 // //     if (file.size > 5 * 1024 * 1024) {
-// //       alert('Image size should be less than 5MB');
+// //       toast.success('Image size should be less than 5MB');
 // //       return;
 // //     }
 
@@ -2658,11 +2659,11 @@
 // //         setTimeout(() => fetchUserData(true), 500);
 // //       }
       
-// //       alert("Profile image updated successfully!");
+// //       toast.success("Profile image updated successfully!");
       
 // //     } catch (err: any) {
 // //       console.error("Image upload error:", err);
-// //       alert("Failed to upload image: " + err.message);
+// //       toast.success("Failed to upload image: " + err.message);
 // //     } finally {
 // //       setUploadingImage(false);
 // //       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -2700,12 +2701,12 @@
 // //       setImgKey(Date.now());
 // //       setProfileUser(prev => prev ? { ...prev, profile_image_url: null } : null);
       
-// //       alert("Profile image removed successfully!");
+// //       toast.success("Profile image removed successfully!");
 // //       setTimeout(() => fetchUserData(true), 500);
       
 // //     } catch (err: any) {
 // //       console.error("Image removal error:", err);
-// //       alert("Failed to remove image: " + err.message);
+// //       toast.success("Failed to remove image: " + err.message);
 // //     } finally {
 // //       setUploadingImage(false);
 // //     }
@@ -2715,7 +2716,7 @@
 // //     if (!profileUser) return;
 
 // //     if (!formData.username.trim() || !formData.email.trim()) {
-// //       alert("Username and email are required");
+// //       toast.success("Username and email are required");
 // //       return;
 // //     }
 
@@ -2745,10 +2746,10 @@
 
 // //       await fetchUserData(true);
 // //       setEditing(false);
-// //       alert("Profile updated successfully!");
+// //       toast.success("Profile updated successfully!");
 // //     } catch (err: any) {
 // //       console.error("Update error:", err);
-// //       alert("Failed to update profile: " + err.message);
+// //       toast.success("Failed to update profile: " + err.message);
 // //     } finally {
 // //       setSaving(false);
 // //     }
@@ -3663,7 +3664,7 @@
       
 //     } catch (err: any) {
 //       console.error("❌ Image upload error:", err);
-//       alert("Failed to upload image: " + err.message);
+//       toast.success("Failed to upload image: " + err.message);
 //     } finally {
 //       setUploadingImage(false);
 //       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -3697,7 +3698,7 @@
 //       setTimeout(() => fetchUserData(true), 500);
 //     } catch (err: any) {
 //       console.error("❌ Image removal error:", err);
-//       alert("Failed to remove image: " + err.message);
+//       toast.success("Failed to remove image: " + err.message);
 //     } finally {
 //       setUploadingImage(false);
 //     }
@@ -3721,7 +3722,7 @@
 //   const handleSaveProfile = async () => {
 //     if (!profileUser) return;
 //     if (!formData.username.trim() || !formData.email.trim()) {
-//       alert("Username and email are required");
+//       toast.success("Username and email are required");
 //       return;
 //     }
 
@@ -3751,10 +3752,10 @@
 
 //       await fetchUserData(true);
 //       setEditing(false);
-//       alert("Profile updated successfully!");
+//       toast.success("Profile updated successfully!");
 //     } catch (err: any) {
 //       console.error("❌ Update error:", err);
-//       alert("Failed to update profile: " + err.message);
+//       toast.success("Failed to update profile: " + err.message);
 //     } finally {
 //       setSaving(false);
 //     }
@@ -3806,10 +3807,10 @@
       
 //       await fetchUserData(true);
 //       setEditingEquipment(false);
-//       alert("Equipment & Skills updated successfully!");
+//       toast.success("Equipment & Skills updated successfully!");
 //     } catch (err: any) {
 //       console.error("❌ Update equipment error:", err);
-//       alert("Failed to update equipment: " + err.message);
+//       toast.success("Failed to update equipment: " + err.message);
 //     } finally {
 //       setSaving(false);
 //     }
@@ -4943,7 +4944,7 @@ export const Profile: React.FC = () => {
       
     } catch (err: any) {
       console.error("Image upload error:", err);
-      alert("Failed to upload image: " + err.message);
+      toast.success("Failed to upload image: " + err.message);
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -4977,7 +4978,7 @@ export const Profile: React.FC = () => {
       setTimeout(() => fetchUserData(true), 500);
     } catch (err: any) {
       console.error("❌ Image removal error:", err);
-      alert("Failed to remove image: " + err.message);
+      toast.success("Failed to remove image: " + err.message);
     } finally {
       setUploadingImage(false);
     }
@@ -5001,7 +5002,7 @@ export const Profile: React.FC = () => {
   const handleSaveProfile = async () => {
     if (!profileUser) return;
     if (!formData.username.trim() || !formData.email.trim()) {
-      alert("Username and email are required");
+      toast.success("Username and email are required");
       return;
     }
 
@@ -5031,10 +5032,10 @@ export const Profile: React.FC = () => {
 
       await fetchUserData(true);
       setEditing(false);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     } catch (err: any) {
       console.error("Update error:", err);
-      alert("Failed to update profile: " + err.message);
+      toast.success("Failed to update profile: " + err.message);
     } finally {
       setSaving(false);
     }
@@ -5087,10 +5088,10 @@ export const Profile: React.FC = () => {
       
       await fetchUserData(true);
       setEditingEquipment(false);
-      alert("Equipment & Skills updated successfully!");
+      toast.success("Equipment & Skills updated successfully!");
     } catch (err: any) {
       console.error("Update equipment error:", err);
-      alert("Failed to update equipment: " + err.message);
+      toast.success("Failed to update equipment: " + err.message);
     } finally {
       setSaving(false);
     }
@@ -5845,4 +5846,5 @@ export const Profile: React.FC = () => {
     </div>
   );
 };
+
 
