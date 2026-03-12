@@ -252,7 +252,7 @@
 // // // // //     }
 
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -504,7 +504,7 @@
 // // // // //   // Fetch status list from database
 // // // // //   const fetchStatusList = useCallback(async () => {
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) return;
 
 // // // // //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -561,7 +561,7 @@
 // // // // //     try {
 // // // // //       setLoading(true);
 
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         setLoading(false);
@@ -622,7 +622,7 @@
 // // // // //     try {
 // // // // //       setLoadingVolunteers(true);
 
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         setVolunteers([]);
 // // // // //         setLoadingVolunteers(false);
@@ -683,7 +683,7 @@
 
 // // // // //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -750,7 +750,7 @@
 // // // // //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -1471,7 +1471,7 @@
 // // // // //     }
 
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -1767,7 +1767,7 @@
 // // // // //   // Fetch status list from database
 // // // // //   const fetchStatusList = useCallback(async () => {
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) return;
 
 // // // // //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -1825,7 +1825,7 @@
 // // // // //     try {
 // // // // //       setLoading(true);
 
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         setLoading(false);
@@ -1917,7 +1917,7 @@
 // // // // //     try {
 // // // // //       setLoadingVolunteers(true);
 
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         setVolunteers([]);
 // // // // //         setLoadingVolunteers(false);
@@ -1978,7 +1978,7 @@
 
 // // // // //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -2046,7 +2046,7 @@
 // // // // //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 // // // // //     try {
-// // // // //       const token = localStorage.getItem('token');
+// // // // //       const token = sessionStorage.getItem('token');
 // // // // //       if (!token) {
 // // // // //         showMessage('Please login first', 'error');
 // // // // //         return;
@@ -2872,7 +2872,7 @@
 // // // //     }
 
 // // // //     try {
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) {
 // // // //         showMessage('Please login first', 'error');
 // // // //         return;
@@ -3177,7 +3177,7 @@
 // // // //   // Fetch status list from database
 // // // //   const fetchStatusList = useCallback(async () => {
 // // // //     try {
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) return;
 
 // // // //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -3234,7 +3234,7 @@
 // // // //     try {
 // // // //       setLoading(true);
 
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) {
 // // // //         showMessage('Please login first', 'error');
 // // // //         setLoading(false);
@@ -3322,7 +3322,7 @@
 // // // //     try {
 // // // //       setLoadingVolunteers(true);
 
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) {
 // // // //         setVolunteers([]);
 // // // //         setLoadingVolunteers(false);
@@ -3406,7 +3406,7 @@
 
 // // // //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 // // // //     try {
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) {
 // // // //         showMessage('Please login first', 'error');
 // // // //         return;
@@ -3474,7 +3474,7 @@
 // // // //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 // // // //     try {
-// // // //       const token = localStorage.getItem('token');
+// // // //       const token = sessionStorage.getItem('token');
 // // // //       if (!token) {
 // // // //         showMessage('Please login first', 'error');
 // // // //         return;
@@ -4326,7 +4326,7 @@
 // // //     }
 
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) {
 // // //         showMessage('Please login first', 'error');
 // // //         return;
@@ -4750,7 +4750,7 @@
 // // //   // Fetch status list from database
 // // //   const fetchStatusList = useCallback(async () => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) return;
 
 // // //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -4774,7 +4774,7 @@
 // // //   // Fetch task evidence
 // // //   const fetchTaskEvidence = async (taskId: number) => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 // // //         {
@@ -4793,7 +4793,7 @@
 // // //   // Fetch task completion notes
 // // //   const fetchTaskCompletionNotes = async (taskId: number) => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       const response = await fetch(
 // // //         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
 // // //         {
@@ -4845,7 +4845,7 @@
 // // //     try {
 // // //       setLoading(true);
 
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) {
 // // //         showMessage('Please login first', 'error');
 // // //         setLoading(false);
@@ -4924,7 +4924,7 @@
 // // //     try {
 // // //       setLoadingVolunteers(true);
 
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) {
 // // //         setVolunteers([]);
 // // //         setLoadingVolunteers(false);
@@ -5002,7 +5002,7 @@
 
 // // //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) {
 // // //         showMessage('Please login first', 'error');
 // // //         return;
@@ -5070,7 +5070,7 @@
 // // //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 // // //     try {
-// // //       const token = localStorage.getItem('token');
+// // //       const token = sessionStorage.getItem('token');
 // // //       if (!token) {
 // // //         showMessage('Please login first', 'error');
 // // //         return;
@@ -5929,7 +5929,7 @@
 // //       }
 
 // //       try {
-// //         const token = localStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token');
 // //         if (!token) {
 // //           showMessage('Please login first', 'error');
 // //           return;
@@ -6353,7 +6353,7 @@
 // //   // Fetch status list from database
 // //   const fetchStatusList = useCallback(async () => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       if (!token) return;
 
 // //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -6377,7 +6377,7 @@
 // //   // Fetch task evidence
 // //   const fetchTaskEvidence = async (taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 // //         {
@@ -6396,7 +6396,7 @@
 // //   // Fetch task completion notes
 // //   const fetchTaskCompletionNotes = async (taskId: number) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       const response = await fetch(
 // //         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
 // //         {
@@ -6448,7 +6448,7 @@
 // //     try {
 // //       setLoading(true);
 
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       if (!token) {
 // //         showMessage('Please login first', 'error');
 // //         setLoading(false);
@@ -6527,7 +6527,7 @@
 // //     try {
 // //       setLoadingVolunteers(true);
 
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       if (!token) {
 // //         setVolunteers([]);
 // //         setLoadingVolunteers(false);
@@ -6605,7 +6605,7 @@
 
 // //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       if (!token) {
 // //         showMessage('Please login first', 'error');
 // //         return;
@@ -6673,7 +6673,7 @@
 // //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 // //     try {
-// //       const token = localStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token');
 // //       if (!token) {
 // //         showMessage('Please login first', 'error');
 // //         return;
@@ -7538,7 +7538,7 @@
 //       }
 
 //       try {
-//         const token = localStorage.getItem('token');
+//         const token = sessionStorage.getItem('token');
 //         if (!token) {
 //           showMessage('Please login first', 'error');
 //           return;
@@ -7962,7 +7962,7 @@
 //   // Fetch status list from database
 //   const fetchStatusList = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) return;
 
 //       const response = await fetch('http://localhost:5000/api/reports/status/list', {
@@ -7986,7 +7986,7 @@
 //   // Fetch task evidence
 //   const fetchTaskEvidence = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/${taskId}/evidence`,
 //         {
@@ -8005,7 +8005,7 @@
 //   // Fetch task completion notes
 //   const fetchTaskCompletionNotes = async (taskId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const response = await fetch(
 //         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
 //         {
@@ -8057,7 +8057,7 @@
 //     try {
 //       setLoading(true);
 
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         showMessage('Please login first', 'error');
 //         setLoading(false);
@@ -8136,7 +8136,7 @@
 //     try {
 //       setLoadingVolunteers(true);
 
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         setVolunteers([]);
 //         setLoadingVolunteers(false);
@@ -8214,7 +8214,7 @@
 
 //   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         showMessage('Please login first', 'error');
 //         return;
@@ -8282,7 +8282,7 @@
 //     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         showMessage('Please login first', 'error');
 //         return;
@@ -9332,7 +9332,7 @@ const ReportDetailModal: React.FC<{
     const fetchTrackingData = async (taskId: number) => {
       try {
         setLoadingTracking(true);
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         
         if (!token) {
           console.error('No token found');
@@ -9460,7 +9460,7 @@ const ReportDetailModal: React.FC<{
       }
 
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (!token) {
           showMessage('Please login first', 'error');
           return;
@@ -10185,7 +10185,7 @@ const RescueReports: React.FC = () => {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         showMessage('Please login first', 'error');
         setLoading(false);
@@ -10251,7 +10251,7 @@ const RescueReports: React.FC = () => {
     try {
       setLoadingVolunteers(true);
 
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         setVolunteers([]);
         setLoadingVolunteers(false);
@@ -10311,7 +10311,7 @@ const RescueReports: React.FC = () => {
 
   const fetchTaskEvidence = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/${taskId}/evidence`,
         {
@@ -10329,7 +10329,7 @@ const RescueReports: React.FC = () => {
 
   const fetchTaskCompletionNotes = async (taskId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(
         `http://localhost:5000/api/tasks/${taskId}/completion-notes`,
         {
@@ -10363,7 +10363,7 @@ const RescueReports: React.FC = () => {
 
   const assignVolunteer = async (reportId: number, volunteerId: number, volunteerName: string) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         showMessage('Please login first', 'error');
         return;
@@ -10431,7 +10431,7 @@ const RescueReports: React.FC = () => {
     if (!window.confirm('Are you sure you want to unassign this ranger? The status will be reset to "Submitted".')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         showMessage('Please login first', 'error');
         return;

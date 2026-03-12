@@ -33,7 +33,7 @@
 //   // Fetch all users
 //   const fetchUsers = async () => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const res = await fetch('http://localhost:5000/api/users', {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@
 
 //   // ✅ FIXED: CORRECT APPROVE FUNCTION
 //   const approveVolunteer = async (userId: number) => {
-//     const token = localStorage.getItem('token');
+//     const token = sessionStorage.getItem('token');
 //     if (!token) {
 //       alert('Please login first');
 //       return;
@@ -192,7 +192,7 @@
 
 //   // ✅ FIXED: CORRECT REJECT FUNCTION
 //   const rejectVolunteer = async (userId: number) => {
-//     const token = localStorage.getItem('token');
+//     const token = sessionStorage.getItem('token');
 //     if (!token) {
 //       alert('Please login first');
 //       return;
@@ -257,7 +257,7 @@
 //     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
 //         method: 'DELETE',
 //         headers: {
@@ -695,7 +695,7 @@
 //   // Fetch all users
 //   const fetchUsers = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         console.error('No token found');
 //         setLoading(false);
@@ -780,7 +780,7 @@
 //   // ✅ APPROVE VOLUNTEER - SIMPLE & WORKING
 //   const approveVolunteer = async (userId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         alert('Please login first');
 //         return;
@@ -864,7 +864,7 @@
 //   // ✅ REJECT VOLUNTEER - SIMPLE & WORKING
 //   const rejectVolunteer = async (userId: number) => {
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       if (!token) {
 //         alert('Please login first');
 //         return;
@@ -946,7 +946,7 @@
 //     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
 //     try {
-//       const token = localStorage.getItem('token');
+//       const token = sessionStorage.getItem('token');
 //       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
 //         method: 'DELETE',
 //         headers: {
@@ -1384,7 +1384,7 @@ const UserList: React.FC = () => {
   // Fetch all users
   const fetchUsers = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         console.error('No token found');
         setLoading(false);
@@ -1495,7 +1495,7 @@ const UserList: React.FC = () => {
   // ✅ APPROVE VOLUNTEER - SIMPLE & WORKING
   const approveVolunteer = async (userId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         alert('Please login first');
         return;
@@ -1579,7 +1579,7 @@ const UserList: React.FC = () => {
   // ✅ REJECT VOLUNTEER - SIMPLE & WORKING
   const rejectVolunteer = async (userId: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         alert('Please login first');
         return;
@@ -1661,7 +1661,7 @@ const UserList: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
         method: 'DELETE',
         headers: {
