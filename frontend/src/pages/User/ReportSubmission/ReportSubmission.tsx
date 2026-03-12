@@ -51,7 +51,7 @@
 
 // // //   // Get token from localStorage
 // // //   const getToken = () => {
-// // //     return localStorage.getItem('token');
+// // //     return sessionStorage.getItem('token');
 // // //   };
 
 // // //   // Fetch animal data from API
@@ -798,7 +798,7 @@
 
 // //   // Get token from localStorage
 // //   const getToken = () => {
-// //     return localStorage.getItem('token');
+// //     return sessionStorage.getItem('token');
 // //   };
 
 // //   // Fetch animal data from API
@@ -1467,7 +1467,7 @@
 
 //   // Get token from localStorage
 //   const getToken = () => {
-//     return localStorage.getItem('token');
+//     return sessionStorage.getItem('token');
 //   };
 
 //   // Fetch animal data from API
@@ -2301,7 +2301,7 @@ const ReportSubmission: React.FC = () => {
     }
   };
 
-  const getToken = () => localStorage.getItem('token');
+  const getToken = () => sessionStorage.getItem('token');
 
   const fetchAnimalData = useCallback(async () => {
     const token = getToken();

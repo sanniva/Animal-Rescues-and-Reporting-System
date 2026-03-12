@@ -44,7 +44,7 @@
 // // // // // //       setLoading(true);
 // // // // // //       setError(null);
 // // // // // //       try {
-// // // // // //         const token = localStorage.getItem("token");
+// // // // // //         const token = sessionStorage.getItem("token");
 // // // // // //         if (!token) throw new Error("No authentication token found");
 
 // // // // // //         const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
@@ -86,7 +86,7 @@
 
 // // // // // //     try {
 // // // // // //       setSaving(true);
-// // // // // //       const token = localStorage.getItem("token");
+// // // // // //       const token = sessionStorage.getItem("token");
 // // // // // //       if (!token) throw new Error("No authentication token");
 
 // // // // // //       const res = await fetch(`http://localhost:5000/api/users/${profileUser.user_id}`, {
@@ -383,7 +383,7 @@
 // // // // //       setLoading(true);
 // // // // //       setError(null);
 // // // // //       try {
-// // // // //         const token = localStorage.getItem("token");
+// // // // //         const token = sessionStorage.getItem("token");
 // // // // //         if (!token) throw new Error("No authentication token found");
 
 // // // // //         const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
@@ -443,7 +443,7 @@
 
 // // // // //     try {
 // // // // //       setUploadingImage(true);
-// // // // //       const token = localStorage.getItem("token");
+// // // // //       const token = sessionStorage.getItem("token");
 // // // // //       if (!token) throw new Error("No authentication token");
 
 // // // // //       const uploadFormData = new FormData();
@@ -483,7 +483,7 @@
 // // // // //       setTimeout(() => {
 // // // // //         const refreshData = async () => {
 // // // // //           try {
-// // // // //             const token = localStorage.getItem("token");
+// // // // //             const token = sessionStorage.getItem("token");
 // // // // //             const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
 // // // // //               headers: { 
 // // // // //                 Authorization: `Bearer ${token}`,
@@ -522,7 +522,7 @@
 
 // // // // //     try {
 // // // // //       setUploadingImage(true);
-// // // // //       const token = localStorage.getItem("token");
+// // // // //       const token = sessionStorage.getItem("token");
 // // // // //       if (!token) throw new Error("No authentication token");
 
 // // // // //       const res = await fetch(`http://localhost:5000/api/users/${profileUser.user_id}/profile-image`, {
@@ -569,7 +569,7 @@
 
 // // // // //     try {
 // // // // //       setSaving(true);
-// // // // //       const token = localStorage.getItem("token");
+// // // // //       const token = sessionStorage.getItem("token");
 // // // // //       if (!token) throw new Error("No authentication token");
 
 // // // // //       const res = await fetch(`http://localhost:5000/api/users/${profileUser.user_id}`, {
@@ -1095,7 +1095,7 @@
 // // // //     setLoading(true);
 // // // //     setError(null);
 // // // //     try {
-// // // //       const token = localStorage.getItem("token");
+// // // //       const token = sessionStorage.getItem("token");
 // // // //       if (!token) throw new Error("No authentication token found");
 
 // // // //       const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ''}`;
@@ -1155,7 +1155,7 @@
 
 // // // //     try {
 // // // //       setUploadingImage(true);
-// // // //       const token = localStorage.getItem("token");
+// // // //       const token = sessionStorage.getItem("token");
 // // // //       if (!token) throw new Error("No authentication token");
 
 // // // //       const uploadFormData = new FormData();
@@ -1226,7 +1226,7 @@
 
 // // // //     try {
 // // // //       setUploadingImage(true);
-// // // //       const token = localStorage.getItem("token");
+// // // //       const token = sessionStorage.getItem("token");
 // // // //       if (!token) throw new Error("No authentication token");
 
 // // // //       const res = await fetch(
@@ -1282,7 +1282,7 @@
 
 // // // //     try {
 // // // //       setSaving(true);
-// // // //       const token = localStorage.getItem("token");
+// // // //       const token = sessionStorage.getItem("token");
 // // // //       if (!token) throw new Error("No authentication token");
 
 // // // //       const res = await fetch(
@@ -1799,7 +1799,7 @@
 // // //     setLoading(true);
 // // //     setError(null);
 // // //     try {
-// // //       const token = localStorage.getItem("token");
+// // //       const token = sessionStorage.getItem("token");
 // // //       if (!token) throw new Error("No authentication token found");
 
 // // //       const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ''}`;
@@ -1858,7 +1858,7 @@
 
 // // //     try {
 // // //       setUploadingImage(true);
-// // //       const token = localStorage.getItem("token");
+// // //       const token = sessionStorage.getItem("token");
 // // //       if (!token) throw new Error("No authentication token");
 
 // // //       const uploadFormData = new FormData();
@@ -1920,7 +1920,7 @@
 
 // // //     try {
 // // //       setUploadingImage(true);
-// // //       const token = localStorage.getItem("token");
+// // //       const token = sessionStorage.getItem("token");
 // // //       if (!token) throw new Error("No authentication token");
 
 // // //       const res = await fetch(
@@ -1971,7 +1971,7 @@
 
 // // //     try {
 // // //       setSaving(true);
-// // //       const token = localStorage.getItem("token");
+// // //       const token = sessionStorage.getItem("token");
 // // //       if (!token) throw new Error("No authentication token");
 
 // // //       const res = await fetch(
@@ -2566,7 +2566,7 @@
 // //     setLoading(true);
 // //     setError(null);
 // //     try {
-// //       const token = localStorage.getItem("token");
+// //       const token = sessionStorage.getItem("token");
 // //       if (!token) throw new Error("No authentication token found");
 
 // //       const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ''}`;
@@ -2626,7 +2626,7 @@
 
 // //     try {
 // //       setUploadingImage(true);
-// //       const token = localStorage.getItem("token");
+// //       const token = sessionStorage.getItem("token");
 // //       if (!token) throw new Error("No authentication token");
 
 // //       const uploadFormData = new FormData();
@@ -2678,7 +2678,7 @@
 
 // //     try {
 // //       setUploadingImage(true);
-// //       const token = localStorage.getItem("token");
+// //       const token = sessionStorage.getItem("token");
 // //       if (!token) throw new Error("No authentication token");
 
 // //       const res = await fetch(
@@ -2721,7 +2721,7 @@
 
 // //     try {
 // //       setSaving(true);
-// //       const token = localStorage.getItem("token");
+// //       const token = sessionStorage.getItem("token");
 // //       if (!token) throw new Error("No authentication token");
 
 // //       const res = await fetch(
@@ -3393,7 +3393,7 @@
 //   const fetchVolunteerBadges = useCallback(async () => {
 //     if (!userId) return;
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/volunteers/${userId}/badges`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3412,7 +3412,7 @@
 
 //   const fetchVolunteerTasks = useCallback(async (userId: number) => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/tasks/volunteer/${userId}`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3440,7 +3440,7 @@
 
 //   const fetchUserReports = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/reports/my-reports`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3459,7 +3459,7 @@
 
 //   const fetchAllReports = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3490,7 +3490,7 @@
 
 //   const fetchAdminStats = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/reports/admin/statistics`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3516,7 +3516,7 @@
 
 //   const fetchAdminVolunteerCount = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/users`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3543,7 +3543,7 @@
 
 //   const fetchAdminReportsCount = useCallback(async () => {
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
 //         headers: { 
 //           Authorization: `Bearer ${token}`,
@@ -3569,7 +3569,7 @@
 //     setLoading(true);
 //     setError(null);
 //     try {
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       if (!token) throw new Error("No authentication token found");
 
 //       const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ''}`;
@@ -3636,7 +3636,7 @@
 
 //     try {
 //       setUploadingImage(true);
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       if (!token) throw new Error("No authentication token");
 
 //       const uploadFormData = new FormData();
@@ -3676,7 +3676,7 @@
 
 //     try {
 //       setUploadingImage(true);
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       if (!token) throw new Error("No authentication token");
 
 //       const res = await fetch(
@@ -3727,7 +3727,7 @@
 
 //     try {
 //       setSaving(true);
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       if (!token) throw new Error("No authentication token");
 
 //       const res = await fetch(
@@ -3766,7 +3766,7 @@
 
 //     try {
 //       setSaving(true);
-//       const token = localStorage.getItem("token");
+//       const token = sessionStorage.getItem("token");
 //       if (!token) throw new Error("No authentication token");
 
 //       console.log("📤 Sending equipment update to:", `http://localhost:5000/api/users/${profileUser.user_id}/volunteer-profile`);
@@ -4639,7 +4639,7 @@ export const Profile: React.FC = () => {
   // ============= FETCH AVAILABILITY STATUSES =============
   const fetchAvailabilityStatuses = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/volunteers/availability-statuses`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4671,7 +4671,7 @@ export const Profile: React.FC = () => {
   const fetchVolunteerBadges = useCallback(async () => {
     if (!userId) return;
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/volunteers/${userId}/badges`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4690,7 +4690,7 @@ export const Profile: React.FC = () => {
 
   const fetchVolunteerTasks = useCallback(async (userId: number) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/tasks/volunteer/${userId}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4718,7 +4718,7 @@ export const Profile: React.FC = () => {
 
   const fetchUserReports = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/reports/my-reports`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4737,7 +4737,7 @@ export const Profile: React.FC = () => {
 
   const fetchAllReports = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4768,7 +4768,7 @@ export const Profile: React.FC = () => {
 
   const fetchAdminStats = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/reports/admin/statistics`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4794,7 +4794,7 @@ export const Profile: React.FC = () => {
 
   const fetchAdminVolunteerCount = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/users`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4821,7 +4821,7 @@ export const Profile: React.FC = () => {
 
   const fetchAdminReportsCount = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -4847,7 +4847,7 @@ export const Profile: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
       const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ''}`;
@@ -4916,7 +4916,7 @@ export const Profile: React.FC = () => {
 
     try {
       setUploadingImage(true);
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
       const uploadFormData = new FormData();
@@ -4956,7 +4956,7 @@ export const Profile: React.FC = () => {
 
     try {
       setUploadingImage(true);
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
       const res = await fetch(
@@ -5007,7 +5007,7 @@ export const Profile: React.FC = () => {
 
     try {
       setSaving(true);
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
       const res = await fetch(
@@ -5046,7 +5046,7 @@ export const Profile: React.FC = () => {
 
     try {
       setSaving(true);
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
       console.log("Sending equipment update to:", `http://localhost:5000/api/users/${profileUser.user_id}/volunteer-profile`);
@@ -5845,3 +5845,4 @@ export const Profile: React.FC = () => {
     </div>
   );
 };
+
