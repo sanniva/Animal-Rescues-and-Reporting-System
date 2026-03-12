@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 // // // import React, { useState, useEffect } from 'react';
 // // // import { Link } from 'react-router-dom';
 // // // import { useAuth } from '../../../context/AuthContext';
@@ -1178,14 +1179,14 @@
 // //           setReportToDelete(null);
 // //           setIsModalOpen(false);
 // //         } else {
-// //           alert(data.message || 'Failed to delete report');
+// //           toast.success(data.message || 'Failed to delete report');
 // //         }
 // //       } else {
-// //         alert('Failed to delete report');
+// //         toast.success('Failed to delete report');
 // //       }
 // //     } catch (error) {
 // //       console.error('Error deleting report:', error);
-// //       alert('Error deleting report. Please try again.');
+// //       toast.success('Error deleting report. Please try again.');
 // //     } finally {
 // //       setIsDeleting(false);
 // //     }
@@ -2025,14 +2026,14 @@
 //           setReportToDelete(null);
 //           setIsModalOpen(false);
 //         } else {
-//           alert(data.message || 'Failed to delete report');
+//           toast.success(data.message || 'Failed to delete report');
 //         }
 //       } else {
-//         alert('Failed to delete report');
+//         toast.success('Failed to delete report');
 //       }
 //     } catch (error) {
 //       console.error('Error deleting report:', error);
-//       alert('Error deleting report. Please try again.');
+//       toast.success('Error deleting report. Please try again.');
 //     } finally {
 //       setIsDeleting(false);
 //     }
@@ -3171,14 +3172,14 @@
 //           setReportToDelete(null);
 //           setIsModalOpen(false);
 //         } else {
-//           alert(data.message || 'Failed to delete report');
+//           toast.success(data.message || 'Failed to delete report');
 //         }
 //       } else {
-//         alert('Failed to delete report');
+//         toast.success('Failed to delete report');
 //       }
 //     } catch (error) {
 //       console.error('Error deleting report:', error);
-//       alert('Error deleting report. Please try again.');
+//       toast.success('Error deleting report. Please try again.');
 //     } finally {
 //       setIsDeleting(false);
 //     }
@@ -4307,14 +4308,14 @@ const MyReports: React.FC = () => {
           setReportToDelete(null);
           setIsModalOpen(false);
         } else {
-          alert(data.message || 'Failed to delete report');
+          toast.success(data.message || 'Failed to delete report');
         }
       } else {
-        alert('Failed to delete report');
+        toast.success('Failed to delete report');
       }
     } catch (error) {
       console.error('Error deleting report:', error);
-      alert('Error deleting report. Please try again.');
+      toast.success('Error deleting report. Please try again.');
     } finally {
       setIsDeleting(false);
     }
@@ -4705,3 +4706,4 @@ const MyReports: React.FC = () => {
 };
 
 export default MyReports;
+
