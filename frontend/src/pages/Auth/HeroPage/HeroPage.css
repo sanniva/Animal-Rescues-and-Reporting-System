@@ -32,7 +32,7 @@
   background: var(--beige);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow-x: hidden;
   padding: 20px;
 }
 
