@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Icon from "../../../components/Icon";
 import "./Mission.css";
 
 const Mission: React.FC = () => {
@@ -17,7 +18,9 @@ const Mission: React.FC = () => {
       <section className="mission-hero">
         <div className="mission-hero-content">
           <div className="section-badge">
-            <span className="badge-icon">🐾</span>
+            <span className="badge-icon">
+              <Icon type="fa" name="FaPaw" size={16} />
+            </span>
             <span>Our Purpose</span>
           </div>
           <h1 className="hero-title">
@@ -67,25 +70,33 @@ const Mission: React.FC = () => {
             <div className="pillar-number">01</div>
             <h3>Rapid Response</h3>
             <p>Every second counts when an animal is in distress. We ensure the fastest possible response to every emergency call, regardless of the species.</p>
-            <div className="pillar-stat">⏱️ 15min avg response</div>
+            <div className="pillar-stat">
+              <Icon type="feather" name="FiClock" size={16} /> 15min avg response
+            </div>
           </div>
           <div className="pillar-card">
             <div className="pillar-number">02</div>
             <h3>Quality Care</h3>
             <p>Partnering with veterinarians who treat all animals – from cats and dogs to cows, birds, and wildlife – providing the best medical care for every rescued creature.</p>
-            <div className="pillar-stat">🏥 50+ vet partners</div>
+            <div className="pillar-stat">
+              <Icon type="fa" name="FaHospital" size={16} /> 50+ vet partners
+            </div>
           </div>
           <div className="pillar-card">
             <div className="pillar-number">03</div>
             <h3>Community Building</h3>
             <p>Growing a network of trained volunteers across Nepal who are ready to help any animal in need, fostering a culture of compassion for all living beings.</p>
-            <div className="pillar-stat">👥 200+ rangers</div>
+            <div className="pillar-stat">
+              <Icon type="fa" name="FaUsers" size={16} /> 200+ rangers
+            </div>
           </div>
           <div className="pillar-card">
             <div className="pillar-number">04</div>
             <h3>Education</h3>
             <p>Teaching communities about animal welfare, prevention, and the importance of protecting all creatures – big and small, domestic and wild.</p>
-            <div className="pillar-stat">📚 1000+ people reached</div>
+            <div className="pillar-stat">
+              <Icon type="fa" name="FaBook" size={16} /> 1000+ people reached
+            </div>
           </div>
         </div>
       </section>
@@ -137,7 +148,9 @@ const Mission: React.FC = () => {
             </h2>
             <p className="vision-text">We envision a Nepal where every animal in distress – whether a street dog, a stray cat, an injured bird, or a trapped cow – has someone to call. A country where animal welfare is a priority for all creatures, and where communities work together to protect the most vulnerable among us.</p>
             <div className="vision-quote">
-              <span className="quote-mark">"</span>
+              <span className="quote-mark">
+                <Icon type="fa" name="FaQuoteLeft" size={20} />
+              </span>
               <p>Building a nation of animal lovers, one rescue at a time – for all animals.</p>
             </div>
           </div>
@@ -159,36 +172,46 @@ const Mission: React.FC = () => {
           <p className="cta-text">Join us in making a difference for all animals. Every volunteer counts, every rescue matters.</p>
           <div className="cta-buttons">
             <button className="btn-primary btn-large" onClick={() => navigate("/login")}>
-              Become a Ranger
+              <Icon type="fa" name="FaUserPlus" size={18} className="btn-icon" /> Become a Ranger
             </button>
             <button className="btn-outline btn-large" onClick={() => navigate("/about")}>
-              Learn More
+              <Icon type="fa" name="FaInfoCircle" size={18} className="btn-icon" /> Learn More
             </button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - Updated to match About page exactly */}
       <footer className="footer">
         <div className="footer-bg-wave"></div>
         <div className="footer-content">
           <div className="footer-section">
             <div className="footer-logo">
-              <span className="logo-icon">🐾</span>
+              <span className="logo-icon">
+                <Icon type="fa" name="FaPaw" size={24} />
+              </span>
               <span className="logo-text">RESQALL</span>
             </div>
-            <p className="footer-description">Rapid response animal rescue network. Saving all animals 24/7 – dogs, cats, cows, birds, and wildlife.</p>
-            <div className="footer-social">
-              <span className="footer-social-icon">📘</span>
-              <span className="footer-social-icon">📷</span>
-              <span className="footer-social-icon">🐦</span>
-              <span className="footer-social-icon">📱</span>
+            <p className="footer-description">Rapid response animal rescue network. Saving lives 24/7.</p>
+            <div className="footer-social-mini">
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaFacebookF" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaInstagram" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaTwitter" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaTiktok" size={16} />
+              </span>
             </div>
           </div>
 
           <div className="footer-section">
             <h4>Quick Links</h4>
-            <ul className="footer-links">
+            <ul className="footer-links-list">
               <li><Link to="/about">About Us</Link></li>
               <li><Link to="/mission">Our Mission</Link></li>
               <li><Link to="/contact">Contact</Link></li>
@@ -198,7 +221,7 @@ const Mission: React.FC = () => {
 
           <div className="footer-section">
             <h4>Get Involved</h4>
-            <ul className="footer-links">
+            <ul className="footer-links-list">
               <li><Link to="/login">Become a Ranger</Link></li>
               <li><Link to="/login">Report an Animal</Link></li>
               <li><Link to="/login">Partner With Us</Link></li>
@@ -208,16 +231,20 @@ const Mission: React.FC = () => {
           <div className="footer-section">
             <h4>Emergency</h4>
             <div className="footer-emergency">
-              <p className="emergency-label">📞 24/7 Animal Rescue Hotline</p>
-              <p className="emergency-number">1-800-RESQALL</p>
-              <p className="emergency-dial">1-800-737-7255</p>
-              <p className="footer-email">📧 rescue@resqall.org</p>
+              <p className="footer-emergency-label">
+                <Icon type="fa" name="FaPhone" size={12} /> 24/7 Hotline
+              </p>
+              <p className="footer-emergency-number">1-800-RESQALL</p>
+              <p className="footer-emergency-dial">1-800-737-7255</p>
+              <p className="footer-email">
+                <Icon type="fa" name="FaEnvelope" size={12} /> rescue@resqall.org
+              </p>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2025 ResQAll. All rights reserved. Made with ❤️ for all animals in Nepal.</p>
+          <p>&copy; 2025 ResQAll. All rights reserved. Made with <Icon type="fa" name="FaHeart" size={14} color="#ff4444" /> for animal rescue in Nepal.</p>
         </div>
       </footer>
     </div>
