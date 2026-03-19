@@ -34,7 +34,7 @@ import { toast } from 'react-toastify';
 //   // Fetch all users
 //   const fetchUsers = async () => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       const res = await fetch('http://localhost:5000/api/users', {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ import { toast } from 'react-toastify';
 
 //   // ✅ FIXED: CORRECT APPROVE FUNCTION
 //   const approveVolunteer = async (userId: number) => {
-//     const token = sessionStorage.getItem('token');
+//     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //     if (!token) {
 //       toast.success('Please login first');
 //       return;
@@ -193,7 +193,7 @@ import { toast } from 'react-toastify';
 
 //   // ✅ FIXED: CORRECT REJECT FUNCTION
 //   const rejectVolunteer = async (userId: number) => {
-//     const token = sessionStorage.getItem('token');
+//     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //     if (!token) {
 //       toast.success('Please login first');
 //       return;
@@ -258,7 +258,7 @@ import { toast } from 'react-toastify';
 //     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
 //         method: 'DELETE',
 //         headers: {
@@ -696,7 +696,7 @@ import { toast } from 'react-toastify';
 //   // Fetch all users
 //   const fetchUsers = useCallback(async () => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       if (!token) {
 //         console.error('No token found');
 //         setLoading(false);
@@ -781,7 +781,7 @@ import { toast } from 'react-toastify';
 //   // ✅ APPROVE VOLUNTEER - SIMPLE & WORKING
 //   const approveVolunteer = async (userId: number) => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       if (!token) {
 //         toast.success('Please login first');
 //         return;
@@ -865,7 +865,7 @@ import { toast } from 'react-toastify';
 //   // ✅ REJECT VOLUNTEER - SIMPLE & WORKING
 //   const rejectVolunteer = async (userId: number) => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       if (!token) {
 //         toast.success('Please login first');
 //         return;
@@ -947,7 +947,7 @@ import { toast } from 'react-toastify';
 //     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
 //         method: 'DELETE',
 //         headers: {
@@ -1385,7 +1385,7 @@ const UserList: React.FC = () => {
   // Fetch all users
   const fetchUsers = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) {
         console.error('No token found');
         setLoading(false);
@@ -1496,7 +1496,7 @@ const UserList: React.FC = () => {
   // ✅ APPROVE VOLUNTEER - SIMPLE & WORKING
   const approveVolunteer = async (userId: number) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) {
         toast.success('Please login first');
         return;
@@ -1580,7 +1580,7 @@ const UserList: React.FC = () => {
   // ✅ REJECT VOLUNTEER - SIMPLE & WORKING
   const rejectVolunteer = async (userId: number) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) {
         toast.success('Please login first');
         return;
@@ -1662,7 +1662,7 @@ const UserList: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/users/${id}`, {
         method: 'DELETE',
         headers: {
@@ -2086,4 +2086,5 @@ const UserList: React.FC = () => {
 };
 
 export default UserList;
+
 
