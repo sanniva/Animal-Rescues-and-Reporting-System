@@ -257,7 +257,7 @@ import { toast } from 'react-toastify';
 // // //       try {
 // // //         setLoading(true);
 // // //         setError(null);
-// // //         const token = sessionStorage.getItem('token');
+// // //         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
 // // //         console.log('FETCHING reports for user ID:', currentUser.user_id);
         
@@ -1031,7 +1031,7 @@ import { toast } from 'react-toastify';
 // //       if (!currentUser) return;
       
 // //       try {
-// //         const token = sessionStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 // //         const response = await fetch('http://localhost:5000/api/users/profile', {
 // //           headers: {
 // //             'Authorization': `Bearer ${token}`,
@@ -1061,7 +1061,7 @@ import { toast } from 'react-toastify';
 // //       try {
 // //         setLoading(true);
 // //         setError(null);
-// //         const token = sessionStorage.getItem('token');
+// //         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
 // //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 // //           headers: {
@@ -1106,7 +1106,7 @@ import { toast } from 'react-toastify';
 
 // //   const handleSaveReport = async (updatedReport: Report) => {
 // //     try {
-// //       const token = sessionStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 // //       const response = await fetch(`http://localhost:5000/api/reports/${updatedReport.report_id}`, {
 // //         method: 'PATCH',
@@ -1160,7 +1160,7 @@ import { toast } from 'react-toastify';
     
 // //     try {
 // //       setIsDeleting(true);
-// //       const token = sessionStorage.getItem('token');
+// //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 // //       const response = await fetch(`http://localhost:5000/api/reports/${reportToDelete}`, {
 // //         method: 'DELETE',
@@ -1826,7 +1826,7 @@ import { toast } from 'react-toastify';
 //       try {
 //         setLoading(true);
 //         setError(null);
-//         const token = sessionStorage.getItem('token');
+//         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
 //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 //           headers: {
@@ -1956,7 +1956,7 @@ import { toast } from 'react-toastify';
 
 //   const handleSaveReport = async (updatedReport: Report) => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/reports/${updatedReport.report_id}`, {
 //         method: 'PATCH',
@@ -2008,7 +2008,7 @@ import { toast } from 'react-toastify';
     
 //     try {
 //       setIsDeleting(true);
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/reports/${reportToDelete}`, {
 //         method: 'DELETE',
@@ -2629,7 +2629,7 @@ import { toast } from 'react-toastify';
 
 //   const fetchEvidenceAndNotes = async (taskId: number) => {
 //     setLoading(true);
-//     const token = sessionStorage.getItem('token');
+//     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     
 //     try {
 //       // Fetch evidence
@@ -2972,7 +2972,7 @@ import { toast } from 'react-toastify';
 //       try {
 //         setLoading(true);
 //         setError(null);
-//         const token = sessionStorage.getItem('token');
+//         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
 //         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
 //           headers: {
@@ -3102,7 +3102,7 @@ import { toast } from 'react-toastify';
 
 //   const handleSaveReport = async (updatedReport: Report) => {
 //     try {
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/reports/${updatedReport.report_id}`, {
 //         method: 'PATCH',
@@ -3154,7 +3154,7 @@ import { toast } from 'react-toastify';
     
 //     try {
 //       setIsDeleting(true);
-//       const token = sessionStorage.getItem('token');
+//       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
 //       const response = await fetch(`http://localhost:5000/api/reports/${reportToDelete}`, {
 //         method: 'DELETE',
@@ -3731,7 +3731,7 @@ const ReportDetailModal: React.FC<{
 
   const fetchEvidenceAndNotes = async (taskId: number) => {
     setLoading(true);
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     
     try {
       // Fetch evidence
@@ -4108,7 +4108,7 @@ const MyReports: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const token = sessionStorage.getItem('token');
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
         const response = await fetch('http://localhost:5000/api/reports/my-reports', {
           headers: {
@@ -4238,7 +4238,7 @@ const MyReports: React.FC = () => {
 
   const handleSaveReport = async (updatedReport: Report) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
       const response = await fetch(`http://localhost:5000/api/reports/${updatedReport.report_id}`, {
         method: 'PATCH',
@@ -4290,7 +4290,7 @@ const MyReports: React.FC = () => {
     
     try {
       setIsDeleting(true);
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       
       const response = await fetch(`http://localhost:5000/api/reports/${reportToDelete}`, {
         method: 'DELETE',
@@ -4706,4 +4706,5 @@ const MyReports: React.FC = () => {
 };
 
 export default MyReports;
+
 
