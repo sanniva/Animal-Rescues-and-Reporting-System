@@ -1118,7 +1118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // If not in localStorage, check sessionStorage
         if (!storedUser || !token) {
-          storedUser = sessionStorage.getItem("resqall_user");
+          storedUser = sessionStorage.getItem("resqall_user") || localStorage.getItem("resqall_user");
           token = sessionStorage.getItem("token");
           storageSource = 'sessionStorage';
         }
@@ -1346,7 +1346,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Update storage based on where user is stored
       if (localStorage.getItem("resqall_user")) {
         localStorage.setItem("resqall_user", JSON.stringify(mappedUser));
-      } else if (sessionStorage.getItem("resqall_user")) {
+      } else if (sessionStorage.getItem("resqall_user") || localStorage.getItem("resqall_user")) {
         sessionStorage.setItem("resqall_user", JSON.stringify(mappedUser));
       }
       
@@ -1379,3 +1379,4 @@ export const useAuth = () => {
   if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
+
