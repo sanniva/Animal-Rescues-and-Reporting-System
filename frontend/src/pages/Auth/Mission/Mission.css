@@ -790,6 +790,73 @@ body {
   z-index: 2;
 }
 
+/* Icon Styles */
+.btn-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.link-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.emergency-icon,
+.email-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.copyright-icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.footer-emergency .emergency-icon {
+  color: var(--accent);
+}
+
+.footer-emergency .email-icon {
+  color: var(--beige-dark);
+}
+
+.footer-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.footer-social-icon:hover {
+  transform: translateY(-3px);
+  color: var(--accent);
+}
+
+.footer-links li a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-links li a .link-icon {
+  opacity: 0.7;
+  transition: var(--transition);
+}
+
+.footer-links li a:hover .link-icon {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.fa-heart {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .hero-title {
