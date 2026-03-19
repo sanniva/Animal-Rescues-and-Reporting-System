@@ -48,7 +48,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     if (!user) return; // Changed from currentUser to user
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/notifications', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -84,7 +84,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     if (!user) return; // Changed from currentUser to user
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
         headers: {
@@ -110,7 +110,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     if (!user) return; // Changed from currentUser to user
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/notifications/read-all', {
         method: 'PATCH',
         headers: {
@@ -132,7 +132,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     if (!user) return; // Changed from currentUser to user
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}`, {
         method: 'DELETE',
         headers: {
@@ -210,3 +210,4 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     </NotificationContext.Provider>
   );
 };
+
