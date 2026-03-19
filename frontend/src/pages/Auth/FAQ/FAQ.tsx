@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Icon from "../../../components/Icon"; // Adjust the import path as needed
 import "./FAQ.css";
 
 const FAQ: React.FC = () => {
@@ -105,7 +106,9 @@ const FAQ: React.FC = () => {
       <section className="faq-hero">
         <div className="faq-hero-content">
           <div className="section-badge">
-            <span className="badge-icon">❓</span>
+            <span className="badge-icon">
+              <Icon type="fa" name="FaQuestionCircle" size={16} />
+            </span>
             <span>Got Questions?</span>
           </div>
           <h1 className="hero-title">
@@ -170,27 +173,37 @@ const FAQ: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - Updated to match Contact page */}
       <footer className="footer">
         <div className="footer-bg-wave"></div>
         <div className="footer-content">
           <div className="footer-section">
             <div className="footer-logo">
-              <span className="logo-icon">🐾</span>
+              <span className="logo-icon">
+                <Icon type="fa" name="FaPaw" size={24} />
+              </span>
               <span className="logo-text">RESQALL</span>
             </div>
-            <p className="footer-description">Rapid response animal rescue network. Saving all animals 24/7 – dogs, cats, cows, birds, and wildlife.</p>
-            <div className="footer-social">
-              <span className="footer-social-icon">📘</span>
-              <span className="footer-social-icon">📷</span>
-              <span className="footer-social-icon">🐦</span>
-              <span className="footer-social-icon">📱</span>
+            <p className="footer-description">Rapid response animal rescue network. Saving lives 24/7.</p>
+            <div className="footer-social-mini">
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaFacebookF" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaInstagram" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaTwitter" size={16} />
+              </span>
+              <span className="footer-social-icon">
+                <Icon type="fa" name="FaTiktok" size={16} />
+              </span>
             </div>
           </div>
 
           <div className="footer-section">
             <h4>Quick Links</h4>
-            <ul className="footer-links">
+            <ul className="footer-links-list">
               <li><Link to="/about">About Us</Link></li>
               <li><Link to="/mission">Our Mission</Link></li>
               <li><Link to="/contact">Contact</Link></li>
@@ -200,7 +213,7 @@ const FAQ: React.FC = () => {
 
           <div className="footer-section">
             <h4>Get Involved</h4>
-            <ul className="footer-links">
+            <ul className="footer-links-list">
               <li><Link to="/login">Become a Ranger</Link></li>
               <li><Link to="/login">Report an Animal</Link></li>
               <li><Link to="/login">Partner With Us</Link></li>
@@ -210,16 +223,20 @@ const FAQ: React.FC = () => {
           <div className="footer-section">
             <h4>Emergency</h4>
             <div className="footer-emergency">
-              <p className="emergency-label">📞 24/7 Animal Rescue Hotline</p>
-              <p className="emergency-number">1-800-RESQALL</p>
-              <p className="emergency-dial">1-800-737-7255</p>
-              <p className="footer-email">📧 rescue@resqall.org</p>
+              <p className="footer-emergency-label">
+                <Icon type="fa" name="FaPhone" size={12} /> 24/7 Hotline
+              </p>
+              <p className="footer-emergency-number">1-800-RESQALL</p>
+              <p className="footer-emergency-dial">1-800-737-7255</p>
+              <p className="footer-email">
+                <Icon type="fa" name="FaEnvelope" size={12} /> rescue@resqall.org
+              </p>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2025 ResQAll. All rights reserved. Made with ❤️ for all animals in Nepal.</p>
+          <p>&copy; 2025 ResQAll. All rights reserved. Made with <Icon type="fa" name="FaHeart" size={14} color="#ff4444" /> for animal rescue in Nepal.</p>
         </div>
       </footer>
     </div>
