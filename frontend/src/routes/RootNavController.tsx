@@ -4,7 +4,10 @@ import AuthStack from "./AuthStack";
 import MainStack from "./MainStack";
 
 const RootNavController: React.FC = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+
   return user ? <MainStack /> : <AuthStack />;
 };
 

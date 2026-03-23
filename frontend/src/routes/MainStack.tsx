@@ -119,7 +119,7 @@ import { Profile } from "../pages/Profile/Profile";
 import ReportSubmission from "../pages/User/ReportSubmission/ReportSubmission";
 import MyReports from "../pages/User/MyReports/MyReports";
 import RescueReports from "../pages/Admin/RescueReports/RescueReports";
-import MissionBoard from "../pages/Volunteer/MissionBorad/MissionBoard";
+import MissionBoard from "../pages/Volunteer/MissionBoard/MissionBoard";
 
 const MainStack: React.FC = () => {
   return (
