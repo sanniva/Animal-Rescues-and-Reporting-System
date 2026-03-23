@@ -1,0 +1,32 @@
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: system-ui, sans-serif;
+} */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;    /* was height: 100% — that locked the page and blocked scrolling */
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  background-color: #e1b545;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
