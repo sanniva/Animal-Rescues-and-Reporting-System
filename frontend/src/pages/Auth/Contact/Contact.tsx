@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Icon from "../../../components/Icon"; 
+import Icon from "../../../components/Icon";
 import "./Contact.css";
 
 const Contact: React.FC = () => {
@@ -36,7 +36,7 @@ const Contact: React.FC = () => {
           <h2 className="info-title">
             Let's <span>Talk</span>
           </h2>
-          
+
           <div className="info-card">
             <div className="info-icon-wrapper">
               <Icon type="fa" name="FaPhone" size={24} className="info-icon" />
@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
               <p className="emergency-number-large">1-800-RESQALL</p>
               <p className="emergency-number-small">(1-800-737-7255)</p>
               <p className="info-note">
-                <Icon type="fa" name="FaMobile" size={12} /> Available 24/7 for emergencies
+                <Icon type="fa" name="FaMobileAlt" size={12} /> Available 24/7 for emergencies
               </p>
             </div>
           </div>
@@ -102,19 +102,19 @@ const Contact: React.FC = () => {
           <h2 className="info-title">
             Get in <span>Touch</span>
           </h2>
-          
+
           <div className="static-contact-card">
             <div className="static-contact-header">
               <Icon type="fa" name="FaEnvelopeOpenText" size={24} className="static-contact-icon" />
               <h3>Send us a message</h3>
             </div>
-            
+
             <p className="static-contact-text">
-              We'd love to hear from you! Whether you have questions about volunteering, 
-              want to report an emergency, or are interested in partnering with us, 
+              We'd love to hear from you! Whether you have questions about volunteering,
+              want to report an emergency, or are interested in partnering with us,
               our team is here to help.
             </p>
-            
+
             <div className="emergency-highlight">
               <span className="emergency-badge">
                 <Icon type="fa" name="FaExclamationTriangle" size={14} /> 24/7 EMERGENCY
@@ -122,7 +122,7 @@ const Contact: React.FC = () => {
               <p className="emergency-big-number">1-800-RESQALL</p>
               <p className="emergency-dial-number">Dial: 1-800-737-7255</p>
             </div>
-            
+
             <div className="static-contact-details">
               <div className="static-detail-item">
                 <span className="detail-label">
