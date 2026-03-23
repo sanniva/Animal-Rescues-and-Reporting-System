@@ -41,6 +41,12 @@
   font-weight: 400;
 }
 
+.profile .profile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
 .profile .btn-edit {
   display: flex;
   align-items: center;
@@ -66,6 +72,34 @@
 }
 
 .profile .btn-edit svg {
+  stroke: currentColor;
+}
+
+.profile .btn-password {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.5rem;
+  background: white;
+  border: 1.5px solid #e2dfd3;
+  border-radius: 100px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5f7970;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.profile .btn-password:hover {
+  background: #2c5e4a;
+  border-color: #2c5e4a;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(44, 94, 74, 0.15);
+}
+
+.profile .btn-password svg {
   stroke: currentColor;
 }
 
@@ -105,8 +139,10 @@
 }
 
 .profile .error-icon {
-  font-size: 3.2rem;
+  display: flex;
+  justify-content: center;
   margin-bottom: 1.2rem;
+  color: #dc4a4a;
 }
 
 .profile .profile-error h3 {
@@ -173,7 +209,6 @@
   position: relative;
 }
 
-/* ===== AVATAR POSITION - SET TO -100px AS REQUESTED ===== */
 .profile .profile-avatar-wrapper {
   position: absolute;
   left: 50%;
@@ -287,7 +322,7 @@
   box-shadow: none;
 }
 
-/* ===== PROFILE INFO - CENTERED (Username & Role Badge only) ===== */
+/* ===== PROFILE INFO ===== */
 .profile .profile-info {
   padding: 7rem 1.8rem 1.8rem;
   display: flex;
@@ -305,7 +340,7 @@
   text-align: center;
 }
 
-/* ===== ROLE BADGE - CENTERED ===== */
+/* ===== ROLE BADGE ===== */
 .profile .profile-role {
   display: inline-flex;
   align-items: center;
@@ -319,6 +354,11 @@
   margin-bottom: 1.5rem;
   letter-spacing: 0.3px;
   align-self: center;
+}
+
+.profile .profile-role svg {
+  stroke: currentColor;
+  flex-shrink: 0;
 }
 
 .profile .profile-role.admin {
@@ -353,7 +393,7 @@
   color: #dc4a4a; 
 }
 
-/* ===== PROFILE BIO - CENTERED ===== */
+/* ===== PROFILE BIO ===== */
 .profile .profile-bio {
   padding: 1.2rem 1.5rem;
   background: #f8f6f2;
@@ -376,7 +416,7 @@
   margin-right: 0.2rem;
 }
 
-/* ===== META ITEMS - LEFT ALIGNED (NOT CENTERED) ===== */
+/* ===== META ITEMS ===== */
 .profile .profile-meta {
   margin: 1.8rem 0;
   width: 100%;
@@ -398,7 +438,7 @@
   color: #2d4a40;
   border-bottom: 1px solid rgba(26,58,50,0.04);
   padding-bottom: 0.8rem;
-  justify-content: flex-start; /* LEFT ALIGNED */
+  justify-content: flex-start;
 }
 
 .profile .meta-item:last-child {
@@ -437,7 +477,7 @@
   box-shadow: 0 0 0 4px rgba(44, 94, 74, 0.08);
 }
 
-/* ===== PROFILE ID - CENTERED ===== */
+/* ===== PROFILE ID ===== */
 .profile .profile-id {
   display: flex;
   flex-direction: column;
@@ -573,7 +613,176 @@
   gap: 1.8rem;
 }
 
-/* ===== STATS CARD (BASE) - SCOPED UNDER .profile ===== */
+/* ===== PASSWORD CARD ===== */
+.profile .password-card {
+  background: white;
+  border-radius: 28px;
+  padding: 1.8rem;
+  border: 1px solid rgba(44, 94, 74, 0.12);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.01);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.profile .password-header {
+  margin-bottom: 1.6rem;
+}
+
+.profile .password-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a3a32;
+}
+
+.profile .password-header h3 svg {
+  color: #2c5e4a;
+}
+
+.profile .password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile .password-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile .password-field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2c5e4a;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.profile .password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile .password-input-wrapper input {
+  width: 100%;
+  padding: 0.8rem 3rem 0.8rem 1.2rem;
+  border: 1.5px solid #e2dfd3;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  background: white;
+  color: #1a3a32;
+}
+
+.profile .password-input-wrapper input:focus {
+  outline: none;
+  border-color: #2c5e4a;
+  box-shadow: 0 0 0 4px rgba(44, 94, 74, 0.08);
+}
+
+.profile .password-input-wrapper input.input-error {
+  border-color: #dc4a4a;
+  box-shadow: 0 0 0 4px rgba(220, 74, 74, 0.08);
+}
+
+.profile .password-toggle {
+  position: absolute;
+  right: 0.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7e9a8f;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.profile .password-toggle:hover {
+  color: #1a3a32;
+}
+
+.profile .field-error {
+  font-size: 0.75rem;
+  color: #dc4a4a;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.profile .field-success {
+  font-size: 0.75rem;
+  color: #2c5e4a;
+  font-weight: 500;
+}
+
+.profile .password-strength {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.profile .strength-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: #e2dfd3;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile .strength-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.profile .strength-bar.weak::after {
+  width: 33%;
+  background: #dc4a4a;
+}
+
+.profile .strength-bar.medium::after {
+  width: 66%;
+  background: #f4b942;
+}
+
+.profile .strength-bar.strong::after {
+  width: 100%;
+  background: #2c5e4a;
+}
+
+.profile .password-strength span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5f7970;
+  min-width: 40px;
+}
+
+.profile .strength-bar.weak + span { color: #dc4a4a; }
+.profile .strength-bar.medium + span { color: #f4b942; }
+.profile .strength-bar.strong + span { color: #2c5e4a; }
+
+.profile .password-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+/* ===== STATS CARD ===== */
 .profile .stats-card {
   background: white;
   border-radius: 28px;
@@ -703,8 +912,16 @@
   margin-top: 0.5rem;
 }
 
-.profile .admin-role-info .admin-icon {
-  font-size: 2rem;
+.profile .admin-role-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffefe6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #b85a1a;
 }
 
 .profile .admin-role-text h4 {
@@ -736,7 +953,15 @@
 }
 
 .profile .user-stat-icon {
-  font-size: 2.2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #e3f2ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #2c5e4a;
 }
 
 .profile .user-stat-info {
@@ -767,8 +992,16 @@
   border-radius: 16px;
 }
 
-.profile .user-role-info .user-icon {
-  font-size: 1.8rem;
+.profile .user-role-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #2c5e4a;
 }
 
 .profile .user-role-text h4 {
@@ -857,10 +1090,16 @@
   border-bottom: none;
 }
 
-.profile .equipment-icon {
-  font-size: 1.3rem;
-  width: 32px;
-  text-align: center;
+.profile .equipment-icon-svg {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f0f5f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #2c5e4a;
 }
 
 .profile .equipment-info {
@@ -888,6 +1127,16 @@
 }
 
 .profile .equipment-badge.no {
+  background: #fdeded;
+  color: #dc4a4a;
+}
+
+.profile .equipment-badge.available {
+  background: #e3f2ed;
+  color: #2c5e4a;
+}
+
+.profile .equipment-badge.unavailable {
   background: #fdeded;
   color: #dc4a4a;
 }
@@ -1021,6 +1270,7 @@
   box-shadow: inset 0 -2px 5px rgba(0,0,0,0.04);
 }
 
+/* Badge emoji kept intentionally */
 .profile .badge-icon {
   font-size: 1.5rem;
 }
@@ -1050,7 +1300,8 @@
   border-radius: 20px;
 }
 
-.profile .badges-empty .empty-icon {
+/* Badge medal emoji kept intentionally */
+.profile .badges-empty-icon {
   font-size: 2.2rem;
   margin-bottom: 0.8rem;
   opacity: 0.6;
@@ -1068,7 +1319,7 @@
   color: #5f7970;
 }
 
-/* ===== REPORTS CARD (For Users & Admins) ===== */
+/* ===== REPORTS CARD ===== */
 .profile .reports-card {
   background: white;
   border-radius: 28px;
@@ -1132,6 +1383,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
 
+/* Animal emojis in report icons are kept intentionally */
 .profile .report-icon {
   width: 42px;
   height: 42px;
@@ -1246,10 +1498,11 @@
   border-radius: 20px;
 }
 
-.profile .reports-empty .empty-icon {
-  font-size: 2.2rem;
+.profile .reports-empty-icon {
+  display: flex;
+  justify-content: center;
   margin-bottom: 0.8rem;
-  opacity: 0.6;
+  color: #b8cfc4;
 }
 
 .profile .reports-empty p {
@@ -1311,8 +1564,14 @@
     align-items: flex-start;
     gap: 1rem;
   }
+
+  .profile .profile-header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
   
-  .profile .btn-edit {
+  .profile .btn-edit,
+  .profile .btn-password {
     width: 100%;
     justify-content: center;
   }
@@ -1394,7 +1653,8 @@
     justify-content: center;
   }
   
-  .profile .equipment-edit-actions {
+  .profile .equipment-edit-actions,
+  .profile .password-actions {
     flex-direction: column;
   }
   
@@ -1462,7 +1722,8 @@
   .profile .stats-card,
   .profile .equipment-card,
   .profile .badges-card,
-  .profile .reports-card {
+  .profile .reports-card,
+  .profile .password-card {
     padding: 1.5rem;
   }
   
@@ -1546,21 +1807,6 @@
   background: #9bb7aa;
 }
 
-/* ===== AVAILABILITY STATUS STYLES ===== */
-.profile .equipment-badge.available {
-  background: #e3f2ed;
-  color: #2c5e4a;
-}
-
-.profile .equipment-badge.unavailable {
-  background: #fdeded;
-  color: #dc4a4a;
-}
-
-.profile .status-icon {
-  margin-right: 0.3rem;
-}
-
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
   from {
@@ -1577,7 +1823,8 @@
 .profile .stats-card,
 .profile .equipment-card,
 .profile .badges-card,
-.profile .reports-card {
+.profile .reports-card,
+.profile .password-card {
   animation: fadeIn 0.3s ease-out;
 }
 
@@ -1597,6 +1844,7 @@
   }
   
   .profile .btn-edit,
+  .profile .btn-password,
   .profile .avatar-edit-buttons,
   .profile .view-all-btn {
     display: none;
@@ -1606,7 +1854,8 @@
   .profile .stats-card,
   .profile .equipment-card,
   .profile .badges-card,
-  .profile .reports-card {
+  .profile .reports-card,
+  .profile .password-card {
     box-shadow: none;
     border: 1px solid #ddd;
     break-inside: avoid;
