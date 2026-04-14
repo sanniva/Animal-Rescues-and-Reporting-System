@@ -1,5 +1,14 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+import React from "react";
+import { useAuth } from "../context/AuthContext";
+import AuthStack from "./AuthStack";
+import MainStack from "./MainStack";
+
+const RootNavController: React.FC = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+
+  return user ? <MainStack /> : <AuthStack />;
+};
+
+export default RootNavController;

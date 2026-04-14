@@ -1,5 +1,6 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+export function doPasswordsMatch(password, confirmPassword) {
+  if (password !== confirmPassword) {
+    return { doMatch: false, message: 'Passwords do not match' };
+  }
+  return { doMatch: true, message: 'Passwords match' };
+}

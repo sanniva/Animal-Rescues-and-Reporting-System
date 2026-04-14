@@ -107,7 +107,7 @@
   stroke: currentColor;
 }
 
-/* ===== LOADING STATE ===== */
+/*  LOADING STATE */
 .profile .profile-loading {
   display: flex;
   flex-direction: column;
@@ -520,7 +520,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== EDIT FIELDS ===== */
+/*  EDIT FIELDS*/
 .profile .edit-field {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -570,7 +570,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== PROFILE ACTIONS ===== */
+/* PROFILE ACTIONS  */
 .profile .profile-actions {
   display: flex;
   gap: 0.8rem;
@@ -623,14 +623,14 @@
   box-shadow: none;
 }
 
-/* ===== SIDEBAR ===== */
+/*  SIDEBAR  */
 .profile .profile-sidebar {
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
 }
 
-/* ===== PASSWORD CARD ===== */
+/* PASSWORD CARD */
 .profile .password-card {
   background: white;
   border-radius: 28px;
@@ -804,7 +804,7 @@
   margin-top: 0.5rem;
 }
 
-/* ===== STATS CARD ===== */
+/* STATS CARD  */
 .profile .stats-card {
   background: white;
   border-radius: 28px;
@@ -848,7 +848,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== VOLUNTEER STATS ===== */
+/*  VOLUNTEER STATS */
 .profile .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -894,7 +894,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== ADMIN STATS ===== */
+/* ADMIN STATS  */
 .profile .admin-stats {
   display: flex;
   flex-direction: column;
@@ -967,7 +967,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== USER STATS ===== */
+/*  USER STATS  */
 .profile .user-stats {
   display: flex;
   flex-direction: column;
@@ -1051,7 +1051,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== EQUIPMENT CARD ===== */
+/*EQUIPMENT CARD  */
 .profile .equipment-card {
   background: white;
   border-radius: 28px;
@@ -1187,7 +1187,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== EQUIPMENT EDIT FORM ===== */
+/* EQUIPMENT EDIT FORM  */
 .profile .equipment-edit-form {
   display: flex;
   flex-direction: column;
@@ -1255,7 +1255,7 @@
   font-size: 0.8rem;
 }
 
-/* ===== BADGES CARD ===== */
+/*  BADGES CARD */
 .profile .badges-card {
   background: white;
   border-radius: 28px;
@@ -1364,7 +1364,7 @@
   font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== REPORTS CARD ===== */
+/*  REPORTS CARD */
 .profile .reports-card {
   background: white;
   border-radius: 28px;
@@ -1607,7 +1607,7 @@
   stroke: white;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .profile {
     padding: 1.5rem;
@@ -1832,7 +1832,7 @@
   }
 }
 
-/* ===== UTILITY CLASSES ===== */
+/*  UTILITY CLASSES  */
 .profile .spinner {
   width: 20px;
   height: 20px;
@@ -1842,7 +1842,7 @@
   animation: spin 0.8s linear infinite;
 }
 
-/* ===== SCROLLBAR STYLING ===== */
+/*  SCROLLBAR STYLING */
 .profile ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -1861,7 +1861,7 @@
   background: #9bb7aa;
 }
 
-/* ===== ANIMATIONS ===== */
+/*  ANIMATIONS*/
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1882,7 +1882,7 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* ===== FOCUS STATES ===== */
+/* FOCUS STATES  */
 .profile button:focus-visible,
 .profile input:focus-visible,
 .profile textarea:focus-visible {
@@ -1890,7 +1890,7 @@
   outline-offset: 2px;
 }
 
-/* ===== PRINT STYLES ===== */
+/* PRINT STYLES  */
 @media print {
   .profile {
     background: white;
