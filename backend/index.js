@@ -24,7 +24,7 @@ const initializeTracking = require('./scripts/initTracking');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ FIXED: CORS for production
+// FIXED: CORS for production
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
       process.env.FRONTEND_URL || 'https://placeholder.com',
