@@ -1,9 +1,5 @@
-export function mapUserRole(user) {
-  if (user.role_id === 3 || user.role === 'admin' || user.role_name === 'admin') {
-    return 'admin';
-  }
-  if (user.role_id === 2 || user.role === 'volunteer' || user.role_name === 'volunteer') {
-    return 'volunteer';
-  }
-  return 'user';
-}
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';

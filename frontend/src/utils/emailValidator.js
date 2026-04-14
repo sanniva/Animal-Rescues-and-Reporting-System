@@ -1,9 +1,5 @@
-export function validateEmail(email) {
-  if (!email || email.trim() === '') {
-    return { isValid: false, error: 'Email is required' };
-  }
-  if (!email.includes('@') || !email.includes('.')) {
-    return { isValid: false, error: 'Please include @ and valid domain' };
-  }
-  return { isValid: true, error: null };
-}
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
