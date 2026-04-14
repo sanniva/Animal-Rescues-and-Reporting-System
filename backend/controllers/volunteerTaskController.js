@@ -1,8 +1,8 @@
 const pool = require('../config/db');
 
-// ===========================================
+
 // COMPLETE TASK - WITH AUTO CLEANUP OF TRACKING POINTS
-// ===========================================
+
 exports.completeTask = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -46,17 +46,17 @@ exports.completeTask = async (req, res) => {
         [taskId, volunteerId]
       );
       
-      // ===========================================
-      // 🔴 KEY PART: DELETE ALL TRACKING POINTS FOR THIS TASK
-      // ===========================================
+     
+      // KEY PART: DELETE ALL TRACKING POINTS FOR THIS TASK
+
       const [deleteResult] = await connection.execute(
         `DELETE FROM task_tracking 
          WHERE task_id = ?`,
         [taskId]
       );
       
-      console.log(`✅ Task ${taskId} completed by volunteer ${volunteerId}`);
-      console.log(`🗑️ Deleted ${deleteResult.affectedRows} tracking points`);
+      console.log(`Task ${taskId} completed by volunteer ${volunteerId}`);
+      console.log(`Deleted ${deleteResult.affectedRows} tracking points`);
       
       // 3. Update report status to Completed (assuming status_id 4)
       await connection.execute(
@@ -96,9 +96,9 @@ exports.completeTask = async (req, res) => {
   }
 };
 
-// ===========================================
+
 // GET ALL TASKS FOR VOLUNTEER
-// ===========================================
+
 exports.getVolunteerTasks = async (req, res) => {
   try {
     const volunteerId = req.user.user_id;
