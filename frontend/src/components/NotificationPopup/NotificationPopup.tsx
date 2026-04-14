@@ -62,7 +62,7 @@ const NotificationPopup: React.FC = () => {
       try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
-        const response = await fetch('http://localhost:5000/api/notifications/recent', {
+        const response = await fetch('${process.env.REACT_APP_API_URL}/api/notifications/recent', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

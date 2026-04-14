@@ -204,7 +204,7 @@
 // const getFullImageUrl = (proofUrl: string): string => {
 //   if (!proofUrl) return '';
 //   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-//   const baseUrl = 'http://localhost:5000';
+//   const baseUrl = '${process.env.REACT_APP_API_URL}';
 //   const cleanUrl = proofUrl.replace(/^\/+/, '');
 //   if (cleanUrl.startsWith('uploads/')) return `${baseUrl}/${cleanUrl}`;
 //   return `${baseUrl}/uploads/${cleanUrl}`;
@@ -223,7 +223,7 @@
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       if (!token) return;
-//       const response = await fetch('http://localhost:5000/api/volunteer/tracking/point', {
+//       const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
 //         method: 'POST',
 //         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
 //         body: JSON.stringify({ taskId, latitude, longitude, accuracy })
@@ -239,7 +239,7 @@
 //     if (!token) return;
 //     const points = [...pendingQueue.current]; pendingQueue.current = []; setPendingPoints(0);
 //     for (const point of points) {
-//       try { await fetch('http://localhost:5000/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy }) }); }
+//       try { await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy }) }); }
 //       catch (error) { pendingQueue.current.push(point); setPendingPoints(pendingQueue.current.length); }
 //     }
 //   };
@@ -721,7 +721,7 @@
 //     try {
 //       setLoading(true); setError(null);
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch('http://localhost:5000/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}` } });
 //       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 //       const data = await response.json();
 //       if (data.success && data.data) {
@@ -737,7 +737,7 @@
 //   const fetchAllEvidence = (missionList: Mission[], token: string | null) => {
 //     missionList.forEach(async m => {
 //       try {
-//         const res = await fetch(`http://localhost:5000/api/tasks/${m.task_id}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
+//         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${m.task_id}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
 //         const data = await res.json();
 //         if (data.success) setTaskEvidence(prev => ({ ...prev, [m.task_id]: data.data }));
 //       } catch { /* silently skip */ }
@@ -747,7 +747,7 @@
 //   const fetchTaskEvidence = async (taskId: number) => {
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
 //       const data = await response.json();
 //       if (data.success) setTaskEvidence(prev => ({ ...prev, [taskId]: data.data }));
 //     } catch (error) { console.error('Error fetching evidence:', error); }
@@ -756,7 +756,7 @@
 //   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/reports/${reportId}/admin-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}/admin-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
 //       const data = await response.json();
 //       if (data.success) setTaskAdminNotes(prev => ({ ...prev, [taskId]: data.data }));
 //     } catch (error) { console.error('Error fetching admin notes:', error); }
@@ -765,7 +765,7 @@
 //   const fetchTaskCompletionNotes = async (taskId: number) => {
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
 //       const data = await response.json();
 //       if (data.success) setTaskCompletionNotes(prev => ({ ...prev, [taskId]: data.data }));
 //     } catch (error) { console.error('Error fetching completion notes:', error); }
@@ -774,7 +774,7 @@
 //   const fetchFullTaskDetails = async (taskId: number) => {
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/tasks/task/${taskId}/full-details`, { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/task/${taskId}/full-details`, { headers: { 'Authorization': `Bearer ${token}` } });
 //       const data = await response.json();
 //       if (data.success) { setTaskDetails(prev => ({ ...prev, [taskId]: data.data.task })); return data.data; }
 //     } catch (error) { console.error('Error fetching full task details:', error); }
@@ -785,7 +785,7 @@
 //     try {
 //       setActionLoading(true);
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/accept`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
 //       const data = await response.json();
 //       if (data.success) { await fetchMissions(); setIsTaskModalOpen(false); setSelectedTask(null); toast.success('Mission accepted successfully!'); }
 //       else toast.error('Failed to accept task: ' + data.message);
@@ -796,7 +796,7 @@
 //     try {
 //       setActionLoading(true);
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/decline`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
 //       const data = await response.json();
 //       if (data.success) { await fetchMissions(); setIsTaskModalOpen(false); setSelectedTask(null); toast.success('Mission declined'); }
 //       else toast.error('Failed to decline task: ' + data.message);
@@ -808,13 +808,13 @@
 //       setActionLoading(true);
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       const formData = new FormData(); formData.append('proofs', file);
-//       const uploadResponse = await fetch(`http://localhost:5000/api/tasks/${taskId}/upload-proofs`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData });
+//       const uploadResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/upload-proofs`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData });
 //       const uploadData = await uploadResponse.json();
 //       if (!uploadData.success) { toast.error('Failed to upload proof: ' + uploadData.message); return; }
-//       const noteResponse = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ note_text: notes, volunteer_id: currentUser?.user_id }) });
+//       const noteResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ note_text: notes, volunteer_id: currentUser?.user_id }) });
 //       const noteData = await noteResponse.json();
 //       if (!noteData.success) { toast.error('Failed to save completion note: ' + noteData.message); return; }
-//       const completeResponse = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/complete`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+//       const completeResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/complete`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
 //       const completeData = await completeResponse.json();
 //       if (completeData.success) { await fetchMissions(); setIsTaskModalOpen(false); setSelectedTask(null); toast.success('Mission completed successfully!'); }
 //       else toast.error('Failed to complete mission: ' + completeData.message);
@@ -1271,7 +1271,7 @@ const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: numbe
 const getFullImageUrl = (proofUrl: string): string => {
   if (!proofUrl) return '';
   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-  const baseUrl = 'http://localhost:5000';
+  const baseUrl = '${process.env.REACT_APP_API_URL}';
   const cleanUrl = proofUrl.replace(/^\/+/, '');
   if (cleanUrl.startsWith('uploads/')) return `${baseUrl}/${cleanUrl}`;
   return `${baseUrl}/uploads/${cleanUrl}`;
@@ -1290,7 +1290,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) return;
-      const response = await fetch('http://localhost:5000/api/volunteer/tracking/point', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId, latitude, longitude, accuracy })
@@ -1315,7 +1315,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     setPendingPoints(0);
     for (const point of points) {
       try {
-        await fetch('http://localhost:5000/api/volunteer/tracking/point', {
+        await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy })
@@ -1941,7 +1941,7 @@ export const MissionBoard: React.FC = () => {
       setLoading(true);
       setError(null);
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/volunteers/tasks', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -1961,7 +1961,7 @@ export const MissionBoard: React.FC = () => {
   const fetchAllEvidence = (missionList: Mission[], token: string | null) => {
     missionList.forEach(async m => {
       try {
-        const res = await fetch(`http://localhost:5000/api/tasks/${m.task_id}/evidence`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${m.task_id}/evidence`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -1973,7 +1973,7 @@ export const MissionBoard: React.FC = () => {
   const fetchTaskEvidence = async (taskId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -1986,7 +1986,7 @@ export const MissionBoard: React.FC = () => {
   const fetchTaskAdminNotes = async (reportId: number, taskId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/reports/${reportId}/admin-notes`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}/admin-notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -1999,7 +1999,7 @@ export const MissionBoard: React.FC = () => {
   const fetchTaskCompletionNotes = async (taskId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -2012,7 +2012,7 @@ export const MissionBoard: React.FC = () => {
   const fetchFullTaskDetails = async (taskId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/task/${taskId}/full-details`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/task/${taskId}/full-details`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -2030,7 +2030,7 @@ export const MissionBoard: React.FC = () => {
     try {
       setActionLoading(true);
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/accept`, {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
@@ -2054,7 +2054,7 @@ export const MissionBoard: React.FC = () => {
     try {
       setActionLoading(true);
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/decline`, {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
@@ -2091,7 +2091,7 @@ export const MissionBoard: React.FC = () => {
       // Step 1: Upload the photo
       const formData = new FormData();
       formData.append('proofs', file);
-      const uploadResponse = await fetch(`http://localhost:5000/api/tasks/${taskId}/upload-proofs`, {
+      const uploadResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/upload-proofs`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -2103,7 +2103,7 @@ export const MissionBoard: React.FC = () => {
       }
 
       // Step 2: Save the completion note
-      const noteResponse = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, {
+      const noteResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ note_text: notes, volunteer_id: currentUser?.user_id })
@@ -2115,7 +2115,7 @@ export const MissionBoard: React.FC = () => {
       }
 
       // Step 3: Mark task as completed + award badges
-      const completeResponse = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/complete`, {
+      const completeResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/complete`, {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });

@@ -258,7 +258,7 @@ export const Profile: React.FC = () => {
     if (!url) return null;
     if (url.startsWith("http")) return `${url}?key=${imgKey}`;
     if (url.startsWith("/uploads/")) {
-      return `http://localhost:5000${url}?key=${imgKey}`;
+      return `${process.env.REACT_APP_API_URL}${url}?key=${imgKey}`;
     }
     return url;
   };
@@ -266,7 +266,7 @@ export const Profile: React.FC = () => {
   const fetchAvailabilityStatuses = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/volunteers/availability-statuses`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/availability-statuses`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -291,7 +291,7 @@ export const Profile: React.FC = () => {
     if (!userId) return;
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/volunteers/${userId}/badges`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/${userId}/badges`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -306,7 +306,7 @@ export const Profile: React.FC = () => {
   const fetchVolunteerTasks = useCallback(async (uid: number) => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/tasks/volunteer/${uid}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/volunteer/${uid}`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -327,7 +327,7 @@ export const Profile: React.FC = () => {
   const fetchUserReports = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/reports/my-reports`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/my-reports`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -342,7 +342,7 @@ export const Profile: React.FC = () => {
   const fetchAllReports = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/admin/all`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -368,7 +368,7 @@ export const Profile: React.FC = () => {
   const fetchAdminStats = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/reports/admin/statistics`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/admin/statistics`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -390,7 +390,7 @@ export const Profile: React.FC = () => {
   const fetchAdminVolunteerCount = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/users`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -407,7 +407,7 @@ export const Profile: React.FC = () => {
   const fetchAdminReportsCount = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/reports/admin/all`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/admin/all`, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
       if (res.ok) {
@@ -428,7 +428,7 @@ export const Profile: React.FC = () => {
         const token = sessionStorage.getItem("token") || localStorage.getItem("token");
         if (!token) throw new Error("No authentication token found");
 
-        const url = `http://localhost:5000/api/users/${userId}${force ? `?t=${Date.now()}` : ""}`;
+        const url = `${process.env.REACT_APP_API_URL}/api/users/${userId}${force ? `?t=${Date.now()}` : ""}`;
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
           cache: "no-store",
@@ -506,7 +506,7 @@ export const Profile: React.FC = () => {
       uploadFormData.append("profile_image", file);
 
       const res = await fetch(
-        `http://localhost:5000/api/users/${profileUser.user_id}/profile-image`,
+        `${process.env.REACT_APP_API_URL}/api/users/${profileUser.user_id}/profile-image`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -551,7 +551,7 @@ export const Profile: React.FC = () => {
       if (!token) throw new Error("No authentication token");
 
       const res = await fetch(
-        `http://localhost:5000/api/users/${profileUser.user_id}/profile-image`,
+        `${process.env.REACT_APP_API_URL}/api/users/${profileUser.user_id}/profile-image`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -650,7 +650,7 @@ export const Profile: React.FC = () => {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
-      const res = await fetch(`http://localhost:5000/api/auth/change-password`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/change-password`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -704,7 +704,7 @@ export const Profile: React.FC = () => {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
       if (!token) throw new Error("No authentication token");
 
-      const res = await fetch(`http://localhost:5000/api/users/${profileUser.user_id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${profileUser.user_id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -737,7 +737,7 @@ export const Profile: React.FC = () => {
       if (!token) throw new Error("No authentication token");
 
       const res = await fetch(
-        `http://localhost:5000/api/users/${profileUser.user_id}/volunteer-profile`,
+        `${process.env.REACT_APP_API_URL}/api/users/${profileUser.user_id}/volunteer-profile`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },

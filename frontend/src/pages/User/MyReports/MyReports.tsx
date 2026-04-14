@@ -80,8 +80,8 @@ const getFullImageUrl = (url: string): string => {
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   const clean = url.replace(/^\/+/, '');
   return clean.startsWith('uploads/')
-    ? `http://localhost:5000/${clean}`
-    : `http://localhost:5000/uploads/${clean}`;
+    ? `${process.env.REACT_APP_API_URL}/${clean}`
+    : `${process.env.REACT_APP_API_URL}/uploads/${clean}`;
 };
 
 const animalEmoji = (type: string): string => {
@@ -210,9 +210,9 @@ const MRDetailModal: React.FC<{
     const token = getToken();
     try {
       const [er, nr] = await Promise.all([
-        fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`,
+        fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`,
           { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`,
+        fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`,
           { headers: { 'Authorization': `Bearer ${token}` } }),
       ]);
       const [ed, nd] = [await er.json(), await nr.json()];
@@ -583,7 +583,7 @@ const MyReports: React.FC = () => {
       try {
         setLoading(true); setError(null);
         const token = getToken();
-        const res = await fetch('http://localhost:5000/api/reports/my-reports', {
+        const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/my-reports', {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         });
         if (res.ok) {
@@ -632,7 +632,7 @@ const MyReports: React.FC = () => {
 
   const handleSave = async (updated: Report) => {
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/reports/${updated.report_id}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${updated.report_id}`, {
       method: 'PATCH',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ description: updated.description, location_address: updated.location_address }),
@@ -648,7 +648,7 @@ const MyReports: React.FC = () => {
     setIsDeleting(true);
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:5000/api/reports/${deleteTarget}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${deleteTarget}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       });

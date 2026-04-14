@@ -47,7 +47,7 @@ const CONFIRM_CLOSED: ConfirmModal = { show: false, title: '', message: '', conf
 const getFullImageUrl = (proofUrl: string): string => {
   if (!proofUrl) return '';
   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-  const baseUrl = 'http://localhost:5000';
+  const baseUrl = '${process.env.REACT_APP_API_URL}';
   const cleanUrl = proofUrl.replace(/^\/+/, '');
   return cleanUrl.startsWith('uploads/') ? `${baseUrl}/${cleanUrl}` : `${baseUrl}/uploads/${cleanUrl}`;
 };
@@ -213,7 +213,7 @@ const ReportDetailModal: React.FC<{
       setLoadingTrack(true);
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) return;
-      for (const url of [`http://localhost:5000/api/tasks/${taskId}/tracking`, `http://localhost:5000/api/admin/tracking/route/${taskId}`]) {
+      for (const url of [`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/tracking`, `${process.env.REACT_APP_API_URL}/api/admin/tracking/route/${taskId}`]) {
         try {
           const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
           if (r.ok) {
@@ -246,7 +246,7 @@ const ReportDetailModal: React.FC<{
     setSavingNote(true);
     
     //Change from 'admin-note' to 'admin-notes' 
-    const res = await fetch(`http://localhost:5000/api/reports/${report.report_id}/admin-notes`, { 
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${report.report_id}/admin-notes`, { 
       method: 'POST', 
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -674,7 +674,7 @@ const RescueReports: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) return [];
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -693,7 +693,7 @@ const RescueReports: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) return [];
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -721,7 +721,7 @@ const RescueReports: React.FC = () => {
       reportsNeedingInfo.map(async (rep) => {
         try {
           const res = await fetch(
-            `http://localhost:5000/api/volunteers/report/${rep.report_id}/task`,
+            `${process.env.REACT_APP_API_URL}/api/volunteers/report/${rep.report_id}/task`,
             { headers: { 'Authorization': `Bearer ${token}` } }
           );
           const data = await res.json();
@@ -765,7 +765,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { showMsg('Please login first','error'); setLoading(false); return; }
 
-      const res = await fetch('http://localhost:5000/api/reports/admin/all', {
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/admin/all', {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
 
@@ -828,7 +828,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { setVolunteers([]); return; }
 
-      const res = await fetch('http://localhost:5000/api/volunteers/available', {
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/available', {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
 
@@ -895,7 +895,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { showMsg('Please login first', 'error'); return; }
 
-      const res = await fetch('http://localhost:5000/api/volunteers/assign', {
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/assign', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ report_id: reportId, volunteer_id: volunteerId })
@@ -953,7 +953,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { showMsg('Please login first', 'error'); return; }
 
-      const res = await fetch(`http://localhost:5000/api/volunteers/unassign/${reportId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/unassign/${reportId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });

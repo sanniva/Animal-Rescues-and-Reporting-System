@@ -44,7 +44,7 @@
 //         if (!token) return;
 
 //         const res = await fetch(
-//           `http://localhost:5000/api/users/${currentUser.user_id}`,
+//           `${process.env.REACT_APP_API_URL}/api/users/${currentUser.user_id}`,
 //           {
 //             headers: {
 //               Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@
 //         if (!token) return;
 
 //         const res = await fetch(
-//           `http://localhost:5000/api/users/${currentUser.user_id}?t=${Date.now()}`,
+//           `${process.env.REACT_APP_API_URL}/api/users/${currentUser.user_id}?t=${Date.now()}`,
 //           {
 //             headers: {
 //               Authorization: `Bearer ${token}`,
@@ -116,7 +116,7 @@
 //     if (!url) return '';
 //     if (url.startsWith('http')) return url;
 //     const clean = url.startsWith('/') ? url : `/${url}`;
-//     return `http://localhost:5000${clean}`;
+//     return `${process.env.REACT_APP_API_URL}${clean}`;
 //   };
 
 //   const NavItem = ({
@@ -345,7 +345,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         if (!token) return;
 
         const res = await fetch(
-          `http://localhost:5000/api/users/${currentUser.user_id}`,
+          `${process.env.REACT_APP_API_URL}/api/users/${currentUser.user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -382,7 +382,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         if (!token) return;
 
         const res = await fetch(
-          `http://localhost:5000/api/users/${currentUser.user_id}?t=${Date.now()}`,
+          `${process.env.REACT_APP_API_URL}/api/users/${currentUser.user_id}?t=${Date.now()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -425,7 +425,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (!url) return '';
     if (url.startsWith('http')) return url;
     const clean = url.startsWith('/') ? url : `/${url}`;
-    return `http://localhost:5000${clean}`;
+    return `${process.env.REACT_APP_API_URL}${clean}`;
   };
 
   const NavItem = ({

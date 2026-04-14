@@ -84,7 +84,7 @@ const imgUrl = (u: string) => {
   if (!u) return '';
   if (u.startsWith('http')) return u;
   const c = u.replace(/^\/+/, '');
-  return c.startsWith('uploads/') ? `http://localhost:5000/${c}` : `http://localhost:5000/uploads/${c}`;
+  return c.startsWith('uploads/') ? `${process.env.REACT_APP_API_URL}/${c}` : `${process.env.REACT_APP_API_URL}/uploads/${c}`;
 };
 
 const animalEmoji = (type: string) => {
@@ -212,7 +212,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
   const save = useCallback(async (lat: number, lng: number, acc: number) => {
     const token = getToken(); if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: lat, longitude: lng, accuracy: acc }) });
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: lat, longitude: lng, accuracy: acc }) });
       const data = await res.json();
       if (!data.success) { queue.current.push({ lat, lng, acc }); setPending(queue.current.length); }
     } catch { queue.current.push({ lat, lng, acc }); setPending(queue.current.length); }
@@ -222,7 +222,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     if (!queue.current.length) return;
     const token = getToken(); if (!token) return;
     const pts = [...queue.current]; queue.current = []; setPending(0);
-    for (const p of pts) { try { await fetch('http://localhost:5000/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: p.lat, longitude: p.lng, accuracy: p.acc }) }); } catch { queue.current.push(p); setPending(queue.current.length); } }
+    for (const p of pts) { try { await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: p.lat, longitude: p.lng, accuracy: p.acc }) }); } catch { queue.current.push(p); setPending(queue.current.length); } }
   }, [taskId]);
 
   const start = useCallback(() => {
@@ -978,7 +978,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
         setLoading(true); setErr(null);
         const token = getToken();
         if (!token) { setErr('No auth token'); return; }
-        const res = await fetch('http://localhost:5000/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+        const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.success && data.data) {
@@ -993,21 +993,21 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
 
   const fetchEvidence = async (taskId: number) => {
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } });
     const d = await res.json();
     if (d.success) setEvidence(p => ({ ...p, [taskId]: d.data }));
   };
 
   const fetchAnotes = async (reportId: number, taskId: number) => {
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/reports/${reportId}/admin-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}/admin-notes`, { headers: { 'Authorization': `Bearer ${token}` } });
     const d = await res.json();
     if (d.success) setAnotes(p => ({ ...p, [taskId]: d.data }));
   };
 
   const fetchFull = async (taskId: number) => {
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/tasks/task/${taskId}/full-details`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/task/${taskId}/full-details`, { headers: { 'Authorization': `Bearer ${token}` } });
     const d = await res.json();
     if (d.success) { return d.data; }
     return null;
@@ -1016,7 +1016,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
   const accept = async (taskId: number) => {
     setActLoad(true);
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/accept`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/accept`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
     const d = await res.json();
     if (d.success) {
       const t = pending.find(x => x.task_id === taskId);
@@ -1034,7 +1034,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
   const decline = async (taskId: number, reason: string) => {
     setActLoad(true);
     const token = getToken();
-    const res = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/decline`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/decline`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
     const d = await res.json();
     if (d.success) {
       setPending(p => p.filter(x => x.task_id !== taskId));
@@ -1053,7 +1053,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
     // 1. Upload proof photo
     const fd = new FormData();
     fd.append('proofs', file);
-    const upRes = await fetch(`http://localhost:5000/api/tasks/${taskId}/upload-proofs`, {
+    const upRes = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/upload-proofs`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: fd,
@@ -1066,7 +1066,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
     }
 
     // 2. Save completion note
-    const noteRes = await fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, {
+    const noteRes = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ note_text: notes, volunteer_id: user.user_id }),
@@ -1079,7 +1079,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
     }
 
     // 3. Mark task complete
-    const completeRes = await fetch(`http://localhost:5000/api/volunteers/tasks/${taskId}/complete`, {
+    const completeRes = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks/${taskId}/complete`, {
       method: 'PATCH',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
     });
@@ -1455,7 +1455,7 @@ export const Dashboard: React.FC = () => {
     if (!cu) return;
     (async () => {
       const token = getToken();
-      const res = await fetch('http://localhost:5000/api/users/profile', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/users/profile', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
       if (res.ok) { const d = await res.json(); if (d.success) setProfile(d.data); }
     })();
   }, [cu]);
@@ -1465,10 +1465,10 @@ export const Dashboard: React.FC = () => {
     (async () => {
       setRepLoading(true);
       const token = getToken();
-      const res = await fetch('http://localhost:5000/api/reports/my-reports', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/my-reports', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
       if (res.ok) { const d = await res.json(); if (d.success) setUserReports(d.data || []); }
       if (getRole(cu) === 'admin') {
-        const r2 = await fetch('http://localhost:5000/api/reports/admin/all', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+        const r2 = await fetch('${process.env.REACT_APP_API_URL}/api/reports/admin/all', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (r2.ok) { const d2 = await r2.json(); if (d2.success) setAllReports(d2.data || []); }
       }
       setRepLoading(false);
@@ -1502,8 +1502,8 @@ export const Dashboard: React.FC = () => {
     setRepLoading2(p => ({ ...p, [repId]: true }));
     const token = getToken();
     const [er, nr] = await Promise.all([
-      fetch(`http://localhost:5000/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } }),
-      fetch(`http://localhost:5000/api/tasks/${taskId}/completion-notes`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/evidence`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}/completion-notes`, { headers: { 'Authorization': `Bearer ${token}` } }),
     ]);
     const [ed, nd] = [await er.json(), await nr.json()];
     if (ed.success) setRepEvidence(p => ({ ...p, [repId]: ed.data || [] }));

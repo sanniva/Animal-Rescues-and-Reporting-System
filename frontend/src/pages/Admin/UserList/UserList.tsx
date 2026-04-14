@@ -42,7 +42,7 @@ const UserAvatar: React.FC<{ user: User; size?: 'sm' | 'md' | 'lg'; statusClass?
   const resolveUrl = (url: string) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `http://localhost:5000${url.startsWith('/') ? url : `/${url}`}`;
+    return `${process.env.REACT_APP_API_URL}${url.startsWith('/') ? url : `/${url}`}`;
   };
   const imageUrl = user.profile_image_url ? resolveUrl(user.profile_image_url) : null;
   return (
@@ -76,7 +76,7 @@ const UserList: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { setLoading(false); return; }
-      const res = await fetch('http://localhost:5000/api/users', {
+      const res = await fetch('${process.env.REACT_APP_API_URL}/api/users', {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -127,7 +127,7 @@ const UserList: React.FC = () => {
   const approveVolunteer = async (userId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/users/${userId}/approve`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${userId}/approve`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       });
@@ -144,7 +144,7 @@ const UserList: React.FC = () => {
   const rejectVolunteer = async (userId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/users/${userId}/reject`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${userId}/reject`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       });
@@ -172,7 +172,7 @@ const UserList: React.FC = () => {
   const deleteUser = async (id: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/users/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
