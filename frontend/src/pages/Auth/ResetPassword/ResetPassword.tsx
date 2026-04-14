@@ -8,209 +8,247 @@ export const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const token = searchParams.get('token');
 
-  const [password, setPassword] = useState('');
+  const [password,        setPassword]        = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [validating, setValidating] = useState(true);
-  const [tokenValid, setTokenValid] = useState(false);
+  const [showPassword,    setShowPassword]    = useState(false);
+  const [showConfirm,     setShowConfirm]     = useState(false);
+  const [loading,         setLoading]         = useState(false);
+  const [error,           setError]           = useState('');
+  const [success,         setSuccess]         = useState(false);
+  const [validating,      setValidating]      = useState(true);
+  const [tokenValid,      setTokenValid]      = useState(false);
 
-  // Validate token on mount
   useEffect(() => {
     const validateToken = async () => {
-      if (!token) {
-        setTokenValid(false);
-        setValidating(false);
-        return;
-      }
-
+      if (!token) { setTokenValid(false); setValidating(false); return; }
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/validate-reset-token?token=${token}`);
-        const data = await response.json();
-        
-        if (response.ok && data.valid) {
-          setTokenValid(true);
-        } else {
-          setTokenValid(false);
-        }
-      } catch (err) {
-        setTokenValid(false);
-      } finally {
-        setValidating(false);
-      }
+        const res  = await fetch(`http://localhost:5000/api/auth/validate-reset-token?token=${token}`);
+        const data = await res.json();
+        setTokenValid(res.ok && data.valid);
+      } catch { setTokenValid(false); }
+      finally   { setValidating(false); }
     };
-
     validateToken();
   }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
+    if (password !== confirmPassword) { setError('Passwords do not match'); return; }
+    if (password.length < 6)          { setError('Password must be at least 6 characters'); return; }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
+    setLoading(true); setError('');
     try {
-      const response = await fetch('http://localhost:5000/api/auth/reset-password', {
+      const res  = await fetch('http://localhost:5000/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password }),
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
+      const data = await res.json();
+      if (res.ok) {
         setSuccess(true);
-        setTimeout(() => {
-          navigate('/login');
-        }, 3000);
+        setTimeout(() => navigate('/login'), 3000);
       } else {
         setError(data.message || 'Failed to reset password');
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    } catch { setError('An error occurred. Please try again.'); }
+    finally  { setLoading(false); }
   };
 
+  /* ── Validating ── */
   if (validating) {
     return (
-      <div className="auth-wrapper">
-        <div className="auth-box">
-          <div className="auth-loading">
-            <div className="loading-spinner"></div>
-            <p>Validating reset link...</p>
+      <div className="auth-page-root">
+        <div className="auth-deco-top" />
+        <div className="auth-deco-bottom" />
+        <div className="auth-deco-wave" />
+        <div className="auth-card" style={{ maxWidth: 480, justifyContent: 'center' }}>
+          <div className="auth-panel-right" style={{ borderRadius: 40, textAlign: 'center', padding: '56px 48px' }}>
+            <div className="auth-spinner-lg" style={{ margin: '0 auto 20px' }} />
+            <p style={{ color: '#5c6b5c', fontWeight: 600 }}>Validating reset link…</p>
           </div>
         </div>
       </div>
     );
   }
 
+  /* Invalid / expired token */
   if (!tokenValid) {
     return (
-      <div className="auth-wrapper">
-        <div className="bg-shape-top"></div>
-        <div className="bg-shape-bottom"></div>
-        <div className="bg-wave"></div>
-
-        <div className="auth-box">
-          <div className="auth-left">
-            <div className="auth-left-overlay">
-              <div className="logo">
+      <div className="auth-page-root">
+        <div className="auth-deco-top" />
+        <div className="auth-deco-bottom" />
+        <div className="auth-deco-wave" />
+        <div className="auth-card">
+          <div className="auth-panel-left">
+            <div className="auth-brand">
+              <div className="auth-brand-logo">
                 <Icon type="fa" name="FaPaw" size={48} color="#2D5A27" />
               </div>
               <h2>ResQAll Network</h2>
+              <p>Protecting every paw on the street.</p>
             </div>
           </div>
 
-          <div className="auth-right">
-            <div className="error-state">
-              <Icon type="fa" name="FaExclamationTriangle" size={48} color="#c62828" />
-              <h3>Invalid or Expired Link</h3>
-              <p>The password reset link is invalid or has expired.</p>
-              <Link to="/forgot-password" className="auth-btn">
-                Request New Link
-              </Link>
-              <Link to="/login" className="back-link" style={{ marginTop: '15px' }}>
-                ← Back to Login
-              </Link>
+          <div className="auth-panel-right" style={{ justifyContent: 'center', textAlign: 'center' }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%',
+              background: '#fff3f3', border: '2px solid #ffd6d6',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <Icon type="fa" name="FaExclamationTriangle" size={26} color="#c62828" />
             </div>
+            <h3 className="auth-heading" style={{ color: '#c62828' }}>Link Expired</h3>
+            <p className="auth-sub" style={{ marginBottom: 28 }}>
+              This password reset link is invalid or has expired. Please request a new one to continue.
+            </p>
+            <Link to="/forgot-password" className="auth-submit" style={{ textDecoration: 'none', justifyContent: 'center' }}>
+              <Icon type="fa" name="FaEnvelope" size={14} />
+              Request New Link
+            </Link>
+            <Link to="/login" className="fp-back" style={{ marginTop: 20, justifyContent: 'center' }}>
+              <Icon type="fa" name="FaArrowLeft" size={13} />
+              Back to login
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
+  /*  Main form  */
   return (
-    <div className="auth-wrapper">
-      <div className="bg-shape-top"></div>
-      <div className="bg-shape-bottom"></div>
-      <div className="bg-wave"></div>
+    <div className="auth-page-root">
+      <div className="auth-deco-top" />
+      <div className="auth-deco-bottom" />
+      <div className="auth-deco-wave" />
 
-      <div className="auth-box">
-        <div className="auth-left">
-          <div className="auth-left-overlay">
-            <div className="logo">
+      <div className="auth-card">
+        {/* Left panel */}
+        <div className="auth-panel-left">
+          <div className="auth-brand">
+            <div className="auth-brand-logo">
               <Icon type="fa" name="FaPaw" size={48} color="#2D5A27" />
             </div>
             <h2>ResQAll Network</h2>
-            <p>Create a new password for your account.</p>
+            <p>Create a strong new password to secure your account.</p>
           </div>
         </div>
 
-        <div className="auth-right">
+        {/* Right panel */}
+        <div className="auth-panel-right">
           {success ? (
-            <div className="success-message">
-              <Icon type="fa" name="FaCheckCircle" size={48} color="#2D5A27" />
-              <h4>Password Reset Successfully!</h4>
-              <p>Your password has been updated.</p>
-              <p className="small">Redirecting to login...</p>
+            /* ── Success ── */
+            <div className="fp-success">
+              <div style={{
+                width: 64, height: 64, borderRadius: '50%',
+                background: '#eaf4e8', border: '2px solid #b8ddb5',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 20px',
+              }}>
+                <Icon type="fa" name="FaCheckCircle" size={32} color="#2D5A27" />
+              </div>
+              <h3>Password Reset!</h3>
+              <p>Your password has been updated successfully.</p>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 7,
+                background: '#F5F1E8', border: '1px solid #e8dfc9',
+                borderRadius: 10, padding: '9px 14px',
+                fontSize: 13, color: '#5c6b5c',
+                margin: '12px 0 24px',
+              }}>
+                <Icon type="fa" name="FaClock" size={13} color="#5c6b5c" />
+                <span>Redirecting to login in 3 seconds…</span>
+              </div>
+              <Link to="/login" className="auth-submit" style={{ textDecoration: 'none', marginTop: 0 }}>
+                <Icon type="fa" name="FaSignInAlt" size={14} />
+                Go to Login
+              </Link>
             </div>
           ) : (
+            /*  Form  */
             <>
-              <h3>Set New Password</h3>
+              <div className="fp-icon-wrap">
+                <Icon type="fa" name="FaLock" size={28} color="#2D5A27" />
+              </div>
+
+              <h3 className="auth-heading">Set New Password</h3>
+              <p className="auth-sub">Choose a strong password — at least 6 characters.</p>
+
+              {error && (
+                <div className="auth-err">
+                  <Icon type="fa" name="FaExclamationCircle" size={14} />
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit}>
-                {error && <div className="auth-error">{error}</div>}
-
-                <div className="form-group">
-                  <label>New Password</label>
-                  <div className="password-input-wrapper">
-                    <Icon type="fa" name="FaLock" size={16} className="input-icon" />
+                {/* New password */}
+                <div className="auth-group">
+                  <label>New Password <span className="auth-req">*</span></label>
+                  <div className="auth-pass-wrap">
+                    <Icon type="fa" name="FaLock" size={14} className="auth-input-icon" />
                     <input
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      minLength={6}
-                      disabled={loading}
+                      required minLength={6} disabled={loading}
                     />
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      <Icon 
-                        type="fa" 
-                        name={showPassword ? "FaEyeSlash" : "FaEye"} 
-                        size={18} 
-                      />
+                    <button type="button" className="auth-pass-toggle"
+                      onClick={() => setShowPassword(!showPassword)} disabled={loading}>
+                      <Icon type="fa" name={showPassword ? 'FaEyeSlash' : 'FaEye'} size={15} />
                     </button>
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label>Confirm New Password</label>
-                  <div className="password-input-wrapper">
-                    <Icon type="fa" name="FaLock" size={16} className="input-icon" />
+                {/* Confirm password */}
+                <div className="auth-group">
+                  <label>Confirm Password <span className="auth-req">*</span></label>
+                  <div className="auth-pass-wrap">
+                    <Icon type="fa" name="FaLock" size={14} className="auth-input-icon" />
                     <input
-                      type={showPassword ? "text" : "password"}
+                      type={showConfirm ? 'text' : 'password'}
+                      placeholder="••••••••"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      disabled={loading}
+                      required disabled={loading}
                     />
+                    <button type="button" className="auth-pass-toggle"
+                      onClick={() => setShowConfirm(!showConfirm)} disabled={loading}>
+                      <Icon type="fa" name={showConfirm ? 'FaEyeSlash' : 'FaEye'} size={15} />
+                    </button>
                   </div>
+                  {/* Match indicator */}
+                  {confirmPassword.length > 0 && (
+                    <div style={{
+                      marginTop: 6, fontSize: 12, fontWeight: 600,
+                      color: password === confirmPassword ? '#2e7d32' : '#c62828',
+                      display: 'flex', alignItems: 'center', gap: 5
+                    }}>
+                      <Icon
+                        type="fa"
+                        name={password === confirmPassword ? 'FaCheckCircle' : 'FaTimesCircle'}
+                        size={12}
+                      />
+                      {password === confirmPassword ? 'Passwords match' : 'Passwords do not match'}
+                    </div>
+                  )}
                 </div>
 
-                <button type="submit" className="auth-btn" disabled={loading}>
-                  {loading ? 'Resetting...' : 'Reset Password'}
+                <button type="submit" className="auth-submit" disabled={loading}>
+                  {loading ? (
+                    <><span className="auth-spinner" />Resetting…</>
+                  ) : (
+                    <>Reset Password <Icon type="fa" name="FaArrowRight" size={14} /></>
+                  )}
                 </button>
               </form>
+
+              <Link to="/login" className="fp-back" style={{ marginTop: 20 }}>
+                <Icon type="fa" name="FaArrowLeft" size={13} />
+                Back to login
+              </Link>
             </>
           )}
         </div>
@@ -218,3 +256,4 @@ export const ResetPassword: React.FC = () => {
     </div>
   );
 };
+

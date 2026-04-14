@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './UserList.css';
 import { toast } from 'react-toastify';
+import Icon from '../../../components/Icon';
 
 interface User {
   id: number;
@@ -34,113 +35,86 @@ const CONFIRM_CLOSED: ConfirmModal = {
   confirmText: 'Confirm', confirmColor: '#c62828', onConfirm: () => {}
 };
 
-// ── Avatar component: shows profile image or initial fallback ──
-const UserAvatar: React.FC<{
-  user: User;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}> = ({ user, size = 'md', className = '' }) => {
+const UserAvatar: React.FC<{ user: User; size?: 'sm' | 'md' | 'lg'; statusClass?: string }> = ({
+  user, size = 'md', statusClass = ''
+}) => {
   const [imgError, setImgError] = useState(false);
-
-  const resolveUrl = (url: string): string => {
+  const resolveUrl = (url: string) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    const clean = url.startsWith('/') ? url : `/${url}`;
-    return `http://localhost:5000${clean}`;
+    return `http://localhost:5000${url.startsWith('/') ? url : `/${url}`}`;
   };
-
   const imageUrl = user.profile_image_url ? resolveUrl(user.profile_image_url) : null;
-
-  if (imageUrl && !imgError) {
-    return (
-      <div className={`avatar-wrapper ${size} ${className}`} data-role={user.role}>
-        <img
-          src={imageUrl}
-          alt={user.username}
-          className="avatar-img"
-          onError={() => setImgError(true)}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className={`avatar-wrapper ${size} ${className}`} data-role={user.role}>
-      <span className="avatar-initial">{user.username.charAt(0).toUpperCase()}</span>
+    <div className={`avatar ${size} ${statusClass}`} data-role={user.role}>
+      {imageUrl && !imgError
+        ? <img src={imageUrl} alt={user.username} onError={() => setImgError(true)} />
+        : <span>{user.username.charAt(0).toUpperCase()}</span>
+      }
     </div>
   );
 };
 
 const UserList: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [activeTab, setActiveTab] = useState<'volunteers' | 'users'>('volunteers');
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [users, setUsers]               = useState<User[]>([]);
+  const [activeTab, setActiveTab]       = useState<'volunteers' | 'users'>('volunteers');
+  const [loading, setLoading]           = useState(true);
+  const [searchTerm, setSearchTerm]     = useState('');
   const [confirmModal, setConfirmModal] = useState<ConfirmModal>(CONFIRM_CLOSED);
+  const [taskErrorModal, setTaskErrorModal] = useState<{
+    show: boolean;
+    message: string;
+    tasks: { task_id: number; report_id: number; description: string; status_name: string }[];
+  }>({ show: false, message: '', tasks: [] });
 
   const showConfirm = (
-    title: string,
-    message: string,
-    onConfirm: () => void,
-    confirmText = 'Confirm',
-    confirmColor = '#c62828'
-  ) => {
-    setConfirmModal({ show: true, title, message, confirmText, confirmColor, onConfirm });
-  };
+    title: string, message: string, onConfirm: () => void,
+    confirmText = 'Confirm', confirmColor = '#c62828'
+  ) => setConfirmModal({ show: true, title, message, confirmText, confirmColor, onConfirm });
 
   const fetchUsers = useCallback(async () => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { setLoading(false); return; }
-
       const res = await fetch('http://localhost:5000/api/users', {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
-
-      if (!res.ok) throw new Error(`Failed to fetch users (${res.status})`);
-
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      const mappedUsers: User[] = data.map((u: any) => {
+      const mapped: User[] = data.map((u: any) => {
         let role = 'user';
         if (u.role_id === 2 || u.role === 'volunteer' || u.role_name === 'volunteer') role = 'volunteer';
         else if (u.role_id === 3 || u.role === 'admin' || u.role_name === 'admin') role = 'admin';
 
         let status: string | undefined;
-        if (u.volunteer?.status) status = u.volunteer.status.toLowerCase();
-        else if (u.volunteer_status) status = u.volunteer_status.toLowerCase();
-        else if (u.status_name) status = u.status_name.toLowerCase();
+        if (u.volunteer?.status)             status = u.volunteer.status.toLowerCase();
+        else if (u.volunteer_status)         status = u.volunteer_status.toLowerCase();
         else if (u.approval_status_id === 1) status = 'pending';
         else if (u.approval_status_id === 2) status = 'approved';
         else if (u.approval_status_id === 3) status = 'rejected';
-        else if (role === 'volunteer') status = 'pending';
+        else if (role === 'volunteer')       status = 'pending';
 
         let badges: string[] = [];
         if (u.badges_string) badges = u.badges_string.split('||').filter((b: string) => b.trim() !== '');
         else if (u.badges && Array.isArray(u.badges)) badges = u.badges;
         else if (u.volunteer?.badges) {
-          badges = Array.isArray(u.volunteer.badges)
-            ? u.volunteer.badges
+          badges = Array.isArray(u.volunteer.badges) ? u.volunteer.badges
             : (typeof u.volunteer.badges === 'string' ? JSON.parse(u.volunteer.badges) : []);
         }
 
         return {
-          id: u.user_id || u.id,
-          user_id: u.user_id || u.id,
-          username: u.username || 'Unknown',
-          email: u.email || 'No email',
-          phone: u.phone, bio: u.bio, role,
-          role_id: u.role_id,
-          approval_status: status,
-          volunteer_status: status,
+          id: u.user_id || u.id, user_id: u.user_id || u.id,
+          username: u.username || 'Unknown', email: u.email || 'No email',
+          phone: u.phone, bio: u.bio, role, role_id: u.role_id,
+          approval_status: status, volunteer_status: status,
           badges, badge_count: u.badge_count || badges.length || 0,
           joined_at: u.volunteer?.volunteer_since || u.joined_at || u.created_at,
-          created_at: u.created_at,
-          profile_image_url: u.profile_image_url,
+          created_at: u.created_at, profile_image_url: u.profile_image_url,
         };
       });
 
-      setUsers(mappedUsers);
+      setUsers(mapped);
     } catch (err: any) {
       toast.error(`Failed to fetch users: ${err.message}`);
     } finally {
@@ -153,51 +127,46 @@ const UserList: React.FC = () => {
   const approveVolunteer = async (userId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      if (!token) { toast.error('Please login first'); return; }
-
-      const response = await fetch(`http://localhost:5000/api/users/${userId}/approve`, {
+      const res = await fetch(`http://localhost:5000/api/users/${userId}/approve`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       });
-
-      if (response.ok) {
-        toast.success('Volunteer approved successfully!');
-        setUsers(prev => prev.map(u =>
-          (u.user_id === userId || u.id === userId)
-            ? { ...u, approval_status: 'approved', volunteer_status: 'approved' }
-            : u
-        ));
-      } else {
-        toast.error('Failed to approve volunteer');
-      }
-    } catch (error: any) {
-      toast.error(`Failed to approve volunteer: ${error.message}`);
-    }
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.message || 'Failed to approve volunteer'); return; }
+      toast.success('Volunteer approved!');
+      setUsers(prev => prev.map(u =>
+        (u.user_id === userId || u.id === userId)
+          ? { ...u, approval_status: 'approved', volunteer_status: 'approved' } : u
+      ));
+    } catch (e: any) { toast.error(e.message); }
   };
 
   const rejectVolunteer = async (userId: number) => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      if (!token) { toast.error('Please login first'); return; }
-
-      const response = await fetch(`http://localhost:5000/api/users/${userId}/reject`, {
+      const res = await fetch(`http://localhost:5000/api/users/${userId}/reject`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       });
+      const data = await res.json();
 
-      if (response.ok) {
-        toast.success('Volunteer rejected');
-        setUsers(prev => prev.map(u =>
-          (u.user_id === userId || u.id === userId)
-            ? { ...u, approval_status: 'rejected', volunteer_status: 'rejected' }
-            : u
-        ));
-      } else {
-        toast.error('Failed to reject volunteer');
+      if (res.status === 409) {
+        setTaskErrorModal({
+          show: true,
+          message: data.message || 'This volunteer has active tasks that must be reassigned first.',
+          tasks: data.active_tasks || [],
+        });
+        return;
       }
-    } catch (error: any) {
-      toast.error(`Failed to reject volunteer: ${error.message}`);
-    }
+
+      if (!res.ok) { toast.error(data.message || 'Failed to reject volunteer'); return; }
+
+      toast.success('Volunteer rejected');
+      setUsers(prev => prev.map(u =>
+        (u.user_id === userId || u.id === userId)
+          ? { ...u, approval_status: 'rejected', volunteer_status: 'rejected' } : u
+      ));
+    } catch (e: any) { toast.error(e.message); }
   };
 
   const deleteUser = async (id: number) => {
@@ -207,121 +176,54 @@ const UserList: React.FC = () => {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
-      if (res.ok) { toast.success('User deleted successfully!'); fetchUsers(); }
-      else throw new Error('Delete failed');
-    } catch (err: any) {
-      toast.error(`Failed to delete user: ${err.message}`);
-    }
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.message || 'Delete failed'); return; }
+      toast.success('User deleted!');
+      fetchUsers();
+    } catch (e: any) { toast.error(e.message); }
   };
 
   const exportCSV = () => {
     const headers = ['ID', 'Username', 'Email', 'Role', 'Status', 'Phone', 'Joined Date', 'Badges Count'];
-    const data = users.map(u => [
-      u.id, u.username, u.email, u.role,
-      u.approval_status || u.volunteer_status || '',
-      u.phone || '', u.joined_at || '', u.badges?.length || 0,
-    ]);
-    const csv = [headers, ...data].map(r => r.join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
+    const rows = users.map(u => [u.id, u.username, u.email, u.role, u.approval_status || '', u.phone || '', u.joined_at || '', u.badges?.length || 0]);
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
     const a = document.createElement('a');
-    a.href = url;
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
     a.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
-    URL.revokeObjectURL(url);
   };
 
-  const filteredUsers = users.filter(u =>
+  const filtered    = users.filter(u =>
     u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (u.phone && u.phone.includes(searchTerm))
   );
+  const allVols      = filtered.filter(u => u.role === 'volunteer');
+  const pendingVols  = allVols.filter(v => v.approval_status === 'pending'  || v.volunteer_status === 'pending');
+  const activeVols   = allVols.filter(v => v.approval_status === 'approved' || v.volunteer_status === 'approved');
+  const rejectedVols = allVols.filter(v => v.approval_status === 'rejected' || v.volunteer_status === 'rejected');
+  const allVolsRaw   = users.filter(u => u.role === 'volunteer');
+  const pendingCount  = allVolsRaw.filter(v => v.approval_status === 'pending'  || v.volunteer_status === 'pending').length;
+  const activeCount   = allVolsRaw.filter(v => v.approval_status === 'approved' || v.volunteer_status === 'approved').length;
+  const rejectedCount = allVolsRaw.filter(v => v.approval_status === 'rejected' || v.volunteer_status === 'rejected').length;
+  const fmtDate = (d?: string) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
 
-  const allVolunteersFiltered      = filteredUsers.filter(u => u.role === 'volunteer');
-  const pendingVolunteersFiltered  = allVolunteersFiltered.filter(v => v.approval_status === 'pending' || v.volunteer_status === 'pending');
-  const activeVolunteersFiltered   = allVolunteersFiltered.filter(v => v.approval_status === 'approved' || v.volunteer_status === 'approved');
-  const rejectedVolunteersFiltered = allVolunteersFiltered.filter(v => v.approval_status === 'rejected' || v.volunteer_status === 'rejected');
-
-  const allVolunteersUnfiltered      = users.filter(u => u.role === 'volunteer');
-  const pendingVolunteersUnfiltered  = allVolunteersUnfiltered.filter(v => v.approval_status === 'pending' || v.volunteer_status === 'pending');
-  const activeVolunteersUnfiltered   = allVolunteersUnfiltered.filter(v => v.approval_status === 'approved' || v.volunteer_status === 'approved');
-  const rejectedVolunteersUnfiltered = allVolunteersUnfiltered.filter(v => v.approval_status === 'rejected' || v.volunteer_status === 'rejected');
-
-  const getFormattedStatus = (status: string | undefined) => status ? status.toUpperCase() : '';
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading users...</p>
-      </div>
-    );
-  }
+  if (loading) return <div className="page-loading"><div className="spinner"></div><p>Loading people…</p></div>;
 
   return (
-    <div className="container">
+    <div className="ul-page">
 
-      {/* ── Custom Confirm Modal ── */}
+      {/* Confirm Modal */}
       {confirmModal.show && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.45)', zIndex: 99999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(3px)'
-        }}>
-          <div style={{
-            background: 'white', borderRadius: '20px',
-            padding: '36px 32px', maxWidth: '420px', width: '90%',
-            boxShadow: '0 25px 50px rgba(0,0,0,0.2)',
-            border: '1px solid #e8dfc9', textAlign: 'center',
-            animation: 'fadeIn 0.15s ease'
-          }}>
-            {/* Warning icon — SVG instead of emoji */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px' }}>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF9F1C" strokeWidth="1.8">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-            </div>
-            <h3 style={{
-              color: '#2D5A27', margin: '0 0 10px',
-              fontSize: '1.25rem', fontWeight: 700
-            }}>
-              {confirmModal.title}
-            </h3>
-            <p style={{
-              color: '#666', margin: '0 0 28px',
-              lineHeight: 1.65, fontSize: '0.95rem'
-            }}>
-              {confirmModal.message}
-            </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <button
-                onClick={() => setConfirmModal(CONFIRM_CLOSED)}
-                style={{
-                  padding: '11px 28px', borderRadius: '10px',
-                  border: '2px solid #e8dfc9', background: 'white',
-                  color: '#666', fontWeight: 600, cursor: 'pointer',
-                  fontSize: '0.9rem', transition: 'all 0.2s'
-                }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = '#2D5A27')}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = '#e8dfc9')}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  confirmModal.onConfirm();
-                  setConfirmModal(CONFIRM_CLOSED);
-                }}
-                style={{
-                  padding: '11px 28px', borderRadius: '10px',
-                  border: 'none', background: confirmModal.confirmColor,
-                  color: 'white', fontWeight: 600, cursor: 'pointer',
-                  fontSize: '0.9rem', transition: 'all 0.2s'
-                }}
-              >
+        <div className="modal-backdrop">
+          <div className="confirm-modal">
+            <div className="confirm-icon"><Icon type="fa" name="FaExclamationTriangle" size={32} color="#e07a20" /></div>
+            <h3 className="confirm-title">{confirmModal.title}</h3>
+            <p className="confirm-message">{confirmModal.message}</p>
+            <div className="confirm-actions">
+              <button className="btn-cancel" onClick={() => setConfirmModal(CONFIRM_CLOSED)}>Cancel</button>
+              <button className="btn-confirm" style={{ background: confirmModal.confirmColor }}
+                onClick={() => { confirmModal.onConfirm(); setConfirmModal(CONFIRM_CLOSED); }}>
                 {confirmModal.confirmText}
               </button>
             </div>
@@ -329,144 +231,130 @@ const UserList: React.FC = () => {
         </div>
       )}
 
-      <div className="header">
-        <div>
-          <h2>People Management</h2>
-          <p>Manage your ranger squad and user base.</p>
+      {/* Active Tasks Error Modal */}
+      {taskErrorModal.show && (
+        <div className="modal-backdrop">
+          <div className="confirm-modal">
+            <div className="confirm-icon"><Icon type="fa" name="FaExclamationTriangle" size={32} color="#c62828" /></div>
+            <h3 className="confirm-title">Cannot Remove Volunteer</h3>
+            <p className="confirm-message">{taskErrorModal.message}</p>
+            {taskErrorModal.tasks.length > 0 && (
+              <div style={{ width: '100%', marginTop: 12 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#5c6b5c' }}>
+                  Active tasks that need reassignment:
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, maxHeight: 160, overflowY: 'auto', border: '1px solid #e0e8d8', borderRadius: 8 }}>
+                  {taskErrorModal.tasks.map(t => (
+                    <li key={t.task_id} style={{ padding: '8px 12px', fontSize: 13, borderBottom: '1px solid #f0f4ec', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                      <Icon type="fa" name="FaTasks" size={12} color="#e07a20" />
+                      <span style={{ color: '#3a4d3a' }}>
+                        <strong>Task #{t.task_id}</strong> ({t.status_name}) — {t.description || 'No description'}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="confirm-actions" style={{ marginTop: 16 }}>
+              <button className="btn-confirm" style={{ background: '#2D5A27' }}
+                onClick={() => setTaskErrorModal({ show: false, message: '', tasks: [] })}>
+                Got it
+              </button>
+            </div>
+          </div>
         </div>
-        <button onClick={exportCSV} className="export-btn">
-          {/* SVG chart icon instead of emoji */}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-            <polyline points="17 6 23 6 23 12"/>
-          </svg>
-          Export CSV
-        </button>
+      )}
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="page-header-left">
+          <div className="page-eyebrow"><Icon type="fa" name="FaShieldAlt" size={14} color="#7aaa6a" /> Admin Portal</div>
+          <h1 className="page-title">People Management</h1>
+          <p className="page-subtitle">Manage your ranger squad and user base</p>
+        </div>
+        <button className="export-btn" onClick={exportCSV}><Icon type="fa" name="FaDownload" size={14} /> Export CSV</button>
       </div>
 
-      <div className="stats-grid">
+      {/* Stats */}
+      <div className="stats-row">
         <div className="stat-card total">
-          <div className="stat-value">{users.length}</div>
-          <div className="stat-label">Total Users</div>
+          <div className="stat-icon-wrap"><Icon type="fa" name="FaUsers" size={22} color="#1e3f1a" /></div>
+          <div className="stat-body"><div className="stat-num">{users.length}</div><div className="stat-lbl">Total Users</div></div>
         </div>
         <div className="stat-card pending">
-          <div className="stat-value">{pendingVolunteersUnfiltered.length}</div>
-          <div className="stat-label">Pending Rangers</div>
+          <div className="stat-icon-wrap"><Icon type="fa" name="FaClock" size={22} color="#e07a20" /></div>
+          <div className="stat-body"><div className="stat-num">{pendingCount}</div><div className="stat-lbl">Pending</div></div>
         </div>
         <div className="stat-card approved">
-          <div className="stat-value">{activeVolunteersUnfiltered.length}</div>
-          <div className="stat-label">Active Rangers</div>
+          <div className="stat-icon-wrap"><Icon type="fa" name="FaCheckCircle" size={22} color="#2D5A27" /></div>
+          <div className="stat-body"><div className="stat-num">{activeCount}</div><div className="stat-lbl">Active Rangers</div></div>
         </div>
         <div className="stat-card rejected">
-          <div className="stat-value">{rejectedVolunteersUnfiltered.length}</div>
-          <div className="stat-label">Rejected</div>
+          <div className="stat-icon-wrap"><Icon type="fa" name="FaTimesCircle" size={22} color="#c62828" /></div>
+          <div className="stat-body"><div className="stat-num">{rejectedCount}</div><div className="stat-lbl">Rejected</div></div>
         </div>
       </div>
 
-      <div className="search-container">
-        <div className="search-input-wrapper">
-          <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input
-            type="text"
-            placeholder="Search by name, email, or phone..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+      {/* Search */}
+      <div className="search-wrap">
+        <div className="search-inner">
+          <Icon type="fa" name="FaSearch" size={16} color="#8a9e8a" />
+          <input type="text" placeholder="Search by name, email or phone…" value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)} className="search-input" />
           {searchTerm && (
             <button className="search-clear" onClick={() => setSearchTerm('')}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
+              <Icon type="fa" name="FaTimes" size={12} color="#8a9e8a" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="tabs">
-        <button className={activeTab === 'volunteers' ? 'active' : ''} onClick={() => setActiveTab('volunteers')}>
-          Ranger Squad ({allVolunteersFiltered.length})
+      {/* Tabs */}
+      <div className="tabs-row">
+        <button className={`tab-btn ${activeTab === 'volunteers' ? 'active' : ''}`} onClick={() => setActiveTab('volunteers')}>
+          <Icon type="fa" name="FaUserShield" size={15} /> Ranger Squad <span className="tab-count">{allVols.length}</span>
         </button>
-        <button className={activeTab === 'users' ? 'active' : ''} onClick={() => setActiveTab('users')}>
-          User Directory ({filteredUsers.length})
+        <button className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
+          <Icon type="fa" name="FaUsers" size={15} /> User Directory <span className="tab-count">{filtered.length}</span>
         </button>
       </div>
 
+      {/* Volunteer Tab */}
       {activeTab === 'volunteers' && (
-        <div className="list-view">
-          {pendingVolunteersFiltered.length > 0 && (
-            <div className="list-section">
-              <div className="section-header">
-                <h3>Pending Approvals <span className="section-count">{pendingVolunteersFiltered.length}</span></h3>
+        <div className="tab-content">
+
+          {pendingVols.length > 0 && (
+            <div className="section-block">
+              <div className="section-head">
+                <span className="section-dot pending"></span>
+                <h3>Pending Approvals</h3>
+                <span className="section-badge pending">{pendingVols.length}</span>
               </div>
-              <div className="list-container">
-                {pendingVolunteersFiltered.map(v => (
-                  <div key={v.id} className="list-item pending-item">
-                    <UserAvatar user={v} size="md" className="pending" />
-                    <div className="item-content">
-                      <div className="item-header">
-                        <div className="item-title">
-                          <strong>{v.username}</strong>
-                          <span className="item-id">#{v.user_id || v.id}</span>
+              <div className="vol-list">
+                {pendingVols.map(v => (
+                  <div key={v.id} className="vol-card pending-card">
+                    <div className="vol-left">
+                      <UserAvatar user={v} size="md" statusClass="pending" />
+                      <div className="vol-info">
+                        <div className="vol-name-row">
+                          <strong className="vol-name">{v.username}</strong>
+                          <span className="vol-id">#{v.user_id || v.id}</span>
+                          <span className="status-pill pending">Pending</span>
                         </div>
-                        <span className="status-badge pending">Pending</span>
+                        <div className="vol-details">
+                          <span className="detail-item"><Icon type="fa" name="FaEnvelope" size={12} color="#8a9e8a" />{v.email}</span>
+                          {v.phone && <span className="detail-item"><Icon type="fa" name="FaPhone" size={12} color="#8a9e8a" />{v.phone}</span>}
+                          <span className="detail-item"><Icon type="fa" name="FaCalendarAlt" size={12} color="#8a9e8a" />Applied {fmtDate(v.joined_at || v.created_at)}</span>
+                        </div>
+                        {v.bio && <div className="vol-bio">"{v.bio}"</div>}
                       </div>
-                      <div className="item-details">
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                          </svg>
-                          {v.email}
-                        </span>
-                        {v.phone && (
-                          <span className="item-detail">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                              <line x1="12" y1="18" x2="12" y2="18"/>
-                            </svg>
-                            {v.phone}
-                          </span>
-                        )}
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                          </svg>
-                          Applied: {v.joined_at ? new Date(v.joined_at).toLocaleDateString() :
-                                   v.created_at ? new Date(v.created_at).toLocaleDateString() : 'N/A'}
-                        </span>
-                      </div>
-                      {v.bio && <div className="item-bio">"{v.bio}"</div>}
                     </div>
-                    <div className="item-actions">
-                      <button
-                        className="action-btn reject"
-                        onClick={() => showConfirm(
-                          'Reject Volunteer',
-                          `Are you sure you want to reject ${v.username}'s volunteer application?`,
-                          () => rejectVolunteer(v.user_id || v.id),
-                          'Reject', '#c62828'
-                        )}
-                      >
-                        Reject
+                    <div className="vol-actions">
+                      <button className="action-btn reject" onClick={() => showConfirm('Reject Volunteer', `Reject ${v.username}'s application?`, () => rejectVolunteer(v.user_id || v.id), 'Reject', '#c62828')}>
+                        <Icon type="fa" name="FaTimes" size={13} /> Reject
                       </button>
-                      <button
-                        className="action-btn approve"
-                        onClick={() => showConfirm(
-                          'Approve Volunteer',
-                          `Are you sure you want to approve ${v.username} as a volunteer?`,
-                          () => approveVolunteer(v.user_id || v.id),
-                          'Approve', '#2D5A27'
-                        )}
-                      >
-                        Approve
+                      <button className="action-btn approve" onClick={() => showConfirm('Approve Volunteer', `Approve ${v.username} as a ranger?`, () => approveVolunteer(v.user_id || v.id), 'Approve', '#2D5A27')}>
+                        <Icon type="fa" name="FaCheck" size={13} /> Approve
                       </button>
                     </div>
                   </div>
@@ -475,85 +363,47 @@ const UserList: React.FC = () => {
             </div>
           )}
 
-          {activeVolunteersFiltered.length > 0 && (
-            <div className="list-section">
-              <div className="section-header">
-                <h3>Active Rangers <span className="section-count">{activeVolunteersFiltered.length}</span></h3>
+          {activeVols.length > 0 && (
+            <div className="section-block">
+              <div className="section-head">
+                <span className="section-dot active"></span>
+                <h3>Active Rangers</h3>
+                <span className="section-badge active">{activeVols.length}</span>
               </div>
-              <div className="list-container">
-                {activeVolunteersFiltered.map(v => (
-                  <div key={v.id} className="list-item active-item">
-                    <UserAvatar user={v} size="md" className="active" />
-                    <div className="item-content">
-                      <div className="item-header">
-                        <div className="item-title">
-                          <strong>{v.username}</strong>
-                          <span className="item-id">#{v.user_id || v.id}</span>
+              <div className="vol-list">
+                {activeVols.map(v => (
+                  <div key={v.id} className="vol-card active-card">
+                    <div className="vol-left">
+                      <UserAvatar user={v} size="md" statusClass="active" />
+                      <div className="vol-info">
+                        <div className="vol-name-row">
+                          <strong className="vol-name">{v.username}</strong>
+                          <span className="vol-id">#{v.user_id || v.id}</span>
+                          <span className="status-pill active">Active</span>
                         </div>
-                        <span className="status-badge approved">Active</span>
-                      </div>
-                      <div className="item-details">
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                          </svg>
-                          {v.email}
-                        </span>
-                        {v.phone && (
-                          <span className="item-detail">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                              <line x1="12" y1="18" x2="12" y2="18"/>
-                            </svg>
-                            {v.phone}
-                          </span>
-                        )}
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                          </svg>
-                          Joined: {v.joined_at ? new Date(v.joined_at).toLocaleDateString() :
-                                   v.created_at ? new Date(v.created_at).toLocaleDateString() : 'N/A'}
-                        </span>
-                      </div>
-                      <div className="item-badges">
-                        {v.badges && v.badges.length > 0 ? (
-                          <>
-                            <span className="badges-label">Badges:</span>
-                            <div className="badge-stack">
-                              {v.badges.slice(0, 3).map((badge, idx) => (
-                                <div key={idx} className="badge-item"
-                                  style={{ zIndex: (v.badges?.length || 0) - idx }} title={badge}>
-                                  🏅
-                                </div>
-                              ))}
-                              {v.badges.length > 3 && (
-                                <div className="badge-count" title={`${v.badges.length - 3} more badges`}>
-                                  +{v.badges.length - 3}
-                                </div>
-                              )}
-                            </div>
-                          </>
-                        ) : (
-                          <span className="no-badges">No badges yet</span>
-                        )}
+                        <div className="vol-details">
+                          <span className="detail-item"><Icon type="fa" name="FaEnvelope" size={12} color="#8a9e8a" />{v.email}</span>
+                          {v.phone && <span className="detail-item"><Icon type="fa" name="FaPhone" size={12} color="#8a9e8a" />{v.phone}</span>}
+                          <span className="detail-item"><Icon type="fa" name="FaCalendarAlt" size={12} color="#8a9e8a" />Joined {fmtDate(v.joined_at || v.created_at)}</span>
+                        </div>
+                        <div className="badges-row">
+                          {v.badges && v.badges.length > 0 ? (
+                            <>
+                              <Icon type="fa" name="FaMedal" size={12} color="#e07a20" />
+                              <div className="badge-stack">
+                                {v.badges.slice(0, 4).map((badge, i) => <span key={i} className="badge-chip" title={badge}>🏅</span>)}
+                                {v.badges.length > 4 && <span className="badge-more">+{v.badges.length - 4}</span>}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="no-badges"><Icon type="fa" name="FaMedal" size={12} color="#c8d4c0" /> No badges yet</span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="item-actions">
-                      <button
-                        className="action-btn remove"
-                        onClick={() => showConfirm(
-                          'Remove Volunteer',
-                          `Are you sure you want to remove ${v.username} from the ranger squad?`,
-                          () => rejectVolunteer(v.user_id || v.id),
-                          'Remove', '#FF9F1C'
-                        )}
-                      >
-                        Remove
+                    <div className="vol-actions">
+                      <button className="action-btn remove" onClick={() => showConfirm('Remove Ranger', `Remove ${v.username} from the ranger squad?`, () => rejectVolunteer(v.user_id || v.id), 'Remove', '#e07a20')}>
+                        <Icon type="fa" name="FaUserMinus" size={13} /> Remove
                       </button>
                     </div>
                   </div>
@@ -562,41 +412,28 @@ const UserList: React.FC = () => {
             </div>
           )}
 
-          {rejectedVolunteersFiltered.length > 0 && (
-            <div className="list-section">
-              <div className="section-header">
-                <h3>Rejected Applications <span className="section-count">{rejectedVolunteersFiltered.length}</span></h3>
+          {rejectedVols.length > 0 && (
+            <div className="section-block">
+              <div className="section-head">
+                <span className="section-dot rejected"></span>
+                <h3>Rejected Applications</h3>
+                <span className="section-badge rejected">{rejectedVols.length}</span>
               </div>
-              <div className="list-container">
-                {rejectedVolunteersFiltered.map(v => (
-                  <div key={v.id} className="list-item rejected-item">
-                    <UserAvatar user={v} size="md" className="rejected" />
-                    <div className="item-content">
-                      <div className="item-header">
-                        <div className="item-title">
-                          <strong>{v.username}</strong>
-                          <span className="item-id">#{v.user_id || v.id}</span>
+              <div className="vol-list">
+                {rejectedVols.map(v => (
+                  <div key={v.id} className="vol-card rejected-card">
+                    <div className="vol-left">
+                      <UserAvatar user={v} size="md" statusClass="rejected" />
+                      <div className="vol-info">
+                        <div className="vol-name-row">
+                          <strong className="vol-name">{v.username}</strong>
+                          <span className="vol-id">#{v.user_id || v.id}</span>
+                          <span className="status-pill rejected">Rejected</span>
                         </div>
-                        <span className="status-badge rejected">Rejected</span>
-                      </div>
-                      <div className="item-details">
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                          </svg>
-                          {v.email}
-                        </span>
-                        <span className="item-detail">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                          </svg>
-                          Applied: {v.joined_at ? new Date(v.joined_at).toLocaleDateString() :
-                                   v.created_at ? new Date(v.created_at).toLocaleDateString() : 'N/A'}
-                        </span>
+                        <div className="vol-details">
+                          <span className="detail-item"><Icon type="fa" name="FaEnvelope" size={12} color="#8a9e8a" />{v.email}</span>
+                          <span className="detail-item"><Icon type="fa" name="FaCalendarAlt" size={12} color="#8a9e8a" />Applied {fmtDate(v.joined_at || v.created_at)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -605,104 +442,68 @@ const UserList: React.FC = () => {
             </div>
           )}
 
-          {allVolunteersFiltered.length === 0 && (
+          {allVols.length === 0 && (
             <div className="empty-state">
-              <div className="empty-icon-svg">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b8cfc4" strokeWidth="1.5">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </div>
+              <Icon type="fa" name="FaUsers" size={48} color="#c8d4c0" />
               <h4>No Volunteers Found</h4>
-              <p>There are no volunteers matching your search.</p>
+              <p>No volunteers match your search.</p>
             </div>
           )}
         </div>
       )}
 
+      {/* Users Tab */}
       {activeTab === 'users' && (
-        <div className="list-view">
-          <div className="list-section">
-            <div className="section-header">
-              <h3>User Directory <span className="section-count">{filteredUsers.length}</span></h3>
+        <div className="tab-content">
+          <div className="section-block">
+            <div className="section-head">
+              <span className="section-dot neutral"></span>
+              <h3>User Directory</h3>
+              <span className="section-badge neutral">{filtered.length}</span>
             </div>
-            <div className="list-container">
-              {filteredUsers.map(u => (
-                <div key={u.id} className="user-item">
-                  <UserAvatar user={u} size="sm" />
-                  <div className="user-info-wrapper">
-                    <div className="user-main-info">
-                      <span className="user-name" title={u.username}>{u.username}</span>
-                      <span className="user-id">#{u.id}</span>
-                      <span className={`role-tag ${u.role}`}>{u.role}</span>
-                    </div>
-                    <div className="user-contact-info">
-                      <span className="contact-item email" title={u.email}>
-                        <svg className="contact-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                          <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                        <span className="contact-text">{u.email}</span>
-                      </span>
-                      {u.phone && (
-                        <span className="contact-item phone" title={u.phone}>
-                          <svg className="contact-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                            <line x1="12" y1="18" x2="12" y2="18"/>
-                          </svg>
-                          <span className="contact-text">{u.phone}</span>
-                        </span>
-                      )}
-                      <span className="contact-item date">
-                        <svg className="contact-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                          <line x1="16" y1="2" x2="16" y2="6"/>
-                          <line x1="8" y1="2" x2="8" y2="6"/>
-                          <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        <span className="contact-text">
-                          {u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A'}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="user-meta-info">
-                      {u.role === 'volunteer' && u.approval_status && (
-                        <span className={`status-tag ${u.approval_status}`}>
-                          {getFormattedStatus(u.approval_status)}
-                        </span>
-                      )}
-                    </div>
+            <div className="user-table">
+              <div className="user-table-head">
+                <span>User</span><span>Email</span><span>Phone</span>
+                <span>Joined</span><span>Role</span><span>Status</span><span></span>
+              </div>
+              {filtered.map(u => (
+                <div key={u.id} className="user-row">
+                  <div className="user-col identity">
+                    <UserAvatar user={u} size="sm" />
+                    <div><div className="user-name">{u.username}</div><div className="user-uid">#{u.id}</div></div>
                   </div>
-                  {u.role !== 'admin' && (
-                    <button
-                      className="delete-user-btn"
-                      onClick={() => showConfirm(
-                        'Delete User',
-                        `Are you sure you want to delete ${u.username}? This action cannot be undone.`,
-                        () => deleteUser(u.id),
-                        'Delete', '#c62828'
-                      )}
-                      title="Delete user"
-                    >
-                      Delete
-                    </button>
-                  )}
+                  <div className="user-col">
+                    <span className="user-email"><Icon type="fa" name="FaEnvelope" size={12} color="#1565c0" />{u.email}</span>
+                  </div>
+                  <div className="user-col">
+                    {u.phone ? <span className="user-phone"><Icon type="fa" name="FaPhone" size={12} color="#5c6b5c" />{u.phone}</span> : <span className="user-na">—</span>}
+                  </div>
+                  <div className="user-col">
+                    <span className="user-date"><Icon type="fa" name="FaCalendarAlt" size={12} color="#8a9e8a" />{fmtDate(u.created_at)}</span>
+                  </div>
+                  <div className="user-col"><span className={`role-chip ${u.role}`}>{u.role}</span></div>
+                  <div className="user-col">
+                    {u.role === 'volunteer' && u.approval_status
+                      ? <span className={`status-pill ${u.approval_status}`}>{u.approval_status.toUpperCase()}</span>
+                      : <span className="user-na">—</span>}
+                  </div>
+                  <div className="user-col action-col">
+                    {u.role !== 'admin' && (
+                      <button className="delete-btn" title="Delete user"
+                        onClick={() => showConfirm('Delete User', `Delete ${u.username}? This cannot be undone.`, () => deleteUser(u.id), 'Delete', '#c62828')}>
+                        <Icon type="fa" name="FaTrash" size={13} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          {filteredUsers.length === 0 && (
+          {filtered.length === 0 && (
             <div className="empty-state">
-              <div className="empty-icon-svg">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b8cfc4" strokeWidth="1.5">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
+              <Icon type="fa" name="FaUser" size={48} color="#c8d4c0" />
               <h4>No Users Found</h4>
-              <p>There are no users matching your search.</p>
+              <p>No users match your search.</p>
             </div>
           )}
         </div>

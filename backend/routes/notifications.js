@@ -16,9 +16,8 @@ const pool = mysql.createPool({
 
 console.log('Notification routes initialized');
 
-// =====================================================
 // GET USER NOTIFICATIONS
-// =====================================================
+
 router.get('/', verifyToken, async (req, res) => {
   const userId = req.user.user_id;
   const { limit = 50, offset = 0 } = req.query;
@@ -65,9 +64,9 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-// =====================================================
+
 // GET RECENT NOTIFICATIONS (FOR POLLING)
-// =====================================================
+
 router.get('/recent', verifyToken, async (req, res) => {
   const userId = req.user.user_id;
   const { since } = req.query;
@@ -116,9 +115,9 @@ router.get('/recent', verifyToken, async (req, res) => {
   }
 });
 
-// =====================================================
+
 // MARK NOTIFICATION AS READ
-// =====================================================
+
 router.patch('/:notificationId/read', verifyToken, async (req, res) => {
   const notificationId = Number(req.params.notificationId);
   const userId = req.user.user_id;
@@ -144,9 +143,9 @@ router.patch('/:notificationId/read', verifyToken, async (req, res) => {
   }
 });
 
-// =====================================================
+
 // MARK ALL NOTIFICATIONS AS READ
-// =====================================================
+
 router.patch('/read-all', verifyToken, async (req, res) => {
   const userId = req.user.user_id;
 

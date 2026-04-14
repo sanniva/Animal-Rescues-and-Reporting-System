@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Icon from "../../../components/Icon"; // Adjust the import path as needed
+import { useNavigate } from "react-router-dom";
+import Icon from "../../../components/Icon";
 import "./FAQ.css";
 
 const FAQ: React.FC = () => {
@@ -95,50 +95,80 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <div className="faq-page">
-      {/* Background Shapes */}
-      <div className="bg-shape bg-shape-top"></div>
-      <div className="bg-shape bg-shape-bottom"></div>
-      <div className="bg-circle-right"></div>
-      <div className="bg-circle-left"></div>
+    <div className="faq">
 
-      {/* Hero Section */}
+      {/* ── NAV ── */}
+      <nav className="faq-nav">
+        <div className="faq-nav-logo" onClick={() => navigate("/")}>
+          <Icon type="fa" name="FaPaw" size={20} className="faq-nav-paw" />
+          <span>RESQALL</span>
+        </div>
+        <div className="faq-nav-links">
+          <button className="faq-nav-link" onClick={() => navigate("/")}>Home</button>
+          <button className="faq-nav-link" onClick={() => navigate("/about")}>About Us</button>
+          <button className="faq-nav-link" onClick={() => navigate("/mission")}>Our Mission</button>
+          <button className="faq-nav-link" onClick={() => navigate("/contact")}>Contact</button>
+          <button className="faq-nav-link faq-nav-link-active" onClick={() => navigate("/faq")}>FAQ</button>
+        </div>
+        <button className="faq-btn faq-btn-amber" onClick={() => navigate("/login")}>
+          <Icon type="fa" name="FaExclamationTriangle" size={13} />
+          Report Emergency
+        </button>
+      </nav>
+
+      {/* ── HERO ── */}
       <section className="faq-hero">
-        <div className="faq-hero-content">
-          <div className="section-badge">
-            <span className="badge-icon">
-              <Icon type="fa" name="FaQuestionCircle" size={16} />
-            </span>
-            <span>Got Questions?</span>
+        <div className="faq-hero-blob faq-hero-blob-tr" />
+        <div className="faq-hero-blob faq-hero-blob-bl" />
+        <div className="faq-hero-grain" />
+        <div className="faq-hero-inner">
+          <div className="faq-eyebrow">
+            <Icon type="fa" name="FaQuestionCircle" size={13} className="faq-eyebrow-icon" />
+            Got Questions?
           </div>
-          <h1 className="hero-title">
-            Frequently Asked <span>Questions</span>
+          <h1 className="faq-hero-headline">
+            Frequently Asked <em>Questions</em>
           </h1>
-          <p className="hero-description">
+          <p className="faq-hero-sub">
             Find answers to common questions about ResQAll, reporting emergencies for all animals, volunteering, and more.
           </p>
         </div>
       </section>
 
-      {/* FAQ Categories */}
+      {/* ── TRUST BAR ── */}
+      <div className="faq-trust">
+        {[
+          { type: "fa", name: "FaBolt", label: "24/7 Emergency Response" },
+          { type: "fa", name: "FaClock", label: "15-Min Avg Response" },
+          { type: "fa", name: "FaHeart", label: "500+ Animals Saved" },
+          { type: "fa", name: "FaUsers", label: "200+ Active Rangers" },
+        ].map(({ type, name, label }) => (
+          <div className="faq-trust-item" key={label}>
+            <Icon type={type} name={name} size={14} className="faq-trust-icon" />
+            {label}
+          </div>
+        ))}
+      </div>
+
+      {/* ── FAQ SECTION ── */}
       <section className="faq-section">
-        <div className="faq-container">
+        <div className="faq-section-inner">
           {faqs.map((category, catIndex) => (
-            <div key={catIndex} className="faq-category">
-              <h2 className="category-title">{category.category}</h2>
+            <div className="faq-category" key={catIndex}>
+              <h2 className="faq-category-title">{category.category}</h2>
               <div className="faq-list">
                 {category.questions.map((faq, qIndex) => {
                   const globalIndex = catIndex * 100 + qIndex;
                   return (
                     <div 
                       key={qIndex} 
-                      className={`faq-item ${openIndex === globalIndex ? "open" : ""}`}
+                      className={`faq-item ${openIndex === globalIndex ? "faq-item-open" : ""}`}
                     >
                       <button 
                         className="faq-question"
                         onClick={() => toggleFAQ(globalIndex)}
                       >
-                        <span className="question-text">{faq.q}</span>
+                        <span className="faq-question-text">{faq.q}</span>
                         <span className="faq-icon">{openIndex === globalIndex ? "−" : "+"}</span>
                       </button>
                       <div className="faq-answer">
@@ -153,90 +183,85 @@ const FAQ: React.FC = () => {
         </div>
       </section>
 
-      {/* Still Have Questions */}
-      <section className="still-questions">
-        <div className="questions-content">
-          <h2 className="questions-title">
-            Still Have <span>Questions?</span>
+      {/* ── STILL HAVE QUESTIONS ── */}
+      <section className="faq-still">
+        <div className="faq-still-inner">
+          <h2 className="faq-still-title">
+            Still Have <em>Questions?</em>
           </h2>
-          <p className="questions-text">
+          <p className="faq-still-text">
             Can't find the answer you're looking for? Reach out to us directly. We're here to help all animals.
           </p>
-          <div className="questions-buttons">
-            <button className="btn-primary btn-large" onClick={() => navigate("/contact")}>
+          <div className="faq-still-buttons">
+            <button className="faq-btn faq-btn-white" onClick={() => navigate("/contact")}>
+              <Icon type="fa" name="FaEnvelope" size={15} />
               Contact Us
             </button>
-            <button className="btn-outline btn-large" onClick={() => navigate("/login")}>
+            <button className="faq-btn faq-btn-outline-white" onClick={() => navigate("/login")}>
+              <Icon type="fa" name="FaUserPlus" size={15} />
               Become a Ranger
             </button>
           </div>
         </div>
       </section>
 
-      {/* Footer - Updated to match Contact page */}
-      <footer className="footer">
-        <div className="footer-bg-wave"></div>
-        <div className="footer-content">
-          <div className="footer-section">
-            <div className="footer-logo">
-              <span className="logo-icon">
-                <Icon type="fa" name="FaPaw" size={24} />
-              </span>
-              <span className="logo-text">RESQALL</span>
+      {/* ── FOOTER ── */}
+      <footer className="faq-footer">
+        <div className="faq-footer-grid">
+          <div className="faq-footer-brand">
+            <div className="faq-footer-logo">
+              <Icon type="fa" name="FaPaw" size={24} className="faq-footer-paw" />
+              <span>RESQALL</span>
             </div>
-            <p className="footer-description">Rapid response animal rescue network. Saving lives 24/7.</p>
-            <div className="footer-social-mini">
-              <span className="footer-social-icon">
-                <Icon type="fa" name="FaFacebookF" size={16} />
-              </span>
-              <span className="footer-social-icon">
-                <Icon type="fa" name="FaInstagram" size={16} />
-              </span>
-              <span className="footer-social-icon">
-                <Icon type="fa" name="FaTwitter" size={16} />
-              </span>
-              <span className="footer-social-icon">
-                <Icon type="fa" name="FaTiktok" size={16} />
-              </span>
+            <p>Rapid response animal rescue network. Saving lives 24/7.</p>
+            <div className="faq-footer-socials">
+              {[
+                { type: "fa", name: "FaFacebook" },
+                { type: "fa", name: "FaInstagram" },
+                { type: "fa", name: "FaTwitter" },
+                { type: "fa", name: "FaYoutube" },
+              ].map(({ type, name }) => (
+                <span className="faq-footer-soc" key={name}>
+                  <Icon type={type} name={name} size={16} />
+                </span>
+              ))}
             </div>
           </div>
-
-          <div className="footer-section">
+          <div className="faq-footer-col">
             <h4>Quick Links</h4>
-            <ul className="footer-links-list">
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/mission">Our Mission</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-              <li><Link to="/faq">FAQ</Link></li>
+            <ul>
+              {[["About Us", "/about"], ["Our Mission", "/mission"], ["Contact", "/contact"], ["FAQ", "/faq"]].map(([label, path]) => (
+                <li key={label}><button onClick={() => navigate(path)}>{label}</button></li>
+              ))}
             </ul>
           </div>
-
-          <div className="footer-section">
+          <div className="faq-footer-col">
             <h4>Get Involved</h4>
-            <ul className="footer-links-list">
-              <li><Link to="/login">Become a Ranger</Link></li>
-              <li><Link to="/login">Report an Animal</Link></li>
-              <li><Link to="/login">Partner With Us</Link></li>
+            <ul>
+              {[["Become a Ranger", "/login"], ["Report Animal", "/login"], ["Partner With Us", "/login"]].map(([label, path]) => (
+                <li key={label}><button onClick={() => navigate(path)}>{label}</button></li>
+              ))}
             </ul>
           </div>
-
-          <div className="footer-section">
+          <div className="faq-footer-col">
             <h4>Emergency</h4>
-            <div className="footer-emergency">
-              <p className="footer-emergency-label">
-                <Icon type="fa" name="FaPhone" size={12} /> 24/7 Hotline
-              </p>
-              <p className="footer-emergency-number">1-800-RESQALL</p>
-              <p className="footer-emergency-dial">1-800-737-7255</p>
-              <p className="footer-email">
-                <Icon type="fa" name="FaEnvelope" size={12} /> rescue@resqall.org
-              </p>
+            <div className="faq-footer-phone">
+              <Icon type="fa" name="FaPhone" size={13} /> 24/7 Hotline
             </div>
+            <div className="faq-footer-number">1-800-RESQALL</div>
+            <div className="faq-footer-email">
+              <Icon type="fa" name="FaEnvelope" size={13} /> rescue@resqall.org
+            </div>
+            <button className="faq-footer-emerg-btn" onClick={() => navigate("/login")}>
+              <Icon type="fa" name="FaExclamationCircle" size={14} />
+              Report Emergency
+            </button>
           </div>
         </div>
-
-        <div className="footer-bottom">
-          <p>&copy; 2025 ResQAll. All rights reserved. Made with <Icon type="fa" name="FaHeart" size={14} color="#ff4444" /> for animal rescue in Nepal.</p>
+        <div className="faq-footer-bottom">
+          <span>&copy; 2025 ResQAll Network. All rights reserved. Made with</span>
+          <Icon type="fa" name="FaHeart" size={12} className="faq-footer-heart" />
+          <span>for animal rescue in Nepal.</span>
         </div>
       </footer>
     </div>
