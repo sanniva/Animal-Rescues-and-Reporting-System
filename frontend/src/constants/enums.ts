@@ -13,8 +13,6 @@ export enum SCREENS {
   REGISTER = 'Register',
 
   
-
-  
   // User Screens
   USER_DASHBOARD = 'UserDashboard',
 
