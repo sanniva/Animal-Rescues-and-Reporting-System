@@ -1,4 +1,4 @@
-﻿import { validateReportDescription } from './descriptionValidator';
+import { validateReportDescription } from './descriptionValidator';
 
 describe('Description Validation Unit Tests', () => {
   test('UT-15: Should reject description shorter than 20 characters', () => {

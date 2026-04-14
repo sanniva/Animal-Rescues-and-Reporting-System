@@ -1,4 +1,4 @@
-﻿import { isFileSizeValid } from './fileValidator';
+import { isFileSizeValid } from './fileValidator';
 
 describe('File Size Validation Unit Tests', () => {
   test('UT-34: Should return true for file size 1MB (within 5MB limit)', () => {

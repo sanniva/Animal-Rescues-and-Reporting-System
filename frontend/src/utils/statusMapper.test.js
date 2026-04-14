@@ -1,4 +1,4 @@
-﻿import { getStatusText } from './statusMapper';
+import { getStatusText } from './statusMapper';
 
 describe('Report Status Mapping Unit Tests', () => {
   test('UT-23: Should return Submitted for status_id = 1', () => {

@@ -1,4 +1,4 @@
-﻿export function doPasswordsMatch(password, confirmPassword) {
+export function doPasswordsMatch(password, confirmPassword) {
   if (password !== confirmPassword) {
     return { doMatch: false, message: 'Passwords do not match' };
   }

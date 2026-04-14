@@ -1,4 +1,4 @@
-﻿export function mapUserRole(user) {
+export function mapUserRole(user) {
   if (user.role_id === 3 || user.role === 'admin' || user.role_name === 'admin') {
     return 'admin';
   }

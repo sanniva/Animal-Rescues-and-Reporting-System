@@ -1,4 +1,4 @@
-﻿export function validateEmail(email) {
+export function validateEmail(email) {
   if (!email || email.trim() === '') {
     return { isValid: false, error: 'Email is required' };
   }

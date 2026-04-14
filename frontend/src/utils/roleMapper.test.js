@@ -1,4 +1,4 @@
-﻿import { mapUserRole } from './roleMapper';
+import { mapUserRole } from './roleMapper';
 
 describe('Role Mapping Unit Tests', () => {
   test('UT-18: Should return admin for role_id = 3', () => {

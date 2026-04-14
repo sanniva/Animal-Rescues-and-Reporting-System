@@ -1,4 +1,4 @@
-﻿import { validatePassword } from './passwordValidator';
+import { validatePassword } from './passwordValidator';
 
 describe('Password Validation Unit Tests', () => {
   test('UT-01: Should reject password without uppercase', () => {

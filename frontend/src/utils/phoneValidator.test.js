@@ -1,4 +1,4 @@
-﻿import { validateNepaliPhoneNumber } from './phoneValidator';
+import { validateNepaliPhoneNumber } from './phoneValidator';
 
 describe('Phone Validation Unit Tests', () => {
   test('UT-10: Should reject phone not starting with 98 or 97', () => {

@@ -1,4 +1,4 @@
-﻿import { doPasswordsMatch } from './passwordMatchChecker';
+import { doPasswordsMatch } from './passwordMatchChecker';
 
 describe('Password Match Unit Tests', () => {
   test('UT-13: Should return false when passwords do not match', () => {

@@ -1,4 +1,4 @@
-﻿import { validateEmail } from './emailValidator';
+import { validateEmail } from './emailValidator';
 
 describe('Email Validation Unit Tests', () => {
   test('UT-07: Should reject email without @ symbol', () => {

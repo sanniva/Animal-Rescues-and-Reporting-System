@@ -1,4 +1,4 @@
-﻿export function validateReportDescription(description) {
+export function validateReportDescription(description) {
   if (!description || description.trim() === '') {
     return { isValid: false, error: 'Description is required' };
   }

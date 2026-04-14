@@ -1,4 +1,4 @@
-﻿export function validateNepaliPhoneNumber(phone) {
+export function validateNepaliPhoneNumber(phone) {
   if (!phone || phone.trim() === '') {
     return { isValid: false, error: 'Phone number is required' };
   }

@@ -1,4 +1,4 @@
-﻿import { calculateSuccessRate } from './successRateCalculator';
+import { calculateSuccessRate } from './successRateCalculator';
 
 describe('Success Rate Calculation Unit Tests', () => {
   test('UT-29: Should return 67% for 2 completed out of 3', () => {

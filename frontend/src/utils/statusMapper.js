@@ -1,4 +1,4 @@
-﻿export function getStatusText(statusId) {
+export function getStatusText(statusId) {
   const statusMap = {
     1: 'Submitted',
     2: 'Assigned',
