@@ -139,7 +139,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     rememberMe: boolean = false
   ) => {
     try {
-      const res = await fetch("${process.env.REACT_APP_API_URL}/api/auth/login", {
+      // const res = await fetch("${process.env.REACT_APP_API_URL}/api/auth/login", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: emailOrUsername, password }),
@@ -188,7 +189,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         body.city            = volunteerDetails.city;
       }
 
-      const res = await fetch("${process.env.REACT_APP_API_URL}/api/auth/register", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
