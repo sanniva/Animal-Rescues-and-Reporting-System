@@ -26,8 +26,12 @@ const PORT = process.env.PORT || 5000;
 
 // ✅ FIXED: CORS for production
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [process.env.FRONTEND_URL || 'https://placeholder.com', 'https://animal-rescue-system.vercel.app']
-  : ['http://localhost:3000', 'http://localhost:5173'];
+  ? [
+      process.env.FRONTEND_URL || 'https://placeholder.com',
+      'https://animal-rescue-system.vercel.app',
+      'https://animal-rescues-and-reporting-system.onrender.com'
+    ].filter(Boolean)
+  : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
 
 app.use(cors({
   origin: allowedOrigins,
@@ -39,7 +43,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Create uploads directories
+// Create uploads directories
 const createUploadsDirectories = () => {
   const backendUploadsDir = path.join(__dirname, 'uploads');
   const profileImagesDir = path.join(backendUploadsDir, 'profile-images');
@@ -68,12 +72,22 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Simple ping test
+app.get('/api/ping', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'pong',
+    env: process.env.NODE_ENV,
+    time: new Date().toISOString()
+  });
+});
+
 // Test database connection endpoint
-app.get('/test-db', async (req, res) => {
+app.get('/api/test-db', async (req, res) => {
   try {
     const pool = mysql.createPool({
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
+      port: parseInt(process.env.DB_PORT || '3306'),
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
@@ -82,12 +96,20 @@ app.get('/test-db', async (req, res) => {
       connectionLimit: 10
     });
     
-    const [result] = await pool.query('SELECT 1 as connected');
+    const [result] = await pool.query('SELECT 1 as connected, NOW() as time');
     await pool.end();
     
-    res.json({ success: true, message: 'Database connected!' });
+    res.json({ 
+      success: true, 
+      message: 'Database connected!',
+      time: result[0].time
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      code: error.code
+    });
   }
 });
 
@@ -105,9 +127,10 @@ app.use('/api/volunteer/tracking', volunteerTrackingRoutes);
 (async () => {
   try {
     await initializeTracking();
-    console.log('Tracking system initialized');
+    console.log('✅ Tracking system initialized');
   } catch (error) {
-    console.error('Failed to initialize tracking system:', error);
+    console.error('❌ Failed to initialize tracking system:', error.message);
+    // App continues without tracking
   }
 })();
 

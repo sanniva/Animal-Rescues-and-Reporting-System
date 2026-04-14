@@ -1,14 +1,30 @@
-const mysql = require('mysql2');
+// const mysql = require('mysql2');
+
+// const pool = mysql.createPool({
+//   host: process.env.DB_HOST || '127.0.0.1',  
+//   port: parseInt(process.env.DB_PORT) || 3306, 
+//   user: process.env.DB_USER || 'root',
+//   password: process.env.DB_PASSWORD || '',
+//   database: process.env.DB_NAME || 'animal_rescue_system',
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0
+// });
+
+// module.exports = pool.promise();
+
+const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || '127.0.0.1',  
-  port: parseInt(process.env.DB_PORT) || 3306, 
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'animal_rescue_system',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '3306'),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: process.env.DB_SSL === 'REQUIRED' ? { rejectUnauthorized: false } : false,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-module.exports = pool.promise();
+module.exports = pool;
