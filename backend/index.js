@@ -25,26 +25,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // =====================================================
-// CORS CONFIGURATION - FIXED FOR PRODUCTION
+// SIMPLE CORS - Allow all origins for testing
 // =====================================================
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [
-      process.env.FRONTEND_URL || 'https://placeholder.com',
-      'https://animal-rescue-system.vercel.app',
-      'https://animal-rescues-and-reporting-system.onrender.com',
-      'https://resqall-rescue-system.vercel.app'
-    ].filter(Boolean)
-  : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
-
-// Enable CORS with proper OPTIONS handling
 app.use(cors({
-  origin: allowedOrigins,
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
-  exposedHeaders: ['Authorization'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -68,10 +55,6 @@ createUploadsDirectories();
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/evidence', express.static(path.join(__dirname, '..', 'uploads', 'evidence')));
-
-// =====================================================
-// HEALTH & DEBUG ENDPOINTS
-// =====================================================
 
 // Health check
 app.get('/health', (req, res) => {
@@ -124,74 +107,7 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 
-// Debug endpoint - Test network connectivity to database
-app.get('/api/db-ping', async (req, res) => {
-  const net = require('net');
-  const host = process.env.DB_HOST || '134.209.152.193';
-  const port = parseInt(process.env.DB_PORT || '10559');
-  
-  const socket = new net.Socket();
-  const timeout = 5000;
-  
-  socket.setTimeout(timeout);
-  
-  socket.on('connect', () => {
-    socket.destroy();
-    res.json({ success: true, message: `Successfully connected to ${host}:${port}` });
-  });
-  
-  socket.on('timeout', () => {
-    socket.destroy();
-    res.json({ success: false, message: `Connection timeout to ${host}:${port}` });
-  });
-  
-  socket.on('error', (err) => {
-    socket.destroy();
-    res.json({ success: false, error: err.message, host, port });
-  });
-  
-  socket.connect(port, host);
-});
-
-// Test endpoint - Check users table
-app.get('/api/test-users', async (req, res) => {
-  try {
-    const pool = require('./config/db');
-    const [result] = await pool.query('SELECT COUNT(*) as count FROM users');
-    res.json({ success: true, count: result[0].count, message: 'Users table accessible' });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      error: error.message,
-      code: error.code,
-      sqlMessage: error.sqlMessage
-    });
-  }
-});
-
-// Test endpoint - Exact login query
-app.get('/api/test-exact-login', async (req, res) => {
-  try {
-    const pool = require('./config/db');
-    const email = 'admin@example.com';
-    const [result] = await pool.query('SELECT user_id, username, email, password_hash, role_id FROM users WHERE email = ?', [email]);
-    res.json({ 
-      success: true, 
-      userFound: result.length > 0, 
-      userData: result[0] ? { 
-        id: result[0].user_id, 
-        email: result[0].email, 
-        hasPassword: !!result[0].password_hash 
-      } : null 
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message, code: error.code });
-  }
-});
-
-// =====================================================
-// API ROUTES
-// =====================================================
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -208,20 +124,15 @@ app.use('/api/volunteer/tracking', volunteerTrackingRoutes);
     console.log('✅ Tracking system initialized');
   } catch (error) {
     console.error('❌ Failed to initialize tracking system:', error.message);
-    // App continues without tracking
   }
 })();
-
-// =====================================================
-// ERROR HANDLERS
-// =====================================================
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Global error handler
+// Error handler
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
   res.status(500).json({ 
@@ -230,7 +141,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`\n=================================`);
   console.log(`Server running on port ${PORT}`);
