@@ -4,7 +4,7 @@
   ],
   "build": {
     "env": {
-      "REACT_APP_API_URL": "https://animal-rescue-and-reporting-system.onrender.com"
+      "REACT_APP_API_URL": "https://animal-rescues-and-reporting-system.onrender.com"
     }
   }
 }
