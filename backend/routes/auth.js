@@ -777,7 +777,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// ✅ USE SHARED DATABASE CONFIGURATION (with SSL)
+// USE SHARED DATABASE CONFIGURATION (with SSL)
 const pool = require('../config/db');
 
 const router = express.Router();
