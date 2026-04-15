@@ -29,7 +29,8 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
       process.env.FRONTEND_URL || 'https://placeholder.com',
       'https://animal-rescue-system.vercel.app',
-      'https://animal-rescues-and-reporting-system.onrender.com'
+      'https://animal-rescues-and-reporting-system.onrender.com',
+      'https://resqall-rescue-system.vercel.app'
     ].filter(Boolean)
   : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
 
