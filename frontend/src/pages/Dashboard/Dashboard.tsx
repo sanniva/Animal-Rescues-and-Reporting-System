@@ -212,7 +212,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
   const save = useCallback(async (lat: number, lng: number, acc: number) => {
     const token = getToken(); if (!token) return;
     try {
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: lat, longitude: lng, accuracy: acc }) });
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: lat, longitude: lng, accuracy: acc }) });
       const data = await res.json();
       if (!data.success) { queue.current.push({ lat, lng, acc }); setPending(queue.current.length); }
     } catch { queue.current.push({ lat, lng, acc }); setPending(queue.current.length); }
@@ -222,7 +222,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     if (!queue.current.length) return;
     const token = getToken(); if (!token) return;
     const pts = [...queue.current]; queue.current = []; setPending(0);
-    for (const p of pts) { try { await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: p.lat, longitude: p.lng, accuracy: p.acc }) }); } catch { queue.current.push(p); setPending(queue.current.length); } }
+    for (const p of pts) { try { await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: p.lat, longitude: p.lng, accuracy: p.acc }) }); } catch { queue.current.push(p); setPending(queue.current.length); } }
   }, [taskId]);
 
   const start = useCallback(() => {
@@ -978,7 +978,7 @@ const VolunteerDashboard: React.FC<{ user: any; stats: any; reports: Report[]; r
         setLoading(true); setErr(null);
         const token = getToken();
         if (!token) { setErr('No auth token'); return; }
-        const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks`, { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.success && data.data) {
@@ -1455,7 +1455,7 @@ export const Dashboard: React.FC = () => {
     if (!cu) return;
     (async () => {
       const token = getToken();
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/users/profile', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/profile`, { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
       if (res.ok) { const d = await res.json(); if (d.success) setProfile(d.data); }
     })();
   }, [cu]);
@@ -1465,10 +1465,10 @@ export const Dashboard: React.FC = () => {
     (async () => {
       setRepLoading(true);
       const token = getToken();
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/my-reports', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/my-reports`, { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
       if (res.ok) { const d = await res.json(); if (d.success) setUserReports(d.data || []); }
       if (getRole(cu) === 'admin') {
-        const r2 = await fetch('${process.env.REACT_APP_API_URL}/api/reports/admin/all', { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+        const r2 = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/admin/all`, { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (r2.ok) { const d2 = await r2.json(); if (d2.success) setAllReports(d2.data || []); }
       }
       setRepLoading(false);

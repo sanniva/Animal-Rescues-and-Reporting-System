@@ -47,7 +47,7 @@ const CONFIRM_CLOSED: ConfirmModal = { show: false, title: '', message: '', conf
 const getFullImageUrl = (proofUrl: string): string => {
   if (!proofUrl) return '';
   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-  const baseUrl = '${process.env.REACT_APP_API_URL}';
+  const baseUrl = `${process.env.REACT_APP_API_URL}`;
   const cleanUrl = proofUrl.replace(/^\/+/, '');
   return cleanUrl.startsWith('uploads/') ? `${baseUrl}/${cleanUrl}` : `${baseUrl}/uploads/${cleanUrl}`;
 };
@@ -765,7 +765,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { showMsg('Please login first','error'); setLoading(false); return; }
 
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/admin/all', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/admin/all`, {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
 
@@ -828,7 +828,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { setVolunteers([]); return; }
 
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/available', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/available`, {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
 
@@ -895,7 +895,7 @@ const RescueReports: React.FC = () => {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { showMsg('Please login first', 'error'); return; }
 
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/assign', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/assign`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ report_id: reportId, volunteer_id: volunteerId })

@@ -76,7 +76,7 @@ const UserList: React.FC = () => {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) { setLoading(false); return; }
-      const res = await fetch('${process.env.REACT_APP_API_URL}/api/users', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

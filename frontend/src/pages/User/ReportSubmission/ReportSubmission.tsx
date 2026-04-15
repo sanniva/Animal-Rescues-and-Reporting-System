@@ -43,7 +43,7 @@ interface LocationSuggestion {
   lon: string;
 }
 
-const API_BASE_URL = '${process.env.REACT_APP_API_URL}/api';
+const API_BASE_URL = `${process.env.REACT_APP_API_URL}/api`;
 const NOMINATIM_API = 'https://nominatim.openstreetmap.org';
 
 const ReportSubmission: React.FC = () => {

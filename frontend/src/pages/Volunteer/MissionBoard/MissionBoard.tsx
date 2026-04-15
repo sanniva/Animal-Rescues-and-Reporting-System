@@ -204,7 +204,7 @@
 // const getFullImageUrl = (proofUrl: string): string => {
 //   if (!proofUrl) return '';
 //   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-//   const baseUrl = '${process.env.REACT_APP_API_URL}';
+//   const baseUrl = `${process.env.REACT_APP_API_URL}`;
 //   const cleanUrl = proofUrl.replace(/^\/+/, '');
 //   if (cleanUrl.startsWith('uploads/')) return `${baseUrl}/${cleanUrl}`;
 //   return `${baseUrl}/uploads/${cleanUrl}`;
@@ -223,7 +223,7 @@
 //     try {
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 //       if (!token) return;
-//       const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, {
 //         method: 'POST',
 //         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
 //         body: JSON.stringify({ taskId, latitude, longitude, accuracy })
@@ -239,7 +239,7 @@
 //     if (!token) return;
 //     const points = [...pendingQueue.current]; pendingQueue.current = []; setPendingPoints(0);
 //     for (const point of points) {
-//       try { await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy }) }); }
+//       try { await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy }) }); }
 //       catch (error) { pendingQueue.current.push(point); setPendingPoints(pendingQueue.current.length); }
 //     }
 //   };
@@ -721,7 +721,7 @@
 //     try {
 //       setLoading(true); setError(null);
 //       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-//       const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', { headers: { 'Authorization': `Bearer ${token}` } });
+//       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks`, { headers: { 'Authorization': `Bearer ${token}` } });
 //       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 //       const data = await response.json();
 //       if (data.success && data.data) {
@@ -1271,7 +1271,7 @@ const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: numbe
 const getFullImageUrl = (proofUrl: string): string => {
   if (!proofUrl) return '';
   if (proofUrl.startsWith('http://') || proofUrl.startsWith('https://')) return proofUrl;
-  const baseUrl = '${process.env.REACT_APP_API_URL}';
+  const baseUrl = `${process.env.REACT_APP_API_URL}`;
   const cleanUrl = proofUrl.replace(/^\/+/, '');
   if (cleanUrl.startsWith('uploads/')) return `${baseUrl}/${cleanUrl}`;
   return `${baseUrl}/uploads/${cleanUrl}`;
@@ -1290,7 +1290,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       if (!token) return;
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId, latitude, longitude, accuracy })
@@ -1315,7 +1315,7 @@ const LocationTracker: React.FC<{ taskId: number; isActive: boolean }> = ({ task
     setPendingPoints(0);
     for (const point of points) {
       try {
-        await fetch('${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point', {
+        await fetch(`${process.env.REACT_APP_API_URL}/api/volunteer/tracking/point`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ taskId, latitude: point.latitude, longitude: point.longitude, accuracy: point.accuracy })
@@ -1941,7 +1941,7 @@ export const MissionBoard: React.FC = () => {
       setLoading(true);
       setError(null);
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/volunteers/tasks', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/volunteers/tasks`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);

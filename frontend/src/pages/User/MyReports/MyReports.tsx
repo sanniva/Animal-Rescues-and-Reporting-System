@@ -583,7 +583,7 @@ const MyReports: React.FC = () => {
       try {
         setLoading(true); setError(null);
         const token = getToken();
-        const res = await fetch('${process.env.REACT_APP_API_URL}/api/reports/my-reports', {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/my-reports`, {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         });
         if (res.ok) {
