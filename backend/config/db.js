@@ -39,15 +39,15 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: process.env.DB_SSL === 'REQUIRED' ? { rejectUnauthorized: false } : false,
-  connectTimeout: 30000,  // 30 seconds timeout
+  connectTimeout: 30000,
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 5,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+  keepAliveInitialDelay: 10000,
+  idleTimeout: 60000,
 });
 
-// Test connection on startup
 async function testConnection() {
   try {
     const connection = await pool.getConnection();
@@ -56,15 +56,10 @@ async function testConnection() {
     return true;
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    console.error('   Host:', process.env.DB_HOST);
-    console.error('   Port:', process.env.DB_PORT);
-    console.error('   User:', process.env.DB_USER);
-    console.error('   Database:', process.env.DB_NAME);
     return false;
   }
 }
 
-// Run the test
 testConnection();
 
 module.exports = pool;
