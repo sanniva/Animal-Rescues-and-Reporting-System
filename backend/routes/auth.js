@@ -7,6 +7,9 @@ require('dotenv').config();
 
 const router = express.Router();
 
+const pool = require('../config/db');
+
+
 // MySQL pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
