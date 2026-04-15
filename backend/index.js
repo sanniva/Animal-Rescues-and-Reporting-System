@@ -517,6 +517,28 @@ app.get('/api/test-users', async (req, res) => {
 });
 
 // =====================================================
+// TEST ENDPOINT - Exact login query
+// =====================================================
+app.get('/api/test-exact-login', async (req, res) => {
+  try {
+    const pool = require('./config/db');
+    const email = 'admin@example.com';
+    const [result] = await pool.query('SELECT user_id, username, email, password_hash, role_id FROM users WHERE email = ?', [email]);
+    res.json({ 
+      success: true, 
+      userFound: result.length > 0, 
+      userData: result[0] ? { 
+        id: result[0].user_id, 
+        email: result[0].email, 
+        hasPassword: !!result[0].password_hash 
+      } : null 
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, code: error.code });
+  }
+});
+
+// =====================================================
 // API ROUTES
 // =====================================================
 app.use('/api/auth', authRoutes);
