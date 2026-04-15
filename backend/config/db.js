@@ -39,15 +39,23 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: process.env.DB_SSL === 'REQUIRED' ? { rejectUnauthorized: false } : false,
-  connectTimeout: 30000,
+  connectTimeout: 60000,
   waitForConnections: true,
   connectionLimit: 2,
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
   idleTimeout: 30000,
-  
 });
+
+// Keep connections alive
+setInterval(async () => {
+  try {
+    await pool.query('SELECT 1');
+  } catch (err) {
+    console.error('Keep-alive ping failed:', err.message);
+  }
+}, 30000);
 
 async function testConnection() {
   try {
