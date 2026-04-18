@@ -248,7 +248,7 @@ router.get('/', verifyToken, async (req, res) => {
   const offset = parseInt(req.query.offset) || 0;
 
   try {
-    const [notifications] = await pool.execute(`
+    const [notifications] = await pool.query(`
       SELECT 
         n.notification_id,
         n.user_id,
@@ -264,8 +264,8 @@ router.get('/', verifyToken, async (req, res) => {
       LEFT JOIN notification_types nt ON n.type_id = nt.type_id
       WHERE n.user_id = ?
       ORDER BY n.created_at DESC
-      LIMIT ? OFFSET ?
-    `, [userId, limit, offset]);
+      LIMIT ${limit} OFFSET ${offset}
+    `, [userId]);
 
     const [unreadCount] = await pool.execute(
       'SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = 0',
@@ -325,7 +325,7 @@ router.get('/recent', verifyToken, async (req, res) => {
 
     query += ' ORDER BY n.created_at DESC LIMIT 10';
 
-    const [notifications] = await pool.execute(query, params);
+    const [notifications] = await pool.query(query, params);
 
     res.json({
       success: true,
@@ -343,7 +343,7 @@ router.get('/recent', verifyToken, async (req, res) => {
 });
 
 
-// GET UNREAD COUNT
+// GET UNREAD COUNT — must be before /:notificationId routes
 router.get('/unread-count', verifyToken, async (req, res) => {
   const userId = req.user.user_id;
 
@@ -369,7 +369,7 @@ router.get('/unread-count', verifyToken, async (req, res) => {
 });
 
 
-// MARK ALL NOTIFICATIONS AS READ  ← must be before /:notificationId routes
+// MARK ALL NOTIFICATIONS AS READ — must be before /:notificationId routes
 router.patch('/read-all', verifyToken, async (req, res) => {
   const userId = req.user.user_id;
 
@@ -395,7 +395,7 @@ router.patch('/read-all', verifyToken, async (req, res) => {
 });
 
 
-// MARK NOTIFICATION AS READ
+// MARK SINGLE NOTIFICATION AS READ
 router.patch('/:notificationId/read', verifyToken, async (req, res) => {
   const notificationId = parseInt(req.params.notificationId);
   const userId = req.user.user_id;
