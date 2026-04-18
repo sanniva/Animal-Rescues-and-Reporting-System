@@ -1,7 +1,185 @@
+// import React, { useEffect, useRef } from 'react';
+// import { useNotifications } from '../../context/NotificationContext';
+// import { useAuth } from '../../context/AuthContext';
+// import { useNavigate } from 'react-router-dom';
+// import './NotificationPanel.css';
+
+// interface NotificationPanelProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+// }
+
+// const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }) => {
+//   const { 
+//     notifications, 
+//     unreadCount, 
+//     markAsRead, 
+//     markAllAsRead, 
+//     deleteNotification 
+//   } = useNotifications();
+  
+//   const { user } = useAuth();
+//   const navigate = useNavigate();
+//   const panelRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     const handleClickOutside = (event: MouseEvent) => {
+//       if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+//         onClose();
+//       }
+//     };
+
+//     if (isOpen) {
+//       document.addEventListener('mousedown', handleClickOutside);
+//     }
+
+//     return () => {
+//       document.removeEventListener('mousedown', handleClickOutside);
+//     };
+//   }, [isOpen, onClose]);
+
+//   const handleNotificationClick = async (notification: any) => {
+//     if (!notification.read) {
+//       await markAsRead(notification.notification_id);
+//     }
+
+//     if (notification.related_entity_type && notification.related_entity_id) {
+//       switch (notification.type_name) {
+//         case 'new_report':
+//           if (user?.role?.role_name === 'admin') {
+//             navigate(`/admin/rescue-reports?highlight=${notification.related_entity_id}`);
+//           }
+//           break;
+//         case 'task_assigned':
+//           navigate(`/mission-board?task=${notification.related_entity_id}`);
+//           break;
+//         case 'task_declined':
+//           if (user?.role?.role_name === 'admin') {
+//             navigate(`/admin/rescue-reports?report=${notification.related_entity_id}`);
+//           }
+//           break;
+//         case 'task_completed':
+//           if (user?.role?.role_name === 'admin') {
+//             navigate(`/admin/rescue-reports?report=${notification.related_entity_id}`);
+//           } else {
+//             navigate(`/my-reports?report=${notification.related_entity_id}`);
+//           }
+//           break;
+//         case 'badge_assigned':
+//           navigate(`/profile/${user?.user_id}?badges=true`);
+//           break;
+//         default:
+//           if (notification.related_entity_type === 'report') {
+//             if (user?.role?.role_name === 'admin') {
+//               navigate(`/admin/rescue-reports?report=${notification.related_entity_id}`);
+//             } else {
+//               navigate(`/my-reports?report=${notification.related_entity_id}`);
+//             }
+//           } else if (notification.related_entity_type === 'task') {
+//             navigate(`/mission-board?task=${notification.related_entity_id}`);
+//           }
+//       }
+//     }
+
+//     onClose();
+//   };
+
+//   const getNotificationIcon = (type_name: string) => {
+//     switch (type_name) {
+//       case 'new_report': return '🚨';
+//       case 'task_assigned': return '🎯';
+//       case 'task_declined': return '⚠️';
+//       case 'task_completed': return '✅';
+//       case 'badge_assigned': return '🏆';
+//       default: return '📌';
+//     }
+//   };
+
+//   const getTimeAgo = (date: Date) => {
+//     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    
+//     if (seconds < 60) return 'just now';
+//     const minutes = Math.floor(seconds / 60);
+//     if (minutes < 60) return `${minutes}m ago`;
+//     const hours = Math.floor(minutes / 60);
+//     if (hours < 24) return `${hours}h ago`;
+//     const days = Math.floor(hours / 24);
+//     return `${days}d ago`;
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <>
+//       <div className="notification-overlay" onClick={onClose} />
+//       <div ref={panelRef} className={`notification-panel ${isOpen ? 'open' : ''}`}>
+//         <div className="notification-header">
+//           <div className="notification-header-left">
+//             <h3>Notifications</h3>
+//             {unreadCount > 0 && (
+//               <span className="notification-badge">{unreadCount} new</span>
+//             )}
+//           </div>
+//           <div className="notification-header-right">
+//             {unreadCount > 0 && (
+//               <button onClick={markAllAsRead} className="mark-all-read-btn">
+//                 Mark all as read
+//               </button>
+//             )}
+//             <button onClick={onClose} className="close-btn">×</button>
+//           </div>
+//         </div>
+
+//         <div className="notification-list">
+//           {notifications.length === 0 ? (
+//             <div className="empty-notifications">
+//               <span className="empty-icon">🔔</span>
+//               <p>No notifications yet</p>
+//             </div>
+//           ) : (
+//             notifications.map((notification) => (
+//               <div
+//                 key={notification.id}
+//                 className={`notification-item ${!notification.read ? 'unread' : ''}`}
+//                 onClick={() => handleNotificationClick(notification)}
+//               >
+//                 <div className="notification-icon">
+//                   {getNotificationIcon(notification.type_name)}
+//                 </div>
+//                 <div className="notification-content">
+//                   <div className="notification-title">{notification.title}</div>
+//                   <div className="notification-message">{notification.message}</div>
+//                   <div className="notification-time">
+//                     {getTimeAgo(notification.timestamp)}
+//                   </div>
+//                 </div>
+//                 <button
+//                   className="notification-delete"
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     deleteNotification(notification.notification_id);
+//                   }}
+//                 >
+//                   ×
+//                 </button>
+//               </div>
+//             ))
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default NotificationPanel;
+
+
+
 import React, { useEffect, useRef } from 'react';
 import { useNotifications } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Icon from '../Icon';
 import './NotificationPanel.css';
 
 interface NotificationPanelProps {
@@ -86,18 +264,28 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
 
   const getNotificationIcon = (type_name: string) => {
     switch (type_name) {
-      case 'new_report': return '🚨';
-      case 'task_assigned': return '🎯';
-      case 'task_declined': return '⚠️';
-      case 'task_completed': return '✅';
-      case 'badge_assigned': return '🏆';
-      default: return '📌';
+      case 'new_report':
+        return <Icon type="material" name="MdOutlineReportProblem" size={20} color="#e53e3e" />;
+      case 'task_assigned':
+        return <Icon type="material" name="MdAssignmentInd" size={20} color="#3182ce" />;
+      case 'task_declined':
+        return <Icon type="material" name="MdCancel" size={20} color="#dd6b20" />;
+      case 'task_completed':
+        return <Icon type="material" name="MdCheckCircle" size={20} color="#38a169" />;
+      case 'badge_assigned':
+        return <Icon type="fa" name="FaTrophy" size={18} color="#d69e2e" />;
+      default:
+        return <Icon type="material" name="MdNotifications" size={20} color="#718096" />;
     }
   };
 
-  const getTimeAgo = (date: Date) => {
+  const getTimeAgo = (timestamp: Date | string) => {
+    const date = typeof timestamp === 'string'
+      ? new Date(timestamp.endsWith('Z') ? timestamp : timestamp + 'Z')
+      : timestamp;
+
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    
+
     if (seconds < 60) return 'just now';
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;
@@ -115,6 +303,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
       <div ref={panelRef} className={`notification-panel ${isOpen ? 'open' : ''}`}>
         <div className="notification-header">
           <div className="notification-header-left">
+            <Icon type="material" name="MdNotifications" size={20} color="#2d3748" />
             <h3>Notifications</h3>
             {unreadCount > 0 && (
               <span className="notification-badge">{unreadCount} new</span>
@@ -123,23 +312,26 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
           <div className="notification-header-right">
             {unreadCount > 0 && (
               <button onClick={markAllAsRead} className="mark-all-read-btn">
+                <Icon type="material" name="MdDoneAll" size={16} />
                 Mark all as read
               </button>
             )}
-            <button onClick={onClose} className="close-btn">×</button>
+            <button onClick={onClose} className="close-btn">
+              <Icon type="material" name="MdClose" size={20} />
+            </button>
           </div>
         </div>
 
         <div className="notification-list">
           {notifications.length === 0 ? (
             <div className="empty-notifications">
-              <span className="empty-icon">🔔</span>
+              <Icon type="material" name="MdNotificationsNone" size={40} color="#a0aec0" />
               <p>No notifications yet</p>
             </div>
           ) : (
             notifications.map((notification) => (
               <div
-                key={notification.id}
+                key={notification.notification_id}
                 className={`notification-item ${!notification.read ? 'unread' : ''}`}
                 onClick={() => handleNotificationClick(notification)}
               >
@@ -150,6 +342,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
                   <div className="notification-title">{notification.title}</div>
                   <div className="notification-message">{notification.message}</div>
                   <div className="notification-time">
+                    <Icon type="material" name="MdAccessTime" size={12} />
                     {getTimeAgo(notification.timestamp)}
                   </div>
                 </div>
@@ -160,7 +353,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose }
                     deleteNotification(notification.notification_id);
                   }}
                 >
-                  ×
+                  <Icon type="material" name="MdClose" size={16} />
                 </button>
               </div>
             ))
