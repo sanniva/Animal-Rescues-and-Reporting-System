@@ -1,8 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const adminTrackingController = require('../controllers/adminTrackingController');
-const verifyToken = require('../middleware/auth');
-const roleMiddleware = require('../middleware/roleMiddleware');
+// const express = require('express');
+// const router = express.Router();
+// const adminTrackingController = require('../controllers/adminTrackingController');
+// const verifyToken = require('../middleware/auth');
+// const roleMiddleware = require('../middleware/roleMiddleware');
+
+// USE SHARED DATABASE CONFIGURATION (with SSL)
+const pool = require('../config/db');
 
 // All admin tracking routes require authentication AND admin role
 router.use(verifyToken);
